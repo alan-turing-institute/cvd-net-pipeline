@@ -6,8 +6,8 @@ This repository contains the pipeline for Calibration from Fay Frost as part of 
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd <repository-directory>
+   git clone https://github.com/alan-turing-institute/cvd-net-pipeline
+   cd cvd-net-pipeline
    ```
 
 2. Create a virtual environment (optional but recommended):
