@@ -1,4 +1,3 @@
-```markdown
 # CVDNet pipeline 
 
 This repository contains the pipeline for Calibration from Fay Frost as part of the CVDNet project.
@@ -63,5 +62,4 @@ If no steps are specified, the script will prompt you to provide them.
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
-```
 
