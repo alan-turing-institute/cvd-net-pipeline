@@ -1,14 +1,14 @@
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
-python_requires = ">=3.10"
+python_requires = ">=3.12"
 
 [project]
 name = "pipeline_project"
 version = "0.1.0"
 description = "A pipeline for CVDNet."
 authors = [
-    { name = "Fay Name", email = "your.email@example.com" }
+    { name = "Fay Frost", email = "your.email@example.com" }
 ]
 dependencies = [
     "pandas",

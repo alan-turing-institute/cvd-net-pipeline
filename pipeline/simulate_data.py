@@ -59,4 +59,4 @@ def simulate_data(param_path: str, n_sample: int, input_path: str, output_path: 
     os.system(f'mkdir -p output/output_{n_sample}_{n_params}params/pressure_traces_pat')
     os.system(f'mkdir -p output/output_{n_sample}_{n_params}params/pressure_traces_rv')
 
-    return input_path, output_path
+    return None
