@@ -1,16 +1,20 @@
-import argparse
+import json
 from pipeline.simulate_data import simulate_data
 from pipeline.analyse_giessen import analyse_giessen
 from pipeline.build_emulator import build_emulator
 from pipeline.simulate_posterior import simulate_posterior
 from pipeline.calibrate import calibrate
+import argparse
+def run_pipeline(config):
+    steps = config.get("steps", ["1", "2", "3", "4", "5", "6"])
+    nsamples = config.get("nsamples", 5000)
 
-def main(steps):
     if "1" in steps:
         print("Step 1: Simulating Data")
         simulate_data(
-            "config/parameters_sensitive.json",
-            nsamples=args.nsamples,
+            param_path=config.get("input_parameters"),
+            n_sample=nsamples,
+            output_path=config.get("output_path"),
         )
 
     if "2" in steps:
@@ -36,13 +40,17 @@ def main(steps):
     print("Pipeline complete.")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run selected steps in the pipeline.")
+    parser = argparse.ArgumentParser(description="Run the pipeline with a configuration file.")
     parser.add_argument(
-        "--steps", nargs="+", choices=["1", "2", "3", "4", "5", "6"],
-        help="Steps to run, e.g. --steps 1 2 3 or --steps 4 5", default=["1", "2", "3", "4", "5", "6"]
+        "--config",
+        type=str,
+        required=True,
+        help="Path to the configuration file (JSON format)."
     )
-    parser.add_argument('-nsamples', type=int, default=5000,help='Number of samples')
     args = parser.parse_args()
 
+    # Load configuration from the specified JSON file
+    with open(args.config, "r") as config_file:
+        config = json.load(config_file)
 
-    main(args.steps)
+    run_pipeline(config)
