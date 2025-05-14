@@ -3,6 +3,6 @@
   "output_path": "output/",
   "steps": ["1", "2", "3"],
   "nsamples": 50,
-  "check_physiological_traces": true,
+  "check_physiological_traces": true
 
 }
