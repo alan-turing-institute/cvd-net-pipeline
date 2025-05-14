@@ -68,7 +68,6 @@ def simulate_data(param_path: str, n_sample: int, output_path: str, repeat_simul
         )
 
 
-
     # Check for bool values in the list
     bool_indices = [index for index, value in enumerate(simulations) if isinstance(value, bool)]
 
@@ -84,7 +83,8 @@ def simulate_data(param_path: str, n_sample: int, output_path: str, repeat_simul
     # plot simulated traces
     plot_utils.plot_simulated_traces(simulations, output_path=output_parameters)
 
-    pressure_traces_df_pat, pressure_traces_df_rv = utils.select_feasible_traces(simulated_traces=simulations, screen=True, output_path=output_parameters)
+    # TODO always save the pressure traces despite of screening flag
+    pressure_traces_df_pat, pressure_traces_df_rv = utils.select_feasible_traces(simulated_traces=simulations, screen=False, output_path=output_parameters)
 
     # Save the DataFrame to a single CSV file with headers
     utils.save_csv(pressure_traces_df_pat, f'{output_parameters}/pressure_traces_pat/all_pressure_traces.csv')

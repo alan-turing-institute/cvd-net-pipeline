@@ -1,9 +1,9 @@
 import json
-from pipeline.simulate_data import simulate_data
-from pipeline.analyse_giessen import analyse_giessen
-from pipeline.build_emulator import build_emulator
-from pipeline.simulate_posterior import simulate_posterior
-from pipeline.calibrate import calibrate
+from src.simulate_data import simulate_data
+from src.analyse_giessen import analyse_giessen
+from src.build_emulator import build_emulator
+from src.simulate_posterior import simulate_posterior
+from src.calibrate import calibrate
 import argparse
 def run_pipeline(config):
     steps = config.get("steps", ["1", "2", "3", "4", "5", "6"])
@@ -40,7 +40,7 @@ def run_pipeline(config):
     print("Pipeline complete.")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run the pipeline with a configuration file.")
+    parser = argparse.ArgumentParser(description="Run the src with a configuration file.")
     parser.add_argument(
         "--config",
         type=str,

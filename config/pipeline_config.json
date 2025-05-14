@@ -2,6 +2,7 @@
   "input_parameters": "parameters_pulmonary_sensitive_summarystats.json",
   "output_path": "output/",
   "steps": ["1", "2", "3"],
-  "nsamples": 50
+  "nsamples": 50,
+  "check_physiological_traces": true,
 
 }
