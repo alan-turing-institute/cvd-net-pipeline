@@ -27,8 +27,8 @@ def compute_pca(n_samples:int=500, n_params:int=5, n_pca_components:int=10, outp
     output_file = pd.read_csv(f"{output_path}/output_{n_samples}_{n_params}params/resampled_all_pressure_traces_rv.csv")
 
     # Create direcoty for results
-    if not os.path.exists(f"{output_path}/output_{n_samples}_{n_params}params/PCA"):
-        os.makedirs(f"{output_path}/output_{n_samples}_{n_params}params/PCA")
+    if not os.path.exists(f"{output_path}/output_{n_samples}_{n_params}params/pca"):
+        os.makedirs(f"{output_path}/output_{n_samples}_{n_params}params/pca")
 
 
     bool_exist = False
@@ -54,7 +54,7 @@ def compute_pca(n_samples:int=500, n_params:int=5, n_pca_components:int=10, outp
     component_names = [f"PC{i+1}" for i in range(X_pca.shape[1])]
     X_pca = pd.DataFrame(X_pca, columns=component_names, index=df.index)
 
-    X_pca.to_csv(f'{output_path}/output_{n_samples}_{n_params}params/PCA/PCA.csv', index=False)
+    X_pca.to_csv(f'{output_path}/output_{n_samples}_{n_params}params/pca/PCA.csv', index=False)
 
     # Concatenate the PCA components with the original data     
     df_pca = pd.concat([df, X_pca], axis=1)

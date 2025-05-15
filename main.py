@@ -1,6 +1,7 @@
 import json
 from src.simulate_data import simulate_data
 from src.analyse_giessen import analyse_giessen
+from src.compute_pca import compute_pca
 from src.build_emulator import build_emulator
 from src.simulate_posterior import simulate_posterior
 from src.calibrate import calibrate
