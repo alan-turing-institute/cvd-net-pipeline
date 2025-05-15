@@ -13,7 +13,7 @@ def run_pipeline(config):
         print("Step 1: Simulating Data")
         simulate_data(
             param_path=config.get("input_parameters"),
-            n_sample=nsamples,
+            n_samples=nsamples,
             output_path=config.get("output_path"),
         )
 
