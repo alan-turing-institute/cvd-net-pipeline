@@ -2,6 +2,8 @@
 import numpy as np
 import pandas as pd
 import os
+from sklearn.linear_model import LinearRegression
+
 def load_csv(path, drop_column=""):
     return pd.read_csv(path, usecols=lambda x: x != drop_column)
 
@@ -75,3 +77,32 @@ def select_feasible_traces(simulated_traces, screen, output_path):
     pressure_traces_df_rv = pd.DataFrame(pressure_traces_list_rv, columns=headers)
 
     return pressure_traces_df_pat, pressure_traces_df_rv
+
+def emulate_linear(input, output):
+    # Input and output data
+    X = input
+    Y = output
+
+    # Initialize the model
+    model = LinearRegression()
+
+    # Fit the model to the training data
+    model.fit(X, Y)
+
+    # Predict the output for the test data
+    y_pred = model.predict(X)
+
+    # Compute R² score for the predictions versus actual test data
+    r2 = r2_score(Y, y_pred)
+
+    # compute MSE
+    mse = mean_squared_error(Y, y_pred)
+
+    # compute RSE
+    n = len(Y)   # Number of observations
+    p = X.shape[1] + 1  # Number of parameters (including intercept)
+    rss = np.sum((Y - y_pred) ** 2)  # Residual Sum of Squares
+    rse = np.sqrt(rss / (n - p))
+
+
+    return model, r2, mse, rse
