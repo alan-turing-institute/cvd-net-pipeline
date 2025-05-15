@@ -22,19 +22,23 @@ def run_pipeline(config):
         analyse_giessen("data/input_5000_6params.csv")
 
     if "3" in steps:
-        print("Step 3: Building Emulator")
-        build_emulator()
+        print("Step 3: Compute PCA")
+        compute_pca()
 
     if "4" in steps:
-        print("Step 4: Simulating Posterior Data")
-        simulate_posterior()
+        print("Step 4: Building Emulator")
+        build_emulator()
 
     if "5" in steps:
-        print("Step 5: Calibration")
-        calibrate()
+        print("Step 5: Simulating Posterior Data")
+        simulate_posterior()
 
     if "6" in steps:
-        print("Step 6: Final Resampling")
+        print("Step 6: Calibration")
+        calibrate()
+
+    if "7" in steps:
+        print("Step 7: Final Resampling")
         analyse_giessen("outputs/posterior_simulations.csv")
 
     print("Pipeline complete.")

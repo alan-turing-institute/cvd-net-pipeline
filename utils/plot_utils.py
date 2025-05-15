@@ -1,6 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import  PowerTransformer
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
 
 def plot_simulated_traces(simulated_traces,output_path):
 
@@ -152,3 +156,32 @@ def plot_pca_explained_variance(pca, output_path):
     fig.tight_layout()
             
     plt.savefig(f'{output_path_figures}/pca_explained_variance.png')
+
+def plot_pca_transformed(pca, X_scaled, output_path):
+
+    output_path_figures = os.path.join(output_path,"figures")
+    os.makedirs(output_path_figures, exist_ok=True)
+        
+    pipeline = Pipeline([
+                    ('scl', StandardScaler()),
+                    ('pca', PCA(n_components=10)),
+                    ('post',   PowerTransformer())
+                ])
+
+    signals_pca = pipeline.fit_transform(X_scaled)
+
+    fig, ax = plt.subplots(ncols=10, nrows=2, figsize=(70, 15))
+
+    for i in range(signals_pca.shape[1]):
+        temp = np.zeros(signals_pca.shape)
+        temp[:, i] = signals_pca[:, i]
+        
+        signals_new = pipeline.inverse_transform(temp)
+        
+        ax[1][i].hist(signals_pca[:,i], bins=10)
+        for signal in signals_new:
+            ax[0][i].plot(signal)
+    
+    plt.savefig(f'{output_path_figures}/pca_transformed.png')
+            
+

@@ -18,9 +18,9 @@ from sklearn.model_selection import train_test_split
 from utils import utils, plot_utils
 
 
-# steps/build_emulator.py
-def build_emulator(n_samples:int=500, n_params:int=5, n_pca_components:int=10, output_path:str="output"):
-    print("[BuildEmulator] Running PCA and training emulator (placeholder)")
+# steps/compute.py
+def compute_pca(n_samples:int=500, n_params:int=5, n_pca_components:int=10, output_path:str="output"):
+    print("[ComputePCA] Running PCA (placeholder)")
 
     
     input_file = pd.read_csv(f"{output_path}/input_{n_samples}_{n_params}params.csv")
@@ -64,7 +64,11 @@ def build_emulator(n_samples:int=500, n_params:int=5, n_pca_components:int=10, o
     plt.suptitle(f'Histograms of the First 1{n_pca_components} Principal Components')
     plt.savefig(f'{output_path}/output_{n_samples}_{n_params}params/figures/histograms_pca.png')
 
-    # Plot the explained variance ratio
-    plot_utils.plot_pca_explained_variance(pca, output_path=output_path)
+    output_parameters = os.path.join(output_path, f'output_{n_samples}_{n_params}params')
 
-build_emulator()
+    # Plot the explained variance ratio
+    plot_utils.plot_pca_explained_variance(pca, output_path=output_parameters)
+
+    # Plot the PCA transformed data
+    plot_utils.plot_pca_transformed(pca, X_scaled, output_path=output_parameters)
+

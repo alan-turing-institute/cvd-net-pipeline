@@ -51,10 +51,11 @@ python main.py --config config/pipeline_config.json
 ### Steps in the Pipeline
 1. **Simulate Data**: Generates input and output data based on parameters.
 2. **Analyze Giessen**: Performs analysis on the input data.
-3. **Build Emulator**: Builds an emulator for the data.
-4. **Simulate Posterior Data**: Simulates data from posterior samples.
-5. **Calibration**: Calibrates the model.
-6. **Final Resampling**: Performs final resampling on posterior simulations.
+3. **Compute PCA**: Performs a PCA on the output data.
+4. **Build Emulator**: Builds an emulator for the data.
+5. **Simulate Posterior Data**: Simulates data from posterior samples.
+6. **Calibration**: Calibrates the model.
+7. **Final Resampling**: Performs final resampling on posterior simulations.
 
 ### Example
 
