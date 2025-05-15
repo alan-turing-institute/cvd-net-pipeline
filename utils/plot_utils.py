@@ -105,9 +105,6 @@ def plot_pressure_transients_arterial_tree(input_traces, output_path):
     output_path_figures = os.path.join(output_path,"figures")
     os.makedirs(output_path_figures, exist_ok=True)
 
-    # Create directory for figures if it doesn't exist
-    os.makedirs(os.path.join(output_path, "figures"), exist_ok=True)
-
     fig, ax = plt.subplots()
 
     for ind in range(len(input_traces)):
