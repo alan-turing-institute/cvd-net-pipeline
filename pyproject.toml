@@ -13,5 +13,7 @@ authors = [
 dependencies = [
     "pandas",
     "numpy",
-    "ModularCirc"
+    "ModularCirc",
+    "scikit-learn",
+    "seaborn"
 ]
