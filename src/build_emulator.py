@@ -18,5 +18,17 @@ from sklearn.model_selection import train_test_split
 
 
 # steps/build_emulator.py
-def build_emulator():
+def build_emulator(n_samples:int=500, n_params:int=5, output_path:str="output"):
     print("[BuildEmulator] Running PCA and training emulator (placeholder)")
+
+    
+    input_file = pd.read_csv(f"{output_path}/input_{n_samples}_{n_params}params.csv")
+    output_file = pd.read_csv(f"{output_path}/output_{n_samples}_{n_params}params/resampled_all_pressure_traces_rv.csv")
+
+
+    bool_exist = False
+    if bool_exist:
+        boolean_index = pd.read_csv(f"{output_path}/output_{n_samples}_{n_params}params/bool_indices_{n_samples}.csv")
+
+
+build_emulator()
