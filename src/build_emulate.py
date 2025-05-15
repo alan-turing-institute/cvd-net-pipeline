@@ -12,7 +12,7 @@ from utils import utils, plot_utils
 
 
 # steps/build_emulator.py
-def emulate(n_samples:int=500, n_params:int=5, n_pca_components:int=10, output_path:str="output"):
+def build_emulate(n_samples:int=500, n_params:int=5, n_pca_components:int=10, output_path:str="output"):
     print("[BuildEmulator] training emulator (placeholder)")
 
     
