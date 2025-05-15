@@ -15,10 +15,11 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
+from utils import utils, plot_utils
 
 
 # steps/build_emulator.py
-def build_emulator(n_samples:int=500, n_params:int=5, output_path:str="output"):
+def build_emulator(n_samples:int=500, n_params:int=5, n_pca_components:int=10, output_path:str="output"):
     print("[BuildEmulator] Running PCA and training emulator (placeholder)")
 
     
@@ -46,7 +47,7 @@ def build_emulator(n_samples:int=500, n_params:int=5, output_path:str="output"):
     # Fit the scaler to the data and transform it - standardize
     X_scaled = scaler.fit_transform(X)
 
-    pca = PCA(n_components=10)
+    pca = PCA(n_pca_components)
     X_pca = pca.fit_transform(X_scaled)
 
     # Convert to dataframe
@@ -58,5 +59,12 @@ def build_emulator(n_samples:int=500, n_params:int=5, output_path:str="output"):
     # Concatenate the PCA components with the original data     
     df_pca = pd.concat([df, X_pca], axis=1)
     df_pca.to_csv(f'{output_path}/output_{n_samples}_{n_params}params/resampled_all_pressure_traces_rv_with_pca.csv', index=False)
+
+    X_pca.hist(bins=30, figsize=(15, 13), layout=(5, 2), alpha=0.7, color='orange')
+    plt.suptitle(f'Histograms of the First 1{n_pca_components} Principal Components')
+    plt.savefig(f'{output_path}/output_{n_samples}_{n_params}params/figures/histograms_pca.png')
+
+    # Plot the explained variance ratio
+    plot_utils.plot_pca_explained_variance(pca, output_path=output_path)
 
 build_emulator()

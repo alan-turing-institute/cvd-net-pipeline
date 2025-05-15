@@ -124,3 +124,31 @@ def plot_pressure_transients_arterial_tree(input_traces, output_path):
     # Display the plot
     plt.savefig(f'{output_path_figures}/pressure_transients_arterial_tree_good_traces.png')
 
+
+def plot_pca_explained_variance(pca, output_path):
+
+    output_path_figures = os.path.join(output_path,"figures")
+    os.makedirs(output_path_figures, exist_ok=True)
+
+    # Create figure
+    fig, axs = plt.subplots(1, 2)
+    n = pca.n_components_
+    grid = np.arange(1, n + 1)
+    # Explained variance
+    explained_variance_ratio = pca.explained_variance_ratio_
+    axs[0].bar(grid, explained_variance_ratio, log=True)
+    axs[0].set(
+        xlabel="Component", title="% Explained Variance", ylim=(0.0, 1.0)
+    )
+
+    # Cumulative Variance
+    cumulative_explained_variance = np.cumsum(explained_variance_ratio)
+    axs[1].semilogy(grid, cumulative_explained_variance, "o-")
+    axs[1].set(
+        xlabel="Component", title="% Cumulative Variance", 
+    )
+    # Set up figure
+    fig.set(figwidth=8, dpi=100)
+    fig.tight_layout()
+            
+    plt.savefig(f'{output_path_figures}/pca_explained_variance.png')
