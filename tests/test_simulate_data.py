@@ -1,7 +1,7 @@
 import os
 import pytest
 import pandas as pd
-from simulate_data import simulate_data
+from src.simulate_data import simulate_data
 import tempfile
 
 def test_simulate_data_integration():
