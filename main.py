@@ -6,6 +6,7 @@ from src.simulate_posterior import simulate_posterior
 from src.calibrate import calibrate
 import os
 import argparse
+
 def run_pipeline(config):
     steps = config.get("steps", ["1", "2", "3", "4", "5", "6"])
     nsamples = config.get("nsamples", 5000)

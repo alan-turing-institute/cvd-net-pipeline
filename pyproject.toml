@@ -13,5 +13,6 @@ authors = [
 dependencies = [
     "pandas",
     "numpy",
-    "ModularCirc"
+    "ModularCirc",
+    "pytest"
 ]
