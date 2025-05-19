@@ -16,3 +16,7 @@ dependencies = [
     "ModularCirc",
     "pytest"
 ]
+
+[project.optional-dependencies]
+notebooks = ["ipykernel"]
+dev = ["pre-commit", "black", "flake8", "isort"]
