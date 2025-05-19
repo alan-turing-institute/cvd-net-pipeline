@@ -29,12 +29,12 @@ def select_feasible_traces(simulated_traces, output_path):
         if not isinstance(simulated_traces[ind], bool):
 
             # PAT pressure
-            p_pat_raw = simulated_traces[ind]['p_pat'].values.copy()
+            p_pat_raw = simulated_traces[ind].loc[ind]['p_pat'].values.copy()
 
             # RV pressure
-            p_rv_raw = simulated_traces[ind]['p_rv'].values.copy()
+            p_rv_raw = simulated_traces[ind].loc[ind]['p_rv'].values.copy()
 
-            T = simulated_traces[ind]['T'].values.copy()
+            T = simulated_traces[ind].loc[ind]['T'].values.copy()
             T_resample = np.linspace(T[0], T[-1], 100)
 
             # Interpolate pressure for 100 timesteps from 1000
@@ -42,11 +42,11 @@ def select_feasible_traces(simulated_traces, output_path):
             p_rv_resampled = np.interp(T_resample, T, p_rv_raw)
 
             # Compute CO
-            q_pat = simulated_traces[ind]['q_pat'].values.copy()
+            q_pat = simulated_traces[ind].loc[ind]['q_pat'].values.copy()
             CO = np.sum(q_pat) * (T[1] - T[0]) / (T[-1] - T[0]) * 60. / 1000.  # L / min
 
             # Compute EF
-            v_rv = simulated_traces[ind]['v_rv'].values.copy()
+            v_rv = simulated_traces[ind].loc[ind]['v_rv'].values.copy()
             EF = (np.max(v_rv) - np.min(v_rv)) / np.max(v_rv)
 
             # Compute dPAP, sPAP, mPAP
@@ -55,7 +55,7 @@ def select_feasible_traces(simulated_traces, output_path):
             mPAP = np.mean(p_rv_raw)
 
             # Record time interval, approx T (input param) / 100, there are some rounding differences due to interpolation
-            tl = T_resample - simulated_traces[ind]['T'].iloc[0]
+            tl = T_resample - simulated_traces[ind].loc[ind]['T'].iloc[0]
             dt = np.diff(tl)[0]
 
             # Only create array if conditions hold or screening is turned off
