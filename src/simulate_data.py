@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from utils import utils, plot_utils
 
-def simulate_data(param_path: str, n_sample: int, output_path: str, repeat_simulations: bool = True):
+def simulate_data(param_path: str, n_sample: int, output_path: str, repeat_simulations: bool = True) -> str:
 
     br = BatchRunner('Sobol', 0)
     br.setup_sampler(param_path)
@@ -92,4 +92,4 @@ def simulate_data(param_path: str, n_sample: int, output_path: str, repeat_simul
 
     plot_utils.plot_pressure_transients_arterial_tree(pressure_traces_df_rv, output_parameters)
 
-    return None
+    return output_parameters

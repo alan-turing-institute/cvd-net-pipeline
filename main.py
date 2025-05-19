@@ -11,7 +11,7 @@ def run_pipeline(config):
 
     if "1" in steps:
         print("Step 1: Simulating Data")
-        simulate_data(
+        output_dir = simulate_data(
             param_path=config.get("input_parameters"),
             n_sample=nsamples,
             output_path=config.get("output_path"),
@@ -19,7 +19,7 @@ def run_pipeline(config):
 
     if "2" in steps:
         print("Step 2: Analysing Giessen (resample)")
-        analyse_giessen("data/input_5000_6params.csv")
+        analyse_giessen(output_dir)
 
     if "3" in steps:
         print("Step 3: Building Emulator")
