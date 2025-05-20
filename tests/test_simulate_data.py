@@ -4,7 +4,7 @@ import pandas as pd
 from simulate_data import simulate_data
 import tempfile
 
-def test_simulate_data_integration():
+def test_simulate_data():
     # Define test parameters
 
     with tempfile.TemporaryDirectory() as tmp_path:
@@ -14,7 +14,7 @@ def test_simulate_data_integration():
         n_sample = 10
         repeat_simulations = True
 
-    # Call the function
+        # Call the function
         simulate_data(
             param_path=param_path,
             n_sample=n_sample,
@@ -41,6 +41,29 @@ def test_simulate_data_integration():
         input_data = pd.read_csv(input_file)
         assert len(input_data) == n_sample, "Input file does not contain the expected number of samples."
         print (input_data)
+        # Compare the input file to the input file in the expected_outputs directory
+        expected_input_file_path = os.path.join('./tests/expected_outputs/simulate_data_module',
+                                           f'output_{n_sample}_9params/',
+                                           f'input_{n_sample}_9params.csv')
+        expected_input_data = pd.read_csv(expected_input_file_path)
+        pd.testing.assert_frame_equal(input_data, expected_input_data)
+
+        # Compare the output files to the expected output files
+        expected_output_dir = os.path.join('./tests/expected_outputs/simulate_data_module',
+                                            f'output_{n_sample}_9params/')
+        expected_pressure_traces_pat = pd.read_csv(os.path.join(expected_output_dir,
+                                                    'pressure_traces_pat',
+                                                    'all_pressure_traces.csv'))
+        expected_pressure_traces_rv = pd.read_csv(os.path.join(expected_output_dir,
+                                                    'pressure_traces_rv',
+                                                    'all_pressure_traces.csv'))
+
+        resulting_pressure_traces_pat = pd.read_csv(output_dir_pressure_traces_pat)
+        resulting_pressure_traces_rv = pd.read_csv(output_dir_pressure_traces_rv)
+
+        pd.testing.assert_frame_equal(resulting_pressure_traces_pat, expected_pressure_traces_pat)
+        pd.testing.assert_frame_equal(resulting_pressure_traces_rv, expected_pressure_traces_rv)
+
 
         # delete files to check loading simulations from disk
         os.remove(input_file)
