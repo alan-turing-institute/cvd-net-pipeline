@@ -4,10 +4,14 @@ from src.analyse_giessen import analyse_giessen
 from src.build_emulator import build_emulator
 from src.simulate_posterior import simulate_posterior
 from src.calibrate import calibrate
+import os
 import argparse
+
 def run_pipeline(config):
     steps = config.get("steps", ["1", "2", "3", "4", "5", "6"])
     nsamples = config.get("nsamples", 5000)
+
+    os.makedirs(config.get("output_path"), exist_ok=True)
 
     if "1" in steps:
         print("Step 1: Simulating Data")
