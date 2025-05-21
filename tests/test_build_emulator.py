@@ -7,7 +7,7 @@ import shutil
 
 @pytest.fixture
 def cleanup_output():
-    output_file     = "tests/inputs_for_tests/build_emulator_module/output_50_9params/emulators/linear_models_and_r2_scores_50.csv"
+    output_file = "tests/inputs_for_tests/build_emulator_module/output_50_9params/emulators/linear_models_and_r2_scores_50.csv"
 
     yield output_file
     if os.path.exists(output_file):
