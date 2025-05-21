@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from utils import utils, plot_utils
 
-def simulate_data(param_path: str, n_samples: int, output_path: str, repeat_simulations: bool = True):
+def simulate_data(param_path: str, n_samples: int, output_path: str, repeat_simulations: bool = True) -> str:
 
     br = BatchRunner('Sobol', 0)
     br.setup_sampler(param_path)
@@ -46,9 +46,9 @@ def simulate_data(param_path: str, n_samples: int, output_path: str, repeat_simu
     output_parameters = os.path.join(output_path, f'output_{n_samples}_{n_params}params')
     output_parameters_simulations = os.path.join(output_parameters,'simulations')
 
-    # Check if the directory exists and contains n_samples files
-    if os.path.exists(output_parameters_simulations) and len(os.listdir(output_parameters_simulations)) >= n_samples and repeat_simulations==False:
-        print(f"Skipping simulation as {output_parameters} already contains 500 or more files.")
+    # Check if the directory exists and contains n_sample files
+    if os.path.exists(output_parameters_simulations) and len(os.listdir(output_parameters_simulations)) >= n_sample and repeat_simulations==False:
+        print(f"Skipping simulation as {output_parameters} already contains {n_sample} or more files.")
         # read a list of dataframes from here
         simulations = utils.load_simulation(output_parameters_simulations)
 
@@ -83,8 +83,7 @@ def simulate_data(param_path: str, n_samples: int, output_path: str, repeat_simu
     # plot simulated traces
     plot_utils.plot_simulated_traces(simulations, output_path=output_parameters)
 
-    # TODO always save the pressure traces despite of screening flag
-    pressure_traces_df_pat, pressure_traces_df_rv = utils.select_feasible_traces(simulated_traces=simulations, screen=False, output_path=output_parameters)
+    pressure_traces_df_pat, pressure_traces_df_rv = utils.select_feasible_traces(simulated_traces=simulations, output_path=output_parameters)
 
     # Save the DataFrame to a single CSV file with headers
     utils.save_csv(pressure_traces_df_pat, f'{output_parameters}/pressure_traces_pat/all_pressure_traces.csv')
@@ -92,4 +91,4 @@ def simulate_data(param_path: str, n_samples: int, output_path: str, repeat_simu
 
     plot_utils.plot_pressure_transients_arterial_tree(pressure_traces_df_rv, output_parameters)
 
-    return None
+    return output_parameters

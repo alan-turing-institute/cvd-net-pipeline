@@ -160,7 +160,7 @@ cython_debug/
 #.idea/
 
 */pressure_traces_*
-*.csv
+# *.csv
 /Tutorials
 .DS_Store
 /playground_files

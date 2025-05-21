@@ -5,14 +5,18 @@ from src.compute_pca import compute_pca
 from src.build_emulator import build_emulator
 from src.simulate_posterior import simulate_posterior
 from src.calibrate import calibrate
+import os
 import argparse
+
 def run_pipeline(config):
     steps = config.get("steps", ["1", "2", "3", "4", "5", "6"])
     nsamples = config.get("nsamples", 5000)
 
+    os.makedirs(config.get("output_path"), exist_ok=True)
+
     if "1" in steps:
         print("Step 1: Simulating Data")
-        simulate_data(
+        output_dir = simulate_data(
             param_path=config.get("input_parameters"),
             n_samples=nsamples,
             output_path=config.get("output_path"),
@@ -20,7 +24,7 @@ def run_pipeline(config):
 
     if "2" in steps:
         print("Step 2: Analysing Giessen (resample)")
-        analyse_giessen("data/input_5000_6params.csv")
+        analyse_giessen(output_dir)
 
     if "3" in steps:
         print("Step 3: Compute PCA")
