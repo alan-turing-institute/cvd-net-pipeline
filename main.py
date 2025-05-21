@@ -35,7 +35,10 @@ def run_pipeline(config):
 
     if "4" in steps:
         print("Step 4: Building Emulator")
-        build_emulator()
+        build_emulator(n_samples=nsamples,
+                       n_params=9, 
+                       output_path=config.get("output_path"), 
+                       output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
     if "5" in steps:
         print("Step 5: Simulating Posterior Data")
