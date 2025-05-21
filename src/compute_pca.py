@@ -13,9 +13,13 @@ def compute_pca(n_samples:int=500, n_params:int=5, n_pca_components:int=10, outp
 
     output_file = pd.read_csv(f"{output_path}/output_{n_samples}_{n_params}params/{output_file_name}")
 
-    # Create direcoty for results
+    # Create directory for results
     if not os.path.exists(f"{output_path}/output_{n_samples}_{n_params}params/pca"):
         os.makedirs(f"{output_path}/output_{n_samples}_{n_params}params/pca")
+
+    # Create directory for figures
+    if not os.path.exists(f"{output_path}/output_{n_samples}_{n_params}params/figures"):
+        os.makedirs(f"{output_path}/output_{n_samples}_{n_params}params/figures")
 
     bool_exist = False
     if bool_exist:

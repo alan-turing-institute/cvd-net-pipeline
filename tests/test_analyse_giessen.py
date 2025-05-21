@@ -3,7 +3,6 @@ import pandas as pd
 import os
 import numpy as np
 from analyse_giessen import analyse_giessen
-import tempfile
 
 @pytest.fixture
 def cleanup_output_file():
