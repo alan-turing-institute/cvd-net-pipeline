@@ -12,13 +12,13 @@ def cleanup_output_file():
     if os.path.exists(output_file):
         os.remove(output_file)
 
-def test_analyse_giessen_valid_input():
+def test_analyse_giessen_valid_input(cleanup_output_file):
 
     # Call the function with the input file
     analyse_giessen('tests/inputs_for_tests/analyse_giessen_module/output_10_9params')
 
     # Check if the output data matches the expected output
-    output_data = pd.read_csv("tests/inputs_for_tests/analyse_giessen_module/output_10_9params/waveform_resampled_all_pressure_traces_rv.csv")
+    output_data = pd.read_csv(cleanup_output_file)
     expected_output = pd.read_csv('tests/expected_outputs/analyse_giessen_module/output_10_9params/waveform_resampled_all_pressure_traces_rv.csv')
     pd.testing.assert_frame_equal(output_data, expected_output)
 
