@@ -46,9 +46,9 @@ def simulate_data(param_path: str, n_samples: int, output_path: str, repeat_simu
     output_parameters = os.path.join(output_path, f'output_{n_samples}_{n_params}params')
     output_parameters_simulations = os.path.join(output_parameters,'simulations')
 
-    # Check if the directory exists and contains n_sample files
-    if os.path.exists(output_parameters_simulations) and len(os.listdir(output_parameters_simulations)) >= n_sample and repeat_simulations==False:
-        print(f"Skipping simulation as {output_parameters} already contains {n_sample} or more files.")
+    # Check if the directory exists and contains n_samples files
+    if os.path.exists(output_parameters_simulations) and len(os.listdir(output_parameters_simulations)) >= n_samples and repeat_simulations==False:
+        print(f"Skipping simulation as {output_parameters} already contains {n_samples} or more files.")
         # read a list of dataframes from here
         simulations = utils.load_simulation(output_parameters_simulations)
 
