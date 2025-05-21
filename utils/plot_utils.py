@@ -169,6 +169,9 @@ def plot_pca_histogram(X_pca, output_path, n_pca_components=10):
 
     output_path_figures = os.path.join(output_path,"figures")
 
-    X_pca.hist(bins=30, figsize=(15, 13), layout=(5, 2), alpha=0.7, color='orange')
+    try:
+        X_pca.hist(figsize=(15, 13), layout=(5, 2), alpha=0.7, color='orange', bins=30)
+    except Exception:
+        X_pca.hist(figsize=(15, 13), layout=(5, 2), alpha=0.7, color='orange')
     plt.suptitle(f'Histograms of the First 1{n_pca_components} Principal Components')
     plt.savefig(f'{output_path_figures}/histograms_pca.png')    
