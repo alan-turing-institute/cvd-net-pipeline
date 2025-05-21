@@ -165,6 +165,7 @@ cython_debug/
 .DS_Store
 /playground_files
 output/
+notebooks/
 
 *.pyc
 
