@@ -11,21 +11,21 @@ def test_simulate_data():
         print(f"Temporary directory created at: {tmp_path}")
 
         param_path = "parameters_pulmonary_sensitive_summarystats.json"  # Ensure this file exists with valid parameters
-        n_sample = 10
+        n_samples = 10
         repeat_simulations = True
 
         # Call the function
         simulate_data(
             param_path=param_path,
-            n_sample=n_sample,
+            n_samples=n_samples,
             output_path=str(tmp_path),
             repeat_simulations=repeat_simulations
         )
 
         # Verify that the output files are created
-        input_file = os.path.join(tmp_path,f'input_{n_sample}_9params.csv')
-        output_dir = os.path.join(tmp_path,f'output_{n_sample}_9params')
-        bool_indices_file = os.path.join(output_dir,f'bool_indices_{n_sample}.csv')
+        input_file = os.path.join(tmp_path,f'input_{n_samples}_9params.csv')
+        output_dir = os.path.join(tmp_path,f'output_{n_samples}_9params')
+        bool_indices_file = os.path.join(output_dir,f'bool_indices_{n_samples}.csv')
         output_dir_pressure_traces_pat = os.path.join(output_dir,'pressure_traces_pat','all_pressure_traces.csv')
         output_dir_pressure_traces_rv = os.path.join(output_dir,'pressure_traces_rv','all_pressure_traces.csv')
 
@@ -39,18 +39,18 @@ def test_simulate_data():
 
         # Optionally, check the contents of the input file
         input_data = pd.read_csv(input_file)
-        assert len(input_data) == n_sample, "Input file does not contain the expected number of samples."
+        assert len(input_data) == n_samples, "Input file does not contain the expected number of samples."
         print (input_data)
         # Compare the input file to the input file in the expected_outputs directory
         expected_input_file_path = os.path.join('./tests/expected_outputs/simulate_data_module',
-                                           f'output_{n_sample}_9params/',
-                                           f'input_{n_sample}_9params.csv')
+                                           f'output_{n_samples}_9params/',
+                                           f'input_{n_samples}_9params.csv')
         expected_input_data = pd.read_csv(expected_input_file_path)
         pd.testing.assert_frame_equal(input_data, expected_input_data)
 
         # Compare the output files to the expected output files
         expected_output_dir = os.path.join('./tests/expected_outputs/simulate_data_module',
-                                            f'output_{n_sample}_9params/')
+                                            f'output_{n_samples}_9params/')
         expected_pressure_traces_pat = pd.read_csv(os.path.join(expected_output_dir,
                                                     'pressure_traces_pat',
                                                     'all_pressure_traces.csv'))
@@ -73,7 +73,7 @@ def test_simulate_data():
 
         simulate_data(
             param_path=param_path,
-            n_sample=n_sample,
+            n_samples=n_samples,
             output_path=str(tmp_path),
             repeat_simulations=False
         )
