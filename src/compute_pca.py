@@ -6,18 +6,14 @@ from sklearn.preprocessing import StandardScaler
 from utils import plot_utils
 
 
-# steps/compute.py
 def compute_pca(n_samples:int=500, n_params:int=5, n_pca_components:int=10, output_path:str="output"):
     print("[ComputePCA] Running PCA (placeholder)")
 
-    
-    input_file = pd.read_csv(f"{output_path}/input_{n_samples}_{n_params}params.csv")
     output_file = pd.read_csv(f"{output_path}/output_{n_samples}_{n_params}params/resampled_all_pressure_traces_rv.csv")
 
     # Create direcoty for results
     if not os.path.exists(f"{output_path}/output_{n_samples}_{n_params}params/pca"):
         os.makedirs(f"{output_path}/output_{n_samples}_{n_params}params/pca")
-
 
     bool_exist = False
     if bool_exist:
@@ -48,11 +44,10 @@ def compute_pca(n_samples:int=500, n_params:int=5, n_pca_components:int=10, outp
     df_pca = pd.concat([df, X_pca], axis=1)
     df_pca.to_csv(f'{output_path}/output_{n_samples}_{n_params}params/resampled_all_pressure_traces_rv_with_pca.csv', index=False)
 
-    X_pca.hist(bins=30, figsize=(15, 13), layout=(5, 2), alpha=0.7, color='orange')
-    plt.suptitle(f'Histograms of the First 1{n_pca_components} Principal Components')
-    plt.savefig(f'{output_path}/output_{n_samples}_{n_params}params/figures/histograms_pca.png')
-
     output_parameters = os.path.join(output_path, f'output_{n_samples}_{n_params}params')
+
+    # Plot the PCA histogram
+    plot_utils.plot_pca_histogram(X_pca, output_path=output_parameters, n_pca_components=n_pca_components)
 
     # Plot the explained variance ratio
     plot_utils.plot_pca_explained_variance(pca, output_path=output_parameters)

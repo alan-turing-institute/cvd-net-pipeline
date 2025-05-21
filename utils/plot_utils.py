@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
+
 def plot_simulated_traces(simulated_traces, output_path):
     def save_plot(x, y, xlabel, ylabel, title, filename):
         """Helper function to create and save a plot."""
@@ -135,6 +136,7 @@ def plot_pca_explained_variance(pca, output_path):
             
     plt.savefig(f'{output_path_figures}/pca_explained_variance.png')
 
+
 def plot_pca_transformed(pca, X_scaled, output_path):
 
     output_path_figures = os.path.join(output_path,"figures")
@@ -163,3 +165,10 @@ def plot_pca_transformed(pca, X_scaled, output_path):
     plt.savefig(f'{output_path_figures}/pca_transformed.png')
             
 
+def plot_pca_histogram(X_pca, output_path, n_pca_components=10):
+
+    output_path_figures = os.path.join(output_path,"figures")
+
+    X_pca.hist(bins=30, figsize=(15, 13), layout=(5, 2), alpha=0.7, color='orange')
+    plt.suptitle(f'Histograms of the First 1{n_pca_components} Principal Components')
+    plt.savefig(f'{output_path_figures}/histograms_pca.png')    
