@@ -9,7 +9,7 @@ from utils import plot_utils
 def compute_pca(n_samples:int=500, n_params:int=5, n_pca_components:int=10, output_path:str="output"):
     print("[ComputePCA] Running PCA (placeholder)")
 
-    output_file = pd.read_csv(f"{output_path}/output_{n_samples}_{n_params}params/resampled_all_pressure_traces_rv.csv")
+    output_file = pd.read_csv(f"{output_path}/output_{n_samples}_{n_params}params/waveform_resampled_all_pressure_traces_rv.csv")
 
     # Create direcoty for results
     if not os.path.exists(f"{output_path}/output_{n_samples}_{n_params}params/pca"):

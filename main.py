@@ -28,7 +28,10 @@ def run_pipeline(config):
 
     if "3" in steps:
         print("Step 3: Compute PCA")
-        compute_pca()
+        compute_pca(n_samples=nsamples, 
+                    n_params=9, 
+                    n_pca_components=10, 
+                    output_path=config.get("output_path"))
 
     if "4" in steps:
         print("Step 4: Building Emulator")
