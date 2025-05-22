@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 python_requires = ">=3.12"
 
 [project]
-name = "pipeline_project"
+name = "cvdnet-pipeline"
 version = "0.1.0"
 description = "A pipeline for CVDNet."
 authors = [
@@ -14,7 +14,9 @@ dependencies = [
     "pandas",
     "numpy",
     "ModularCirc",
-    "pytest"
+    "pytest",
+    "my-package @ git+https://github.com/MaxBalmus/GiessenDataAnalysis.git@main",
+
 ]
 
 [project.optional-dependencies]
