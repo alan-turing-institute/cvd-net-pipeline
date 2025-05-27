@@ -11,7 +11,7 @@ def test_simulate_data():
         print(f"Temporary directory created at: {tmp_path}")
 
         param_path = "parameters_pulmonary_sensitive_summarystats.json"  # Ensure this file exists with valid parameters
-        n_samples = 10
+        n_samples = 50
         repeat_simulations = True
 
         # Call the function
