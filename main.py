@@ -11,12 +11,21 @@ import argparse
 def run_pipeline(config):
     steps = config.get("steps", ["1", "2", "3", "4", "5", "6"])
     nsamples = config.get("nsamples", 5000)
+    if not "1" in steps:
+        # Get the n_params from the config if not provided by step 1
+        n_params = config.get("n_params")
+        if n_params is None:
+            raise ValueError("n_params must be provided in the configuration if step 1 is not being executed.")
 
     os.makedirs(config.get("output_path"), exist_ok=True)
 
     if "1" in steps:
         print("Step 1: Simulating Data")
-        output_dir = simulate_data(
+
+        if n_params in locals():
+            print("Warning: n_params is pre-defined in the configuration file. It will be overwritten by the value from the simulation step.")
+
+        output_dir_sims, n_params = simulate_data(
             param_path=config.get("input_parameters"),
             n_samples=nsamples,
             output_path=config.get("output_path"),
@@ -24,19 +33,24 @@ def run_pipeline(config):
 
     if "2" in steps:
         print("Step 2: Analysing Giessen (resample)")
-        analyse_giessen(output_dir)
+        analyse_giessen(output_dir_sims)
 
     if "3" in steps:
         print("Step 3: Compute PCA")
+
+        n_pca_components = config.get("n_pca_components", 10)
+        if n_pca_components is None:
+            raise ValueError("n_pca_components must be provided in the configuration to run PCA.")
+
         compute_pca(n_samples=nsamples, 
-                    n_params=9, 
-                    n_pca_components=10, 
+                    n_params=n_params, 
+                    n_pca_components=n_pca_components,
                     output_path=config.get("output_path"))
 
     if "4" in steps:
         print("Step 4: Building Emulator")
         build_emulator(n_samples=nsamples,
-                       n_params=9, 
+                       n_params=n_params, 
                        output_path=config.get("output_path"), 
                        output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 

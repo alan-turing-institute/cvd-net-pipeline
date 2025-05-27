@@ -24,14 +24,14 @@ def test_simulate_data():
 
         # Verify that the output files are created
         input_file = os.path.join(tmp_path,f'input_{n_samples}_9params.csv')
-        output_dir = os.path.join(tmp_path,f'output_{n_samples}_9params')
-        bool_indices_file = os.path.join(output_dir,f'bool_indices_{n_samples}.csv')
-        output_dir_pressure_traces_pat = os.path.join(output_dir,'pressure_traces_pat','all_pressure_traces.csv')
-        output_dir_pressure_traces_rv = os.path.join(output_dir,'pressure_traces_rv','all_pressure_traces.csv')
+        output_dir_sims = os.path.join(tmp_path,f'output_{n_samples}_9params')
+        bool_indices_file = os.path.join(output_dir_sims,f'bool_indices_{n_samples}.csv')
+        output_dir_pressure_traces_pat = os.path.join(output_dir_sims,'pressure_traces_pat','all_pressure_traces.csv')
+        output_dir_pressure_traces_rv = os.path.join(output_dir_sims,'pressure_traces_rv','all_pressure_traces.csv')
 
 
         assert os.path.exists(input_file), "Input file was not created."
-        assert os.path.exists(output_dir), "Output directory was not created."
+        assert os.path.exists(output_dir_sims), "Simulations Output directory was not created."
         assert os.path.exists(bool_indices_file), "Bool indices file was not created."
         assert os.path.exists(output_dir_pressure_traces_pat), "PAT pressure traces file was not created."
         assert os.path.exists(output_dir_pressure_traces_rv), "RV pressure traces file was not created."

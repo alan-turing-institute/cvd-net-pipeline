@@ -91,4 +91,4 @@ def simulate_data(param_path: str, n_samples: int, output_path: str, repeat_simu
 
     plot_utils.plot_pressure_transients_arterial_tree(pressure_traces_df_rv, output_parameters)
 
-    return output_parameters
+    return output_parameters, n_params
