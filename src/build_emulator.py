@@ -31,7 +31,11 @@ def build_emulator(n_samples:int=200,
     linear_rse_scores = {}
     fitted_models = {}
 
-    # Iterate through the output keys
+    # Iterate through the output keys:
+
+    # Here, we take each output, such as the raw pressure traces, calculated clinical indices and the PCA components,
+    # (if present) and fit a linear model to each of them using those parameters that have been selected as relevant inputs.
+    # Currently, just a linear regression model is used.
     for key in output_keys:
         model, r2, mse, rse = utils.emulate_linear(input=filtered_input, output=output_file[key])
         linear_r2_scores[key] = r2
