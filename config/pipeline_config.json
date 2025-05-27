@@ -4,5 +4,6 @@
   "steps": ["2","3","4"],  
   "nsamples": 50,
   "n_pca_components": 10,
-  "n_params": 9
+  "n_params": 9,
+  "output_dir_sims": "output/output_50_9params/"
 }

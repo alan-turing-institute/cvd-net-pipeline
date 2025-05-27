@@ -21,10 +21,6 @@ def compute_pca(n_samples:int=500, n_params:int=5, n_pca_components:int=10, outp
     if not os.path.exists(f"{output_path}/output_{n_samples}_{n_params}params/figures"):
         os.makedirs(f"{output_path}/output_{n_samples}_{n_params}params/figures")
 
-    bool_exist = False
-    if bool_exist:
-        boolean_index = pd.read_csv(f"{output_path}/output_{n_samples}_{n_params}params/bool_indices_{n_samples}.csv")
-
     ## Conduct PCA ##
     df = output_file.copy()
 

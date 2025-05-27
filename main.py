@@ -9,26 +9,40 @@ import os
 import argparse
 
 def run_pipeline(config):
+
     steps = config.get("steps", ["1", "2", "3", "4", "5", "6"])
+
     nsamples = config.get("nsamples", 5000)
+
+    # Parent folder for all simulations
+    output_path = config.get("output_path")
+
     if not "1" in steps:
         # Get the n_params from the config if not provided by step 1
         n_params = config.get("n_params")
+
         if n_params is None:
             raise ValueError("n_params must be provided in the configuration if step 1 is not being executed.")
 
-    os.makedirs(config.get("output_path"), exist_ok=True)
+        # Define the output directory for the current simulations
+        output_dir_sims = f"{output_path}/output_{nsamples}_{n_params}params"
+        print("Saving simulations to:", output_dir_sims)
+
+    os.makedirs(output_path, exist_ok=True)
 
     if "1" in steps:
         print("Step 1: Simulating Data")
 
-        if n_params in locals():
+        if "n_params" in locals():
             print("Warning: n_params is pre-defined in the configuration file. It will be overwritten by the value from the simulation step.")
+
+        if "output_dir_sims" in locals():
+            print("Warning: output_dir_sims is pre-defined in the configuration file. It will be overwritten by the value from the simulation step.")
 
         output_dir_sims, n_params = simulate_data(
             param_path=config.get("input_parameters"),
             n_samples=nsamples,
-            output_path=config.get("output_path"),
+            output_path=output_path,
         )
 
     if "2" in steps:
@@ -45,13 +59,13 @@ def run_pipeline(config):
         compute_pca(n_samples=nsamples, 
                     n_params=n_params, 
                     n_pca_components=n_pca_components,
-                    output_path=config.get("output_path"))
+                    output_path=output_path)
 
     if "4" in steps:
         print("Step 4: Building Emulator")
         build_emulator(n_samples=nsamples,
                        n_params=n_params, 
-                       output_path=config.get("output_path"), 
+                       output_path=output_path, 
                        output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
     if "5" in steps:
