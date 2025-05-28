@@ -1,10 +1,15 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import  PowerTransformer
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
 
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+
 
 def plot_simulated_traces(simulated_traces, output_path):
     def save_plot(x, y, xlabel, ylabel, title, filename):
@@ -82,9 +87,6 @@ def plot_pressure_transients_arterial_tree(input_traces, output_path):
     output_path_figures = os.path.join(output_path,"figures")
     os.makedirs(output_path_figures, exist_ok=True)
 
-    # Create directory for figures if it doesn't exist
-    os.makedirs(os.path.join(output_path, "figures"), exist_ok=True)
-
     fig, ax = plt.subplots()
 
     for ind in range(len(input_traces)):
@@ -105,3 +107,71 @@ def plot_pressure_transients_arterial_tree(input_traces, output_path):
     # Display the plot
     plt.savefig(f'{output_path_figures}/pressure_transients_arterial_tree_good_traces.png')
 
+
+def plot_pca_explained_variance(pca, output_path):
+
+    output_path_figures = os.path.join(output_path,"figures")
+    os.makedirs(output_path_figures, exist_ok=True)
+
+    # Create figure
+    fig, axs = plt.subplots(1, 2)
+    n = pca.n_components_
+    grid = np.arange(1, n + 1)
+    # Explained variance
+    explained_variance_ratio = pca.explained_variance_ratio_
+    axs[0].bar(grid, explained_variance_ratio, log=True)
+    axs[0].set(
+        xlabel="Component", title="% Explained Variance", ylim=(0.0, 1.0)
+    )
+
+    # Cumulative Variance
+    cumulative_explained_variance = np.cumsum(explained_variance_ratio)
+    axs[1].semilogy(grid, cumulative_explained_variance, "o-")
+    axs[1].set(
+        xlabel="Component", title="% Cumulative Variance", 
+    )
+    # Set up figure
+    fig.set(figwidth=8, dpi=100)
+    fig.tight_layout()
+            
+    plt.savefig(f'{output_path_figures}/pca_explained_variance.png')
+
+
+def plot_pca_transformed(pca, X_scaled, output_path):
+
+    output_path_figures = os.path.join(output_path,"figures")
+    os.makedirs(output_path_figures, exist_ok=True)
+        
+    pipeline = Pipeline([
+                    ('scl', StandardScaler()),
+                    ('pca', PCA(n_components=10)),
+                    ('post',   PowerTransformer())
+                ])
+
+    signals_pca = pipeline.fit_transform(X_scaled)
+
+    fig, ax = plt.subplots(ncols=10, nrows=2, figsize=(70, 15))
+
+    for i in range(signals_pca.shape[1]):
+        temp = np.zeros(signals_pca.shape)
+        temp[:, i] = signals_pca[:, i]
+        
+        signals_new = pipeline.inverse_transform(temp)
+        
+        ax[1][i].hist(signals_pca[:,i], bins=10)
+        for signal in signals_new:
+            ax[0][i].plot(signal)
+    
+    plt.savefig(f'{output_path_figures}/pca_transformed.png')
+            
+
+def plot_pca_histogram(X_pca, output_path, n_pca_components=10):
+
+    output_path_figures = os.path.join(output_path,"figures")
+
+    try:
+        X_pca.hist(figsize=(15, 13), layout=(5, 2), alpha=0.7, color='orange', bins=30)
+    except Exception:
+        X_pca.hist(figsize=(15, 13), layout=(5, 2), alpha=0.7, color='orange')
+    plt.suptitle(f'Histograms of the First {n_pca_components} Principal Components')
+    plt.savefig(f'{output_path_figures}/histograms_pca.png')    

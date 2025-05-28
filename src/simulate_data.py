@@ -5,11 +5,11 @@ import numpy as np
 import pandas as pd
 from utils import utils, plot_utils
 
-def simulate_data(param_path: str, n_sample: int, output_path: str, repeat_simulations: bool = True) -> str:
+def simulate_data(param_path: str, n_samples: int, output_path: str, repeat_simulations: bool = True) -> str:
 
     br = BatchRunner('Sobol', 0)
     br.setup_sampler(param_path)
-    br.sample(n_sample)
+    br.sample(n_samples)
 
     map_ = {
         'delay': ['la.delay', 'ra.delay'],
@@ -40,20 +40,20 @@ def simulate_data(param_path: str, n_sample: int, output_path: str, repeat_simul
 
     input_header = ','.join(br.samples.columns)
 
-    np.savetxt(os.path.join(output_path,f'input_{n_sample}_{n_params}params.csv'), br.samples, header=input_header, delimiter=',')
+    np.savetxt(os.path.join(output_path,f'input_{n_samples}_{n_params}params.csv'), br.samples, header=input_header, delimiter=',')
 
 
-    output_parameters = os.path.join(output_path, f'output_{n_sample}_{n_params}params')
+    output_parameters = os.path.join(output_path, f'output_{n_samples}_{n_params}params')
     output_parameters_simulations = os.path.join(output_parameters,'simulations')
 
-    # Check if the directory exists and contains n_sample files
-    if os.path.exists(output_parameters_simulations) and len(os.listdir(output_parameters_simulations)) >= n_sample and repeat_simulations==False:
-        print(f"Skipping simulation as {output_parameters} already contains {n_sample} or more files.")
+    # Check if the directory exists and contains n_samples files
+    if os.path.exists(output_parameters_simulations) and len(os.listdir(output_parameters_simulations)) >= n_samples and repeat_simulations==False:
+        print(f"Skipping simulation as {output_parameters} already contains {n_samples} or more files.")
         # read a list of dataframes from here
         simulations = utils.load_simulation(output_parameters_simulations)
 
-        if len(simulations) != n_sample:
-            raise ValueError(f"Expected {n_sample} simulations, but found {len(simulations)}. Will run simulations again.")
+        if len(simulations) != n_samples:
+            raise ValueError(f"Expected {n_samples} simulations, but found {len(simulations)}. Will run simulations again.")
             repeat_simulations = True
     else:
         print(f"Running simulation as {output_parameters}.")
@@ -63,7 +63,7 @@ def simulate_data(param_path: str, n_sample: int, output_path: str, repeat_simul
     if repeat_simulations:
         os.makedirs(output_parameters_simulations, exist_ok=True)
         simulations = br.run_batch(
-            n_jobs=5,
+            n_jobs=7,
             output_path=output_parameters_simulations
         )
 
@@ -78,7 +78,7 @@ def simulate_data(param_path: str, n_sample: int, output_path: str, repeat_simul
         print("No boolean values found in the list.")
 
 
-    utils.save_csv(pd.DataFrame(bool_indices), os.path.join(output_parameters, f'bool_indices_{n_sample}.csv'))
+    utils.save_csv(pd.DataFrame(bool_indices), os.path.join(output_parameters, f'bool_indices_{n_samples}.csv'))
 
     # plot simulated traces
     plot_utils.plot_simulated_traces(simulations, output_path=output_parameters)
@@ -91,4 +91,4 @@ def simulate_data(param_path: str, n_sample: int, output_path: str, repeat_simul
 
     plot_utils.plot_pressure_transients_arterial_tree(pressure_traces_df_rv, output_parameters)
 
-    return output_parameters
+    return output_parameters, n_params

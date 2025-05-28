@@ -1,6 +1,9 @@
 {
   "input_parameters": "parameters_pulmonary_sensitive_summarystats.json",
   "output_path": "output/",
-  "steps": ["1","2"],
-  "nsamples": 10
+  "steps": ["2","3","4"],  
+  "nsamples": 50,
+  "n_pca_components": 10,
+  "n_params": 9,
+  "output_dir_sims": "output/output_50_9params/"
 }
