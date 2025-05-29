@@ -70,7 +70,10 @@ def run_pipeline(config):
 
     if "5" in steps:
         print("Step 5: Simulating Posterior Data")
-        sample_parameter_posteriors()
+        sample_parameter_posteriors(n_samples=nsamples,
+                                    n_params=n_params,
+                                    output_path=output_path,
+                                    output_keys=config.get("output_keys"))
 
     if "6" in steps:
         print("Step 6: Calibration")
