@@ -3,7 +3,7 @@ from src.simulate_data import simulate_data
 from src.analyse_giessen import analyse_giessen
 from src.compute_pca import compute_pca
 from src.build_emulator import build_emulator
-from src.simulate_posterior import simulate_posterior
+from sample_parameter_posteriors import simulate_posterior
 from src.calibrate import calibrate
 import os
 import argparse
@@ -70,7 +70,7 @@ def run_pipeline(config):
 
     if "5" in steps:
         print("Step 5: Simulating Posterior Data")
-        simulate_posterior()
+        sample_parameter_posteriors()
 
     if "6" in steps:
         print("Step 6: Calibration")
