@@ -6,8 +6,12 @@ from sklearn.preprocessing import  PowerTransformer
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
+import seaborn as sns
+from scipy.stats import norm
+
 import matplotlib.pyplot as plt
 import numpy as np
+import math
 import os
 
 
@@ -167,6 +171,7 @@ def plot_pca_transformed(pca, X_scaled, output_path):
 
 def plot_pca_histogram(X_pca, output_path, n_pca_components=10):
 
+
     output_path_figures = os.path.join(output_path,"figures")
 
     try:
@@ -175,3 +180,59 @@ def plot_pca_histogram(X_pca, output_path, n_pca_components=10):
         X_pca.hist(figsize=(15, 13), layout=(5, 2), alpha=0.7, color='orange')
     plt.suptitle(f'Histograms of the First {n_pca_components} Principal Components')
     plt.savefig(f'{output_path_figures}/histograms_pca.png')    
+
+
+def plot_posterior_distributions(mu_0, Sigma_0, Mu_post, Sigma_post, which_obs, param_names, output_path):
+
+    output_path_figures = os.path.join(output_path,"figures")
+    os.makedirs(output_path_figures, exist_ok=True)
+
+    prior_means = mu_0.flatten()
+    prior_stds = np.sqrt(np.diag(Sigma_0))
+    posterior_means = Mu_post.flatten()
+    posterior_stds = np.sqrt(np.diag(Sigma_post))
+    true_values = input.iloc[which_obs].values
+    
+    
+    fig, axes = plt.subplots(2, math.ceil(len(param_names)/2), figsize=(18, 8))  
+    axes = axes.flatten()  # Flatten to 1D array
+    for i, ax in enumerate(axes[:len(param_names)]):  # Only iterate over valid axes
+    
+        # Define x-range based on prior and posterior means
+        x_min = min(prior_means[i] - 3 * prior_stds[i], posterior_means[i] - 3 * posterior_stds[i])
+        x_max = max(prior_means[i] + 3 * prior_stds[i], posterior_means[i] + 3 * posterior_stds[i])
+        x = np.linspace(x_min, x_max, 100)
+
+        # Compute PDFs
+        prior_pdf = norm.pdf(x, prior_means[i], prior_stds[i])
+        posterior_pdf = norm.pdf(x, posterior_means[i], posterior_stds[i])
+
+        # Plot prior and posterior distributions
+        ax.plot(x, prior_pdf, label="Prior", linestyle="dashed", color="blue")
+        ax.plot(x, posterior_pdf, label="Posterior", linestyle="solid", color="red")
+
+        # Plot true value as a vertical line
+        ax.axvline(true_values[i], color="green", linestyle="dotted", label="True Value")
+
+        # Labels and title
+        ax.set_title(param_names[i])
+        ax.set_xlabel("Value")
+        ax.set_ylabel("Density")
+        ax.legend()
+
+        plt.suptitle(f'Posterior Distributions of Calibrated Parameters')
+        plt.savefig(f'{output_path_figures}/posterior_distributions_calibrated_params.png')    
+
+def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_path):
+        
+    output_path_figures = os.path.join(output_path,"figures")
+    os.makedirs(output_path_figures, exist_ok=True)
+
+    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+    sns.heatmap(Sigma_0, annot=True, fmt=".3f", cmap="RdBu", xticklabels=param_names, yticklabels=param_names, ax=axes[0])
+    axes[0].set_title("Prior Covariance Matrix")
+    sns.heatmap(Sigma_post, annot=True, fmt=".4f", cmap="PiYG", xticklabels=param_names, yticklabels=param_names, ax=axes[1])
+    axes[1].set_title("Posterior Covariance Matrix")
+
+    plt.suptitle(f'Posterior Covariance Matrix')
+    plt.savefig(f'{output_path_figures}/posterior_covairance_matrix.png') 

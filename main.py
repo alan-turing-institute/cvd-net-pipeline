@@ -3,8 +3,7 @@ from src.simulate_data import simulate_data
 from src.analyse_giessen import analyse_giessen
 from src.compute_pca import compute_pca
 from src.build_emulator import build_emulator
-from sample_parameter_posteriors import simulate_posterior
-from src.calibrate import calibrate
+from src.calibrate_parameters import calibrate_parameters
 import os
 import argparse
 
@@ -69,15 +68,20 @@ def run_pipeline(config):
                        output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
     if "5" in steps:
-        print("Step 5: Simulating Posterior Data")
-        sample_parameter_posteriors(n_samples=nsamples,
+        print("Step 5: Calibrating parameters using config output keys")
+
+        output_keys = config.get("output_keys")
+        if output_keys is None:
+            raise ValueError("output keys must be provided in the configuration to run calibration.")
+        
+        calibrate_parameters(n_samples=nsamples,
                                     n_params=n_params,
                                     output_path=output_path,
                                     output_keys=config.get("output_keys"))
 
     if "6" in steps:
         print("Step 6: Calibration")
-        calibrate()
+        
 
     if "7" in steps:
         print("Step 7: Final Resampling")
