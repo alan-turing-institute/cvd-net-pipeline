@@ -33,7 +33,7 @@ class BayesianCalibration:
         
         # Observation error
         self.obs_error_scale = epsilon_obs_scale 
-        default_epsilon_obs = np.diag(np.std(filtered_output) * self.obs_error_scale)  
+        default_epsilon_obs = np.diag(np.std(filtered_output, axis=0) * self.obs_error_scale)  
         self.epsilon_obs = default_epsilon_obs if epsilon_alt is None else self.epsilon_alt*self.obs_error_scale
         
       
