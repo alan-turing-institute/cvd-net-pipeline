@@ -8,7 +8,7 @@ def build_emulator(n_samples:int=200,
                    n_params:int=9, 
                    output_path:str="output", 
                    output_file_name:str="waveform_resampled_all_pressure_traces_rv_with_pca.csv"):
-    print("[BuildEmulator] training emulator")
+    
 
     input_file = pd.read_csv(f"{output_path}/input_{n_samples}_{n_params}params.csv")
     output_file = pd.read_csv(f"{output_path}/output_{n_samples}_{n_params}params/{output_file_name}")

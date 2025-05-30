@@ -5,19 +5,19 @@ from bayesian_calibration import BayesianCalibration
 import os
 from utils import plot_utils
 
-def calibrate_parameters(n_samples:int=50, n_params:int=9, output_path:str='output'):
+def calibrate_parameters(n_samples:int=50, n_params:int=9, output_path:str='output', output_keys:list=None):
 
 
     # Data
-    input_params = pd.read_csv(f'{output_path}/input_{n_samples}_{n_params}params')
+    input_params = pd.read_csv(f'{output_path}/input_{n_samples}_{n_params}params.csv')
     output_file = pd.read_csv(f"{output_path}/output_{n_samples}_{n_params}params/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
     # emulators
     emulators = pd.read_pickle(f"{output_path}/output_{n_samples}_{n_params}params/emulators/linear_models_and_r2_scores_{n_samples}.pkl")
-    print(emulators)
+    
 
     # Direcotry for saving results
-    output_dir = f"../output/output_{n_samples}_{n_params}params/bayesian_calibration_results/"
+    output_dir = f"{output_path}/output_{n_samples}_{n_params}params/bayesian_calibration_results/"
 
     # Make directory if it doesn't exist
     import os
@@ -43,14 +43,27 @@ def calibrate_parameters(n_samples:int=50, n_params:int=9, output_path:str='outp
     
     # Smaple from the posterior distribution
     bc.sample_posterior(n_samples=1000)
-    bc.samples_df.to_csv(f"{output_dir}/posterior_samples_{output_keys}.csv", index=False)  #### Need a way to keep track of what output 
-                                                                                            ###keys are used as folder will contain many calibrations using different output keys
+
+    n_output_keys =  len(output_keys)
+
+    bc.samples_df.to_csv(f"{output_dir}/posterior_samples_{n_output_keys}.csv", index=False)  #### Need a way to keep track of what output 
+                                                                                            ###keys are used as folder will contain many calibrations using different output keys, currently just using len(output_keys)
 
     # Plot the prior and posteior distributions
-    plot_utils.plot_posterior_distributions()
+    plot_utils.plot_posterior_distributions(input_params, 
+                                             bc.mu_0,
+                                             bc.Sigma_0,
+                                             bc.Mu_post,
+                                             bc.Sigma_post,
+                                             bc.which_obs,
+                                             bc.param_names,
+                                             output_path=output_dir)
 
     # Plot posterior covariance matrix
-    plot_utils.plot_posterior_covariance_matrix()
+    plot_utils.plot_posterior_covariance_matrix(bc.Sigma_0,
+                                                 bc.Sigma_post,
+                                                 bc.param_names,
+                                                 output_path=output_dir)
 
     
     

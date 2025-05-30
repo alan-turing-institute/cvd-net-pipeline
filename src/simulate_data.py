@@ -56,7 +56,7 @@ def simulate_data(param_path: str, n_samples: int, output_path: str, repeat_simu
             raise ValueError(f"Expected {n_samples} simulations, but found {len(simulations)}. Will run simulations again.")
             repeat_simulations = True
     else:
-        print(f"Running simulation as {output_parameters}.")
+        print(f"Running simulation with {n_samples} samples and {n_params} parameters. \n Saving to {output_parameters}.")
         repeat_simulations = True
 
 

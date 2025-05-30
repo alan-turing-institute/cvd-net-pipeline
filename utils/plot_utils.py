@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import  PowerTransformer
 from sklearn.decomposition import PCA
@@ -182,7 +183,7 @@ def plot_pca_histogram(X_pca, output_path, n_pca_components=10):
     plt.savefig(f'{output_path_figures}/histograms_pca.png')    
 
 
-def plot_posterior_distributions(mu_0, Sigma_0, Mu_post, Sigma_post, which_obs, param_names, output_path):
+def plot_posterior_distributions(input, mu_0, Sigma_0, Mu_post, Sigma_post, which_obs, param_names, output_path):
 
     output_path_figures = os.path.join(output_path,"figures")
     os.makedirs(output_path_figures, exist_ok=True)
