@@ -80,11 +80,12 @@ def run_pipeline(config):
                                     output_keys=config.get("output_keys"))
 
     if "6" in steps:
-        print("Step 6: Calibration")
+        print("Step 6: Simulating posterior pressure waves.")
+        simulate_data("output/output_64_9params/bayesian_calibration_results/posterior_samples_17.csv")
         
 
     if "7" in steps:
-        print("Step 7: Final Resampling")
+        print("Step 7: Resampling posterior pressure waves.")
         analyse_giessen("outputs/posterior_simulations.csv")
 
     print("Pipeline complete.")
