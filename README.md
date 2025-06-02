@@ -50,7 +50,7 @@ python main.py --config config/pipeline_config.json
 
 ### Steps in the Pipeline
 1. **Simulate Data**: Generates input and output data based on parameters.
-2. **Analyze Giessen**: Performs analysis on the input data.
+2. **Analyze Giessen**: Performs analysis on the simulated pressure waveform data.
 3. **Compute PCA**: Performs a PCA on the output data.
 4. **Build Emulator**: Builds an emulator for the data.
 5. **Simulate Posterior Data**: Simulates data from posterior samples.
