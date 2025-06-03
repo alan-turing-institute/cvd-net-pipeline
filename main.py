@@ -25,7 +25,7 @@ def run_pipeline(config):
 
         # Define the output directory for the current simulations
         output_dir_sims = f"{output_path}/output_{nsamples}_{n_params}params"
-        print("Saving simulations to:", output_dir_sims)
+        print("Simulation output directory is: ", output_dir_sims)
 
     os.makedirs(output_path, exist_ok=True)
 
@@ -77,7 +77,8 @@ def run_pipeline(config):
         calibrate_parameters(n_samples=nsamples,
                                     n_params=n_params,
                                     output_path=output_path,
-                                    output_keys=output_keys)
+                                    output_keys=output_keys,
+                                    config=config)
 
     if "6" in steps:
         # To be modified
