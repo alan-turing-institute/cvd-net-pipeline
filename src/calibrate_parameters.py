@@ -1,7 +1,7 @@
 
 import pandas as pd
 import numpy as np
-from bayesian_calibration import BayesianCalibration
+from utils import BayesianCalibration
 import os
 from utils import plot_utils
 
