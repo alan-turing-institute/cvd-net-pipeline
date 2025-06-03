@@ -224,6 +224,7 @@ def plot_posterior_distributions(input, mu_0, Sigma_0, Mu_post, Sigma_post, whic
         plt.suptitle(f'Posterior Distributions of Calibrated Parameters')
         plt.savefig(f'{output_path_figures}/posterior_distributions_calibrated_params.png')    
 
+
 def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_path):
         
     output_path_figures = os.path.join(output_path,"figures")
