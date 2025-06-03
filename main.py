@@ -1,9 +1,9 @@
 import json
-from src.simulate_data import simulate_data
-from src.analyse_giessen import analyse_giessen
-from src.compute_pca import compute_pca
-from src.build_emulator import build_emulator
-from src.calibrate_parameters import calibrate_parameters
+from simulate_data import simulate_data
+from analyse_giessen import analyse_giessen
+from compute_pca import compute_pca
+from build_emulator import build_emulator
+from calibrate_parameters import calibrate_parameters
 import os
 import argparse
 
