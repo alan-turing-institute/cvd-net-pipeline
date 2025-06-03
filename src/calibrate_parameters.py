@@ -4,6 +4,8 @@ import numpy as np
 from utils.bayesian_calibration import BayesianCalibration
 import os
 from utils import plot_utils
+import json
+from datetime import datetime
 
 def calibrate_parameters(n_samples:int=50, 
                          n_params:int=9, 
@@ -44,25 +46,21 @@ def calibrate_parameters(n_samples:int=50,
 
     n_output_keys =  len(output_keys)
 
-    # Define the output directory name
-    output_dir_bayesian = f"{output_dir}/bayesian_calibration_results/{n_output_keys}_output_keys"
+    # Define the output directory name, appending the number of output keys to the directory name and including a timestamp
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_dir_bayesian = f"{output_dir}/{n_output_keys}_output_keys/calibration_{timestamp}"
 
-    # Check if the directory exists
-    if os.path.exists(output_dir_bayesian):
-        # Load the output keys from the existing directory and compare to the current output keys
-
-
-        # If the output keys are the same, overwrite the existing files
-
-
-
-        # If the output keys are different, create a new directory with a different name
-
+    # Check if the directory exists, if not, create it
+    if not os.path.exists(output_dir_bayesian):
+        os.makedirs(output_dir_bayesian)
 
     bc.samples_df.to_csv(f"{output_dir_bayesian}/posterior_samples.csv", index=False)
-    posterior_mean.to_csv(f"{output_dir_bayesian}/posterior_mean.csv")
-    posterior_cov.to_csv(f"{output_dir_bayesian}/posterior_covariance.csv")
+    posterior_mean.to_csv(f"{output_dir_bayesian}/posterior_mean.csv", index=False)
+    posterior_cov.to_csv(f"{output_dir_bayesian}/posterior_covariance.csv", index=False)
 
+    # Save the config file
+    with open(os.path.join(output_dir_bayesian, 'used_config.json'), 'w') as f:
+        json.dump(config, f, indent=4)
    
     # Plot the prior and posteior distributions
     plot_utils.plot_posterior_distributions(input_params, 
