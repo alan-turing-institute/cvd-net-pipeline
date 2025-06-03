@@ -77,9 +77,10 @@ def run_pipeline(config):
         calibrate_parameters(n_samples=nsamples,
                                     n_params=n_params,
                                     output_path=output_path,
-                                    output_keys=config.get("output_keys"))
+                                    output_keys=output_keys)
 
     if "6" in steps:
+        # To be modified
         print("Step 6: Simulating posterior pressure waves.")
         simulate_data("output/output_64_9params/bayesian_calibration_results/posterior_samples_17.csv")
         
