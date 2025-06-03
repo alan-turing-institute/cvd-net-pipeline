@@ -20,7 +20,6 @@ def calibrate_parameters(n_samples:int=50, n_params:int=9, output_path:str='outp
     output_dir = f"{output_path}/output_{n_samples}_{n_params}params/bayesian_calibration_results/"
 
     # Make directory if it doesn't exist
-    import os
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
