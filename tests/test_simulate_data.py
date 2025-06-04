@@ -83,7 +83,7 @@ def test_simulate_data():
         assert os.path.exists(output_dir_pressure_traces_rv), "RV pressure traces file was not created."
 
         # Run the test for calibrated parameters
-        output_dir_bayesian = './tests/expected_outputs/simulate_data_module/output_64_9params/bayesian_calibration_results/17_output_keys/calibration_20250604_100806'
+        output_dir_bayesian = './tests/expected_outputs/calibrate_parameters_module/output_64_9params/bayesian_calibration_results/17_output_keys/calibration_20250604_100806'
 
         output_dir_sims, n_params = simulate_data(
             param_path=param_path,
@@ -93,23 +93,27 @@ def test_simulate_data():
         )
 
         # Check that the 'posterior_simulations' folder is created
-        posterior_simulations_dir = os.path.join(output_dir_bayesian, 'posterior_simulations')
-        assert os.path.exists(posterior_simulations_dir), "Posterior simulations directory was not created."
+        assert os.path.exists(os.path.join(output_dir_bayesian, 'posterior_simulations')), "Posterior simulations directory was not created."
 
-        # Compare the results with expected results
+        # Compare the output files to the expected output files
+        expected_output_dir = os.path.join('./tests/expected_outputs/simulate_data_module',
+                                            f'output_{n_samples}_9params/',
+                                            'bayesian_calibration_results/17_output_keys/calibration_20250604_100806/')
+        expected_pressure_traces_pat = pd.read_csv(os.path.join(expected_output_dir,
+                                                    'pressure_traces_pat',
+                                                    'all_pressure_traces.csv'))
+        expected_pressure_traces_rv = pd.read_csv(os.path.join(expected_output_dir,
+                                                    'pressure_traces_rv',
+                                                    'all_pressure_traces.csv'))
+
+        resulting_pressure_traces_pat = pd.read_csv(os.path.join(output_dir_bayesian,'pressure_traces_pat','all_pressure_traces.csv'))
+        resulting_pressure_traces_rv = pd.read_csv(os.path.join(output_dir_bayesian,'pressure_traces_rv','all_pressure_traces.csv'))
+
+        pd.testing.assert_frame_equal(resulting_pressure_traces_pat, expected_pressure_traces_pat)
+        pd.testing.assert_frame_equal(resulting_pressure_traces_rv, expected_pressure_traces_rv)
+
+
+
 
         # Load the expected results
         expected_calibration_results_dir = './tests/expected_outputs/calibrate_parameters_module/output_64_9params/bayesian_calibration_results/17_output_keys/calibration_20250604_100806'
-        expected_posterior_covariance = pd.read_csv(os.path.join(expected_calibration_results_dir, 'posterior_covariance.csv'))
-        expected_posterior_mean       = pd.read_csv(os.path.join(expected_calibration_results_dir, 'posterior_mean.csv'))
-        expected_posterior_samples    = pd.read_csv(os.path.join(expected_calibration_results_dir, 'posterior_samples.csv'))
-
-        # Load the actual results
-        posterior_covariance = pd.read_csv(os.path.join(posterior_simulations_dir, 'posterior_covariance.csv'))
-        posterior_mean       = pd.read_csv(os.path.join(posterior_simulations_dir, 'posterior_mean.csv'))
-        posterior_samples    = pd.read_csv(os.path.join(posterior_simulations_dir, 'posterior_samples.csv'))
-
-        # Compare the dataframes
-        pd.testing.assert_frame_equal(posterior_covariance, expected_posterior_covariance)
-        pd.testing.assert_frame_equal(posterior_mean, expected_posterior_mean)
-        pd.testing.assert_frame_equal(posterior_samples, expected_posterior_samples)
