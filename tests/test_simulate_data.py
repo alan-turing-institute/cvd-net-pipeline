@@ -11,7 +11,7 @@ def test_simulate_data():
         print(f"Temporary directory created at: {tmp_path}")
 
         param_path = "parameters_pulmonary_sensitive_summarystats.json"  # Ensure this file exists with valid parameters
-        n_samples = 50
+        n_samples = 64
         repeat_simulations = True
 
         # Call the function
@@ -33,14 +33,12 @@ def test_simulate_data():
         assert os.path.exists(input_file), "Input file was not created."
         assert os.path.exists(output_dir_sims), "Simulations Output directory was not created."
         assert os.path.exists(bool_indices_file), "Bool indices file was not created."
-        assert os.path.exists(output_dir_pressure_traces_pat), "PAT pressure traces file was not created."
-        assert os.path.exists(output_dir_pressure_traces_rv), "RV pressure traces file was not created."
 
 
         # Optionally, check the contents of the input file
         input_data = pd.read_csv(input_file)
         assert len(input_data) == n_samples, "Input file does not contain the expected number of samples."
-        print (input_data)
+
         # Compare the input file to the input file in the expected_outputs directory
         expected_input_file_path = os.path.join('./tests/expected_outputs/simulate_data_module',
                                            f'output_{n_samples}_9params/',
@@ -84,3 +82,34 @@ def test_simulate_data():
         assert os.path.exists(output_dir_pressure_traces_pat), "PAT pressure traces file was not created."
         assert os.path.exists(output_dir_pressure_traces_rv), "RV pressure traces file was not created."
 
+        # Run the test for calibrated parameters
+        output_dir_bayesian = './tests/expected_outputs/simulate_data_module/output_64_9params/bayesian_calibration_results/17_output_keys/calibration_20250604_100806'
+
+        output_dir_sims, n_params = simulate_data(
+            param_path=param_path,
+            n_samples=n_samples,
+            output_path=output_dir_bayesian,
+            sample_parameters = False
+        )
+
+        # Check that the 'posterior_simulations' folder is created
+        posterior_simulations_dir = os.path.join(output_dir_bayesian, 'posterior_simulations')
+        assert os.path.exists(posterior_simulations_dir), "Posterior simulations directory was not created."
+
+        # Compare the results with expected results
+
+        # Load the expected results
+        expected_calibration_results_dir = './tests/expected_outputs/calibrate_parameters_module/output_64_9params/bayesian_calibration_results/17_output_keys/calibration_20250604_100806'
+        expected_posterior_covariance = pd.read_csv(os.path.join(expected_calibration_results_dir, 'posterior_covariance.csv'))
+        expected_posterior_mean       = pd.read_csv(os.path.join(expected_calibration_results_dir, 'posterior_mean.csv'))
+        expected_posterior_samples    = pd.read_csv(os.path.join(expected_calibration_results_dir, 'posterior_samples.csv'))
+
+        # Load the actual results
+        posterior_covariance = pd.read_csv(os.path.join(posterior_simulations_dir, 'posterior_covariance.csv'))
+        posterior_mean       = pd.read_csv(os.path.join(posterior_simulations_dir, 'posterior_mean.csv'))
+        posterior_samples    = pd.read_csv(os.path.join(posterior_simulations_dir, 'posterior_samples.csv'))
+
+        # Compare the dataframes
+        pd.testing.assert_frame_equal(posterior_covariance, expected_posterior_covariance)
+        pd.testing.assert_frame_equal(posterior_mean, expected_posterior_mean)
+        pd.testing.assert_frame_equal(posterior_samples, expected_posterior_samples)
