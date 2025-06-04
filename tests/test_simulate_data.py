@@ -3,6 +3,7 @@ import pytest
 import pandas as pd
 from simulate_data import simulate_data
 import tempfile
+import shutil
 
 def test_simulate_data():
     # Define test parameters
@@ -112,8 +113,8 @@ def test_simulate_data():
         pd.testing.assert_frame_equal(resulting_pressure_traces_pat, expected_pressure_traces_pat)
         pd.testing.assert_frame_equal(resulting_pressure_traces_rv, expected_pressure_traces_rv)
 
-
-
-
-        # Load the expected results
-        expected_calibration_results_dir = './tests/expected_outputs/calibrate_parameters_module/output_64_9params/bayesian_calibration_results/17_output_keys/calibration_20250604_100806'
+        # Delete the output directory to clean up
+        shutil.rmtree(os.path.join(output_dir_bayesian,'figures'))
+        shutil.rmtree(os.path.join(output_dir_bayesian,'pressure_traces_pat'))
+        shutil.rmtree(os.path.join(output_dir_bayesian,'pressure_traces_rv'))
+        os.remove(os.path.join(output_dir_bayesian, 'bool_indices_64.csv'))
