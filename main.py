@@ -4,6 +4,7 @@ from analyse_giessen import analyse_giessen
 from compute_pca import compute_pca
 from build_emulator import build_emulator
 from calibrate_parameters import calibrate_parameters
+from utils import plot_utils
 import os
 import argparse
 
@@ -42,7 +43,7 @@ def run_pipeline(config):
             param_path=config.get("input_parameters"),
             n_samples=nsamples,
             output_path=output_path,
-            simulate_parameters=True
+            sample_parameters=True
         )
 
     if "2" in steps:
@@ -89,7 +90,7 @@ def run_pipeline(config):
             output_dir_bayesian = config.get("output_dir_bayesian")
             print(f"Reading parameter file from {output_dir_bayesian} as pre-defined in the configuration file.")
 
-        output_dir_sims, n_params = simulate_data(
+        output_dir_bayesian, n_params = simulate_data(
             param_path=config.get("input_parameters"),
             n_samples=nsamples,
             output_path=output_dir_bayesian,
@@ -99,7 +100,8 @@ def run_pipeline(config):
 
     if "7" in steps:
         print("Step 7: Resampling posterior pressure waves.")
-        analyse_giessen("outputs/posterior_simulations.csv")
+        analyse_giessen(output_dir_bayesian)
+        plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian)
 
     print("Pipeline complete.")
 

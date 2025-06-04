@@ -3,7 +3,7 @@ from AnalysisGiessen import analyseGiessen
 
 def analyse_giessen(file_path: str):
 
-    sim_name = 'waveform'
+    
     file = pd.read_csv(f"{file_path}/pressure_traces_rv/all_pressure_traces.csv")
 
     # Here takes all Pressure traces from step 1
