@@ -237,4 +237,76 @@ def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_pa
     axes[1].set_title("Posterior Covariance Matrix")
 
     plt.suptitle(f'Posterior Covariance Matrix')
-    plt.savefig(f'{output_path_figures}/posterior_covairance_matrix.png') 
+    plt.savefig(f'{output_path_figures}/posterior_covariance_matrix.png') 
+
+def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
+    
+    true_waveforms = pd.read_csv(f"{output_dir_sims}/waveform_resampled_all_pressure_traces_rv.csv")
+    posterior_waveforms = pd.read_csv(f"{output_dir_bayesian}/waveform_resampled_all_pressure_traces_rv.csv")
+    
+    # Ground truth waveform
+    which_obs = 3
+    y_true = pd.Series(true_waveforms.iloc[which_obs, :101].values)
+
+    # Posterior waveforms
+    samples = posterior_waveforms.iloc[:, :101].values # Shape (100,101)
+    
+
+    # Compute and plot the mean waveform
+    mean_waveform = samples.mean(axis=0)
+    var_waveform = samples.var(axis=0) + 1e-6  # Adding a small constant to avoid division by zero
+    
+    
+    fig, ax = plt.subplots(figsize=(10, 5))
+    output_path_figures = os.path.join(output_dir_bayesian, "figures")
+    os.makedirs(output_path_figures, exist_ok=True)
+    ax.plot(mean_waveform, color='darkorange', linewidth=1.5, label="Mean Calibrated Waveform")
+
+    
+    
+    # Inputs
+    y_obs = y_true.values                    # shape: (101,)
+    posterior_preds = samples               # shape: (100, 101)
+    S, T = posterior_preds.shape            # S = 100, T = 101
+
+    # Set Gaussian likelihood standard deviation (fixed)
+    sigma = 1.0  # Adjust if your model has a known or estimated σ
+
+    # Compute log pointwise predictive density
+    log_likelihoods = -0.5 * np.log(2 * np.pi * sigma**2) \
+                    - ((y_obs - posterior_preds)**2) / (2 * sigma**2)
+    
+
+    
+    # log_likelihoods shape: (100, 101)
+    # Average over posterior samples (axis 0), then sum over timepoints
+    lppd =  np.sum(np.log(np.mean(np.exp(log_likelihoods), axis=0)))
+    nlpd = -lppd
+
+    # p_WAIC: sum of variances of log-likelihoods across posterior samples
+    p_waic = np.sum(np.var(log_likelihoods, axis=0, ddof=1))  # scalar
+
+    # WAIC computation
+    waic = -2 * (lppd - p_waic)
+
+    # Compute RMSE
+    sqe = (y_obs - mean_waveform) ** 2
+    rmse = np.sqrt(sqe.mean(axis=0))
+    
+    # Plot y_true
+    ax.plot(y_true.values, label="True Waveform", color='c', linewidth=2)
+    
+    # Plot all waveforms in faded orange
+    for j in range(samples.shape[0]):
+        ax.plot(samples[j, :], color='orange', alpha=0.1)
+    
+    
+    ax.set_xticks(np.arange(0, 110, 10))
+    ax.set_xlabel("Time Index")
+    ax.set_title(f"Posterior Simulations\nRMSE = {rmse:.4f}, NLPD = {nlpd:.2f}, WAIC = {waic:.2f}")
+    ax.set_ylabel("Pressure (mmHg)")
+    ax.legend()
+
+    fig.suptitle("Calibrated Pressure Waveforms for Different Methods")
+    plt.tight_layout()
+    fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
