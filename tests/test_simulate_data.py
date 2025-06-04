@@ -117,4 +117,5 @@ def test_simulate_data():
         shutil.rmtree(os.path.join(output_dir_bayesian,'figures'))
         shutil.rmtree(os.path.join(output_dir_bayesian,'pressure_traces_pat'))
         shutil.rmtree(os.path.join(output_dir_bayesian,'pressure_traces_rv'))
+        shutil.rmtree(os.path.join(output_dir_bayesian,'posterior_simulations'))        
         os.remove(os.path.join(output_dir_bayesian, 'bool_indices_64.csv'))
