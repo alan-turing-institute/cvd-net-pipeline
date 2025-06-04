@@ -32,9 +32,8 @@ def test_calibrate_parameters():
                              output_keys=output_keys,
                              config=[])
 
-
         # Compare the output files to the expected output files
-        expected_output_dir = './tests/expected_outputs/calibrate_parameters_module/output_64_9params/bayesian_calibration_results/17_output_keys/calibration_20250603_161640'
+        expected_output_dir = './tests/expected_outputs/calibrate_parameters_module/output_64_9params/bayesian_calibration_results/17_output_keys/calibration_20250604_100806'
         expected_posterior_covariance = pd.read_csv(os.path.join(expected_output_dir,
                                                     'posterior_covariance.csv'))
         expected_posterior_mean       = pd.read_csv(os.path.join(expected_output_dir,
