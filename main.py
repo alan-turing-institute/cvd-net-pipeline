@@ -42,6 +42,7 @@ def run_pipeline(config):
             param_path=config.get("input_parameters"),
             n_samples=nsamples,
             output_path=output_path,
+            simulate_parameters=True
         )
 
     if "2" in steps:
@@ -74,17 +75,27 @@ def run_pipeline(config):
         if output_keys is None:
             raise ValueError("output keys must be provided in the configuration to run calibration.")
         
-        calibrate_parameters(n_samples=nsamples,
+        output_dir_bayesian = calibrate_parameters(n_samples=nsamples,
                                     n_params=n_params,
                                     output_path=output_path,
                                     output_keys=output_keys,
                                     config=config)
 
     if "6" in steps:
-        # To be modified
         print("Step 6: Simulating posterior pressure waves.")
-        simulate_data("output/output_64_9params/bayesian_calibration_results/posterior_samples_17.csv")
-        
+       
+       
+        if not "5" in steps:
+            output_dir_bayesian = config.get("output_dir_bayesian")
+            print(f"Reading parameter file from {output_dir_bayesian} as pre-defined in the configuration file.")
+
+        output_dir_sims, n_params = simulate_data(
+            param_path=config.get("input_parameters"),
+            n_samples=nsamples,
+            output_path=output_dir_bayesian,
+            sample_parameters = False
+        )
+
 
     if "7" in steps:
         print("Step 7: Resampling posterior pressure waves.")
