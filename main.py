@@ -1,10 +1,9 @@
 import json
-from src.simulate_data import simulate_data
-from src.analyse_giessen import analyse_giessen
-from src.compute_pca import compute_pca
-from src.build_emulator import build_emulator
-from src.simulate_posterior import simulate_posterior
-from src.calibrate import calibrate
+from simulate_data import simulate_data
+from analyse_giessen import analyse_giessen
+from compute_pca import compute_pca
+from build_emulator import build_emulator
+from calibrate_parameters import calibrate_parameters
 import os
 import argparse
 
@@ -26,7 +25,7 @@ def run_pipeline(config):
 
         # Define the output directory for the current simulations
         output_dir_sims = f"{output_path}/output_{nsamples}_{n_params}params"
-        print("Saving simulations to:", output_dir_sims)
+        print("Simulation output directory is: ", output_dir_sims)
 
     os.makedirs(output_path, exist_ok=True)
 
@@ -69,15 +68,26 @@ def run_pipeline(config):
                        output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
     if "5" in steps:
-        print("Step 5: Simulating Posterior Data")
-        simulate_posterior()
+        print("Step 5: Calibrating parameters using config output keys")
+
+        output_keys = config.get("output_keys")
+        if output_keys is None:
+            raise ValueError("output keys must be provided in the configuration to run calibration.")
+        
+        calibrate_parameters(n_samples=nsamples,
+                                    n_params=n_params,
+                                    output_path=output_path,
+                                    output_keys=output_keys,
+                                    config=config)
 
     if "6" in steps:
-        print("Step 6: Calibration")
-        calibrate()
+        # To be modified
+        print("Step 6: Simulating posterior pressure waves.")
+        simulate_data("output/output_64_9params/bayesian_calibration_results/posterior_samples_17.csv")
+        
 
     if "7" in steps:
-        print("Step 7: Final Resampling")
+        print("Step 7: Resampling posterior pressure waves.")
         analyse_giessen("outputs/posterior_simulations.csv")
 
     print("Pipeline complete.")

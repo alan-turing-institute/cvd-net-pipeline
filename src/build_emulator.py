@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from utils import utils
+from utils import helper_functions
 
 
 # steps/build_emulator.py
@@ -8,7 +8,7 @@ def build_emulator(n_samples:int=200,
                    n_params:int=9, 
                    output_path:str="output", 
                    output_file_name:str="waveform_resampled_all_pressure_traces_rv_with_pca.csv"):
-    print("[BuildEmulator] training emulator")
+    
 
     input_file = pd.read_csv(f"{output_path}/input_{n_samples}_{n_params}params.csv")
     output_file = pd.read_csv(f"{output_path}/output_{n_samples}_{n_params}params/{output_file_name}")
@@ -37,7 +37,7 @@ def build_emulator(n_samples:int=200,
     # (if present) and fit a linear model to each of them using those parameters that have been selected as relevant inputs.
     # Currently, just a linear regression model is used.
     for key in output_keys:
-        model, r2, mse, rse = utils.emulate_linear(input=filtered_input, output=output_file[key])
+        model, r2, mse, rse = helper_functions.emulate_linear(input=filtered_input, output=output_file[key])
         linear_r2_scores[key] = r2
         linear_mse_scores[key] = mse
         linear_rse_scores[key] = rse
