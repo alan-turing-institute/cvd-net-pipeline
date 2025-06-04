@@ -1,7 +1,0 @@
-{
-  "input_parameters": "sensitivity_input_json.json",
-  "output_path": "output/",
-  "steps": ["1"],
-  "nsamples": 500
-
-}
