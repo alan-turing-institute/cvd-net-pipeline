@@ -42,7 +42,7 @@ def calibrate_parameters(n_samples:int=50,
 
     
     # Smaple from the posterior distribution
-    bc.sample_posterior(n_samples=1000)
+    bc.sample_posterior(n_samples=n_samples)
 
     n_output_keys =  len(output_keys)
 
