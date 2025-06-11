@@ -1,6 +1,6 @@
 import json
 from analyse_giessen_real import analyse_giessen_real
-from compute_pca import compute_pca
+from compute_pca_real import compute_pca_real
 from build_emulator import build_emulator
 from calibrate_parameters import calibrate_parameters
 from utils import plot_utils
@@ -28,9 +28,7 @@ def run_pipeline(config):
         if n_pca_components is None:
             raise ValueError("n_pca_components must be provided in the configuration to run PCA.")
 
-        compute_pca(n_samples=nsamples, 
-                    n_params=n_params, 
-                    n_pca_components=n_pca_components,
+        compute_pca_real(n_pca_components=n_pca_components,
                     output_path=output_path)
 
     if "4" in steps:

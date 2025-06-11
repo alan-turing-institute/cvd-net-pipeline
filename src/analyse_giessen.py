@@ -10,7 +10,7 @@ def analyse_giessen(file_path: str):
 
     all_pressure_traces = pd.DataFrame()
     for ind in range(len(file)):
-        if ind % 10000 == 0:
+        if ind % 1000 == 0:
             print(f"Processing {ind}th trace")
         dt = file.loc[ind, 'dt']
         f = file.iloc[[ind], :100].T

@@ -125,9 +125,7 @@ def plot_pca_explained_variance(pca, output_path):
     # Explained variance
     explained_variance_ratio = pca.explained_variance_ratio_
     axs[0].bar(grid, explained_variance_ratio, log=True)
-    axs[0].set(
-        xlabel="Component", title="% Explained Variance", ylim=(0.0, 1.0)
-    )
+    axs[0].set(xlabel="Component", title="% Explained Variance", ylim=(1e-3, 1.0))
 
     # Cumulative Variance
     cumulative_explained_variance = np.cumsum(explained_variance_ratio)
