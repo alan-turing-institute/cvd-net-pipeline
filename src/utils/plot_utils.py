@@ -258,7 +258,6 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
     fig, ax = plt.subplots(figsize=(10, 5))
     output_path_figures = os.path.join(output_dir_bayesian, "figures")
     os.makedirs(output_path_figures, exist_ok=True)
-    ax.plot(mean_waveform, color='darkorange', linewidth=1.5, label="Mean Calibrated Waveform")
 
     
     
@@ -291,14 +290,18 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
     sqe = (y_obs - mean_waveform) ** 2
     rmse = np.sqrt(sqe.mean(axis=0))
     
-    # Plot y_true
-    ax.plot(y_true.values, label="True Waveform", color='c', linewidth=2)
+    
     
     # Plot all waveforms in faded orange
     for j in range(samples.shape[0]):
-        ax.plot(samples[j, :], color='orange', alpha=0.1)
+        ax.plot(samples[j, :], color='orange', alpha=0.001)
     
-    
+    # Plot y_true
+    ax.plot(y_true.values, label="True Waveform", color='c', linewidth=2)
+
+    # Plot mean waveform
+    ax.plot(mean_waveform, color='darkorange', linewidth=1.5, label="Mean Calibrated Waveform")
+
     ax.set_xticks(np.arange(0, 110, 10))
     ax.set_xlabel("Time Index")
     ax.set_title(f"Posterior Simulations\nRMSE = {rmse:.4f}, NLPD = {nlpd:.2f}, WAIC = {waic:.2f}")

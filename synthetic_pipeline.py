@@ -100,6 +100,11 @@ def run_pipeline(config):
 
     if "7" in steps:
         print("Step 7: Resampling posterior pressure waves.")
+
+        if not "6" in steps:
+            output_dir_bayesian = config.get("output_dir_bayesian")
+            print(f"Loading posterior samples from {output_dir_bayesian} as pre-defined in the configuration file.")
+
         analyse_giessen(output_dir_bayesian)
         plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian)
 

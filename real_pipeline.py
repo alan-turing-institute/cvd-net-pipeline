@@ -1,8 +1,7 @@
 import json
 from analyse_giessen_real import analyse_giessen_real
 from compute_pca_real import compute_pca_real
-from build_emulator import build_emulator
-from calibrate_parameters import calibrate_parameters
+from calibrate_parameters_real import calibrate_parameters_real
 from utils import plot_utils
 import os
 import argparse
@@ -31,12 +30,6 @@ def run_pipeline(config):
         compute_pca_real(n_pca_components=n_pca_components,
                     output_path=output_path)
 
-    if "4" in steps:
-        print("Step 4: Building Emulator")
-        build_emulator(n_samples=nsamples,
-                       n_params=n_params, 
-                       output_path=output_path, 
-                       output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
     if "5" in steps:
         print("Step 5: Calibrating parameters using config output keys")
@@ -45,10 +38,22 @@ def run_pipeline(config):
         if output_keys is None:
             raise ValueError("output keys must be provided in the configuration to run calibration.")
         
-        output_dir_bayesian = calibrate_parameters(n_samples=nsamples,
+        emulator_path = config.get("emulator_path")
+        nsamples = config.get("n_samples")
+        n_params = config.get("n_params")
+        include_timeseries = config.get("include_timeseries")
+        if include_timeseries == 1:
+            include_timeseries = True
+            print("Including time-series in calibraiton as specified in config file.")
+        else:
+            include_timeseries = False
+
+        calibrate_parameters_real(n_samples=nsamples,
                                     n_params=n_params,
                                     output_path=output_path,
+                                    emulator_path=emulator_path,
                                     output_keys=output_keys,
+                                    include_timeseries=include_timeseries,
                                     config=config)
 
     print("Pipeline complete.")
