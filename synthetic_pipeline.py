@@ -76,10 +76,20 @@ def run_pipeline(config):
         if output_keys is None:
             raise ValueError("output keys must be provided in the configuration to run calibration.")
         
+        include_timeseries = config.get("include_timeseries")
+        if include_timeseries == 1:
+            include_timeseries = True
+            #print("Including time-series in calibraiton as specified in config file.")
+        else:
+            include_timeseries = False
+        print(f"Include time-series in calibration: {include_timeseries}")
+
         output_dir_bayesian = calibrate_parameters(n_samples=nsamples,
                                     n_params=n_params,
                                     output_path=output_path,
                                     output_keys=output_keys,
+                                    include_timeseries=include_timeseries,
+                                    epsilon_obs_scale=config.get("epsilon_obs_scale", 0.05),
                                     config=config)
 
     if "6" in steps:

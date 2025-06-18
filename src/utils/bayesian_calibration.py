@@ -8,12 +8,12 @@ import math
 
 class BayesianCalibration:
     def __init__(self, input, emulator_output, filtered_output, which_obs, 
-                 epsilon_obs_scale, epsilon_alt=None):
+                 epsilon_obs):
         self.input = input
         self.emulator_output = emulator_output
         self.filtered_output = filtered_output
         self.which_obs = which_obs
-        self.epsilon_alt = epsilon_alt 
+        self.epsilon_obs = epsilon_obs 
         
 
 
@@ -30,14 +30,7 @@ class BayesianCalibration:
         # Model error
         self.epsilon_model = np.diag(emulator_output['RSE']**2) 
        
-        
-        # Observation error
-        self.obs_error_scale = epsilon_obs_scale 
-        default_epsilon_obs = np.diag(filtered_output.std(axis=0) * self.obs_error_scale)  
-        self.epsilon_obs = default_epsilon_obs if epsilon_alt is None else self.epsilon_alt*self.obs_error_scale
-        
-      
-        
+                      
         # Compute posterior
         self.compute_posterior()
    

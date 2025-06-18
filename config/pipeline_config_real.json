@@ -10,6 +10,7 @@
   "output_keys": [
     "t_max_dpdt", "a_epad", "epad", "s_a_epad", "s_epad",
     "min_dpdt", "max_dpdt", "A_p", "P_max", "esp", "sys",
-    "EF", "Ees/Ea", "iT", "PC1", "PC2", "PC3"
-  ]
+    "iT", "PC1", "PC2", "PC3"
+  ],
+  "epsilon_obs_scale": 0.05
  }

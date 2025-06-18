@@ -44,7 +44,7 @@ def run_pipeline(config):
         include_timeseries = config.get("include_timeseries")
         if include_timeseries == 1:
             include_timeseries = True
-            print("Including time-series in calibraiton as specified in config file.")
+            #print("Including time-series in calibraiton as specified in config file.")
         else:
             include_timeseries = False
 
