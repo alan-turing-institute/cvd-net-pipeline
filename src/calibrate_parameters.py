@@ -47,8 +47,8 @@ def calibrate_parameters(n_samples:int=50,
 
 
         # Select emulators and data for specified output_keys
-        emulator_output = emulators.loc[all_output_keys]
-        observation_data = output_file.loc[:, all_output_keys]
+    emulator_output = emulators.loc[all_output_keys]
+    observation_data = output_file.loc[:, all_output_keys]
         
     # Create the diagonal matrix
     e_obs = np.diag(diagonal_values) * epsilon_obs_scale
