@@ -48,7 +48,9 @@ def run_pipeline(config):
 
     if "2" in steps:
         print("Step 2: Analysing Giessen (resample)")
-        analyse_giessen(output_dir_sims)
+        analyse_giessen(output_dir_sims,
+                        config.get('gaussian_sigmas')
+        )
 
     if "3" in steps:
         print("Step 3: Compute PCA")

@@ -33,7 +33,7 @@ def analyse_giessen(file_path: str, gaussian_sigmas : list[float]):
 
         resampled_df = pd.concat([beats, sumstats.iloc[:-1, :]], axis=1)
         # overwrite EF with model version
-        resampled_df['EF'] = file.loc[ind, 'EF']
+        resampled_df['MC_EF'] = file.loc[ind, 'EF']
         
         all_pressure_traces = pd.concat([all_pressure_traces, resampled_df.iloc[[2]]], axis=0)
 
