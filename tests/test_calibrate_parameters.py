@@ -53,11 +53,11 @@ def test_calibrate_parameters():
         # Find the actual calibration_* directory, because the name is created dynamically with a timestamp
         calibration_dirs = glob.glob(os.path.join(
             tmp_path, 
-            f'output_{n_samples}_{n_params}params',
+            f'output_{n_samples}_{n_params}_params',
             'bayesian_calibration_results/17_output_keys',
             'calibration_*'
         ))
-
+        print(calibration_dirs)
         assert len(calibration_dirs) == 1, "Expected exactly one calibration_* directory"
         calibration_dir = calibration_dirs[0]
 
