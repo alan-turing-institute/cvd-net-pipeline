@@ -51,11 +51,12 @@ def simulate_data(param_path: str, n_samples: int, output_path: str, repeat_simu
                    time_setup=TEMPLATE_TIME_SETUP_DICT)
 
     input_header = ','.join(br.samples.columns)
+    file_suffix  = f'_{n_samples}_{n_params}_params'
 
-    np.savetxt(os.path.join(output_path,f'input_{n_samples}_{n_params}params.csv'), br.samples, header=input_header, delimiter=',')
+    np.savetxt(os.path.join(output_path,f'input_{file_suffix}.csv'), br.samples, header=input_header, delimiter=',')
 
     if sample_parameters:
-        output_parameters = os.path.join(output_path, f'output_{n_samples}_{n_params}params')
+        output_parameters = os.path.join(output_path, f'output{file_suffix}')
         output_parameters_simulations = os.path.join(output_parameters,'simulations')
     else:
         output_parameters = output_path
