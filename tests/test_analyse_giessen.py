@@ -21,24 +21,24 @@ def cleanup_calibration_output_file():
 def test_analyse_giessen_valid_input(cleanup_output_file):
 
     # Call the function with the input file
-    analyse_giessen('tests/inputs_for_tests/analyse_giessen_module/output_64_9params')
+    analyse_giessen('tests/inputs_for_tests/analyse_giessen_module/output_64_9params', [6., 4., 2.])
 
     # Check if the output data matches the expected output
     output_data = pd.read_csv(cleanup_output_file)
     expected_output = pd.read_csv('tests/expected_outputs/analyse_giessen_module/output_64_9params/waveform_resampled_all_pressure_traces_rv.csv')
-    pd.testing.assert_frame_equal(output_data, expected_output)
+    pd.testing.assert_frame_equal(output_data[expected_output.columns], expected_output)
 
 def test_analyse_giessen_invalid_input():
     # Test with an invalid file path
     with pytest.raises(FileNotFoundError):
-        analyse_giessen("invalid/path")
+        analyse_giessen("invalid/path", [6., 4., 2.])
 
 def test_analyse_giessen_valid_calibrated_input(cleanup_calibration_output_file):
 
     # Call the function with the input file
-    analyse_giessen('tests/inputs_for_tests/analyse_giessen_module/output_64_9params/bayesian_calibration_results/17_output_keys/calibration_20250604_154542/')
+    analyse_giessen('tests/inputs_for_tests/analyse_giessen_module/output_64_9params/bayesian_calibration_results/17_output_keys/calibration_20250604_154542/', [6., 4., 2.])
 
     # Check if the output data matches the expected output
     output_data = pd.read_csv(cleanup_calibration_output_file)
     expected_output = pd.read_csv('tests/expected_outputs/analyse_giessen_module/output_64_9params/bayesian_calibration_results/17_output_keys/calibration_20250604_154542/waveform_resampled_all_pressure_traces_rv.csv')
-    pd.testing.assert_frame_equal(output_data, expected_output)
+    pd.testing.assert_frame_equal(output_data[expected_output.columns], expected_output)
