@@ -237,7 +237,7 @@ def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_pa
     plt.suptitle(f'Posterior Covariance Matrix')
     plt.savefig(f'{output_path_figures}/posterior_covariance_matrix.png') 
 
-def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
+def plot_posterior_simulations(output_dir_sims, output_dir_bayesian, e_obs):
     
     true_waveforms = pd.read_csv(f"{output_dir_sims}/waveform_resampled_all_pressure_traces_rv.csv")
     posterior_waveforms = pd.read_csv(f"{output_dir_bayesian}/waveform_resampled_all_pressure_traces_rv.csv")
@@ -267,11 +267,12 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
     S, T = posterior_preds.shape            # S = 100, T = 101
 
     # Set Gaussian likelihood standard deviation (fixed)
-    sigma = 1.0  # Adjust if your model has a known or estimated σ
+    sigma = e_obs # Dynamically adjust from observation model
+    sigma_diag = np.diag(e_obs)
 
     # Compute log pointwise predictive density
-    log_likelihoods = -0.5 * np.log(2 * np.pi * sigma**2) \
-                    - ((y_obs - posterior_preds)**2) / (2 * sigma**2)
+    log_likelihoods = -0.5 * np.log(2 * np.pi * sigma_diag**2) \
+                    - ((y_obs - posterior_preds)**2) / (2 * sigma_diag**2)
     
 
     

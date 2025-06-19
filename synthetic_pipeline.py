@@ -84,7 +84,7 @@ def run_pipeline(config):
             include_timeseries = False
         print(f"Include time-series in calibration: {include_timeseries}")
 
-        output_dir_bayesian = calibrate_parameters(n_samples=nsamples,
+        output_dir_bayesian, e_obs = calibrate_parameters(n_samples=nsamples,
                                     n_params=n_params,
                                     output_path=output_path,
                                     output_keys=output_keys,
@@ -116,7 +116,7 @@ def run_pipeline(config):
             print(f"Loading posterior samples from {output_dir_bayesian} as pre-defined in the configuration file.")
 
         analyse_giessen(output_dir_bayesian)
-        plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian)
+        plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian, e_obs)
 
     print("Pipeline complete.")
 

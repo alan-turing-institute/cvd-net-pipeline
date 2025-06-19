@@ -100,4 +100,4 @@ def calibrate_parameters(n_samples:int=50,
                                                  output_path=output_dir_bayesian)
 
     
-    return output_dir_bayesian 
+    return output_dir_bayesian, e_obs
