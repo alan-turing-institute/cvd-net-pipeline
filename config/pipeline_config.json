@@ -1,13 +1,22 @@
 {
   "input_parameters": "parameters_pulmonary_sensitive_summarystats.json",
   "output_path": "output/",
-  "steps": ["5", "6", "7"],  
-  "nsamples": 1024,
+  "steps": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7"
+  ],  
+  "nsamples": 512,
   "n_pca_components": 10,
   "n_params": 9,
+  "gaussian_sigmas": [0.001, 0.001, 0.001],
   "output_keys": [
     "t_max_dpdt", "a_epad", "epad", "s_a_epad", "s_epad",
     "min_dpdt", "max_dpdt", "A_p", "P_max", "esp", "sys",
-    "EF", "Ees/Ea", "iT", "PC1", "PC2", "PC3"
+    "EF", "Ees/Ea", "iT", "PC1", "PC2", "PC3", "MC_EF"
   ]
 }

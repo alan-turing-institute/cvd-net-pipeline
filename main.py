@@ -102,7 +102,9 @@ def run_pipeline(config):
 
     if "7" in steps:
         print("Step 7: Resampling posterior pressure waves.")
-        analyse_giessen(output_dir_bayesian)
+        analyse_giessen(output_dir_bayesian, 
+                        config.get('gaussian_sigmas')
+                        )
         plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian)
 
     print("Pipeline complete.")
