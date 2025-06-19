@@ -25,7 +25,7 @@ def run_pipeline(config):
             raise ValueError("n_params must be provided in the configuration if step 1 is not being executed.")
 
         # Define the output directory for the current simulations
-        output_dir_sims = f"{output_path}/output_{nsamples}_{n_params}params"
+        output_dir_sims = os.path.join(output_path, f'output_{nsamples}_{n_params}_params')
         print("Simulation output directory is: ", output_dir_sims)
 
     os.makedirs(output_path, exist_ok=True)

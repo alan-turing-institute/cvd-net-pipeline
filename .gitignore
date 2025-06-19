@@ -164,7 +164,7 @@ cython_debug/
 /Tutorials
 .DS_Store
 /playground_files
-output/
+output*/
 notebooks/
 
 *.pyc
