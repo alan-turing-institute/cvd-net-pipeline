@@ -26,6 +26,7 @@ def plot_simulated_traces(simulated_traces, output_path):
         ax.set_xlabel(xlabel)
         ax.set_ylabel(ylabel)
         ax.set_title(title)
+        fig.tight_layout()
         plt.savefig(filename)
         plt.close(fig)
 
@@ -106,14 +107,15 @@ def plot_pressure_transients_arterial_tree(input_traces, output_path):
     ax.set_ylabel('Pressure (mmHg)')
     ax.set_title('Pressure Transients in Arterial Tree')
 
-    # Add legend to the plot
-    # ax.legend()
+    fig.tight_layout()
 
     # Display the plot
     plt.savefig(f'{output_path_figures}/pressure_transients_arterial_tree_good_traces.png')
 
 
-def plot_pca_explained_variance(pca, output_path):
+def plot_pca_explained_variance(pipeline, output_path):
+    pipeline : Pipeline
+    pca = pipeline.named_steps['pca']
 
     output_path_figures = os.path.join(output_path,"figures")
     os.makedirs(output_path_figures, exist_ok=True)
@@ -142,18 +144,13 @@ def plot_pca_explained_variance(pca, output_path):
     plt.savefig(f'{output_path_figures}/pca_explained_variance.png')
 
 
-def plot_pca_transformed(pca, X_scaled, output_path):
+def plot_pca_transformed(pipeline, X, output_path):
+    pipeline : Pipeline
 
     output_path_figures = os.path.join(output_path,"figures")
     os.makedirs(output_path_figures, exist_ok=True)
-        
-    pipeline = Pipeline([
-                    ('scl', StandardScaler()),
-                    ('pca', PCA(n_components=10)),
-                    ('post',   PowerTransformer())
-                ])
 
-    signals_pca = pipeline.fit_transform(X_scaled)
+    signals_pca = pipeline.transform(X)
 
     fig, ax = plt.subplots(ncols=10, nrows=2, figsize=(70, 15))
 
@@ -179,6 +176,8 @@ def plot_pca_histogram(X_pca, output_path, n_pca_components=10):
         X_pca.hist(figsize=(15, 13), layout=(5, 2), alpha=0.7, color='orange', bins=30)
     except Exception:
         X_pca.hist(figsize=(15, 13), layout=(5, 2), alpha=0.7, color='orange')
+    
+    plt.tight_layout()
     plt.suptitle(f'Histograms of the First {n_pca_components} Principal Components')
     plt.savefig(f'{output_path_figures}/histograms_pca.png')    
 
@@ -221,8 +220,9 @@ def plot_posterior_distributions(input, mu_0, Sigma_0, Mu_post, Sigma_post, whic
         ax.set_ylabel("Density")
         ax.legend()
 
-        plt.suptitle(f'Posterior Distributions of Calibrated Parameters')
-        plt.savefig(f'{output_path_figures}/posterior_distributions_calibrated_params.png')    
+    fig.tight_layout()
+    plt.suptitle(f'Posterior Distributions of Calibrated Parameters')
+    plt.savefig(f'{output_path_figures}/posterior_distributions_calibrated_params.png')    
 
 
 def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_path):
@@ -236,6 +236,7 @@ def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_pa
     sns.heatmap(Sigma_post, annot=True, fmt=".4f", cmap="PiYG", xticklabels=param_names, yticklabels=param_names, ax=axes[1])
     axes[1].set_title("Posterior Covariance Matrix")
 
+    fig.tight_layout()
     plt.suptitle(f'Posterior Covariance Matrix')
     plt.savefig(f'{output_path_figures}/posterior_covariance_matrix.png') 
 
