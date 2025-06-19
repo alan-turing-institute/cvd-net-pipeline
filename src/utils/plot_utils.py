@@ -309,5 +309,5 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
     ax.legend()
 
     fig.suptitle("Calibrated Pressure Waveforms for Different Methods")
-    plt.tight_layout()
+    fig.tight_layout()
     fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
