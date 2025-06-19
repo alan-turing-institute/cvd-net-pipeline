@@ -24,8 +24,8 @@ def test_simulate_data():
         )
 
         # Verify that the output files are created
-        input_file = os.path.join(tmp_path,f'input_{n_samples}_9params.csv')
-        output_dir_sims = os.path.join(tmp_path,f'output_{n_samples}_9params')
+        input_file = os.path.join(tmp_path,f'input_{n_samples}_9_params.csv')
+        output_dir_sims = os.path.join(tmp_path,f'output_{n_samples}_9_params')
         bool_indices_file = os.path.join(output_dir_sims,f'bool_indices_{n_samples}.csv')
         output_dir_pressure_traces_pat = os.path.join(output_dir_sims,'pressure_traces_pat','all_pressure_traces.csv')
         output_dir_pressure_traces_rv = os.path.join(output_dir_sims,'pressure_traces_rv','all_pressure_traces.csv')
@@ -42,14 +42,14 @@ def test_simulate_data():
 
         # Compare the input file to the input file in the expected_outputs directory
         expected_input_file_path = os.path.join('./tests/expected_outputs/simulate_data_module',
-                                           f'output_{n_samples}_9params/',
-                                           f'input_{n_samples}_9params.csv')
+                                           f'output_{n_samples}_9_params/',
+                                           f'input_{n_samples}_9_params.csv')
         expected_input_data = pd.read_csv(expected_input_file_path)
         pd.testing.assert_frame_equal(input_data, expected_input_data)
 
         # Compare the output files to the expected output files
         expected_output_dir = os.path.join('./tests/expected_outputs/simulate_data_module',
-                                            f'output_{n_samples}_9params/')
+                                            f'output_{n_samples}_9_params/')
         expected_pressure_traces_pat = pd.read_csv(os.path.join(expected_output_dir,
                                                     'pressure_traces_pat',
                                                     'all_pressure_traces.csv'))
@@ -84,7 +84,7 @@ def test_simulate_data():
         assert os.path.exists(output_dir_pressure_traces_rv), "RV pressure traces file was not created."
 
         # Run the test for calibrated parameters
-        output_dir_bayesian = './tests/expected_outputs/calibrate_parameters_module/output_64_9params/bayesian_calibration_results/17_output_keys/calibration_20250604_100806'
+        output_dir_bayesian = './tests/expected_outputs/calibrate_parameters_module/output_64_9_params/bayesian_calibration_results/17_output_keys/calibration_20250604_100806'
 
         output_dir_sims, n_params = simulate_data(
             param_path=param_path,
@@ -98,7 +98,7 @@ def test_simulate_data():
 
         # Compare the output files to the expected output files
         expected_output_dir = os.path.join('./tests/expected_outputs/simulate_data_module',
-                                            f'output_{n_samples}_9params/',
+                                            f'output_{n_samples}_9_params/',
                                             'bayesian_calibration_results/17_output_keys/calibration_20250604_100806/')
         expected_pressure_traces_pat = pd.read_csv(os.path.join(expected_output_dir,
                                                     'pressure_traces_pat',

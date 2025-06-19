@@ -33,7 +33,7 @@ def test_calibrate_parameters():
                              config=[])
 
         # Compare the output files to the expected output files
-        expected_output_dir = './tests/expected_outputs/calibrate_parameters_module/output_64_9params/bayesian_calibration_results/17_output_keys/calibration_20250604_100806'
+        expected_output_dir = './tests/expected_outputs/calibrate_parameters_module/output_64_9_params/bayesian_calibration_results/17_output_keys/calibration_20250604_100806'
         expected_posterior_covariance = pd.read_csv(os.path.join(expected_output_dir,
                                                     'posterior_covariance.csv'))
         expected_posterior_mean       = pd.read_csv(os.path.join(expected_output_dir,
@@ -53,11 +53,11 @@ def test_calibrate_parameters():
         # Find the actual calibration_* directory, because the name is created dynamically with a timestamp
         calibration_dirs = glob.glob(os.path.join(
             tmp_path, 
-            f'output_{n_samples}_{n_params}params',
+            f'output_{n_samples}_{n_params}_params',
             'bayesian_calibration_results/17_output_keys',
             'calibration_*'
         ))
-
+        print(calibration_dirs)
         assert len(calibration_dirs) == 1, "Expected exactly one calibration_* directory"
         calibration_dir = calibration_dirs[0]
 
