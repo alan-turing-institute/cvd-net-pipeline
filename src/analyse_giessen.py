@@ -27,7 +27,7 @@ def analyse_giessen(file_path: str, gaussian_sigmas : list[float]):
         ag.sigma_filter_d2pdt2   = sigma_filter_d2pdt2
 
         ag.compute_derivatives()
-        ag.compute_points_of_interest(height=10, use_filter=False, export_true_derivates=True, export_true_p=True, distance=90)
+        ag.compute_points_of_interest(height=10, use_filter=False)
         beats = pd.DataFrame(ag.resample_heart_beat())
         sumstats = ag.points_df
 
