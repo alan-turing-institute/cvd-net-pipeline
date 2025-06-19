@@ -44,7 +44,7 @@ def compute_pca(n_samples:int=50, n_params:int=9, n_pca_components:int=10, outpu
     component_names = [f"PC{i+1}" for i in range(X_pca.shape[1])]
     X_pca = pd.DataFrame(X_pca, columns=component_names, index=df.index)
 
-    X_pca.to_csv(f'{output_path}/output_{n_samples}_{n_params}_params/pca/PCA.csv', index=False)
+    X_pca.to_csv(f'{output_path}/output{file_sufix}/pca/PCA.csv', index=False)
 
     # Concatenate the PCA components with the original data     
     df_pca = pd.concat([df, X_pca], axis=1)
@@ -52,9 +52,9 @@ def compute_pca(n_samples:int=50, n_params:int=9, n_pca_components:int=10, outpu
     # Create a new name for the output file which appends "_with_pca" to the original name
     output_file_name_pca = output_file_name.replace('.csv', '_with_pca.csv')
 
-    df_pca.to_csv(f'{output_path}/output_{n_samples}_{n_params}_params/{output_file_name_pca}', index=False)
+    df_pca.to_csv(f'{output_path}/output{file_sufix}/{output_file_name_pca}', index=False)
 
-    output_parameters = os.path.join(output_path, f'output_{n_samples}_{n_params}_params')
+    output_parameters = os.path.join(output_path, f'output{file_sufix}')
 
     # Plot the PCA histogram
     plot_utils.plot_pca_histogram(X_pca, output_path=output_parameters, n_pca_components=n_pca_components)
