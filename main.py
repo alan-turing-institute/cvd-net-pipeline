@@ -1,10 +1,10 @@
 import json
-from src.simulate_data import simulate_data
-from src.analyse_giessen import analyse_giessen
-from src.compute_pca import compute_pca
-from src.build_emulator import build_emulator
-from src.simulate_posterior import simulate_posterior
-from src.calibrate import calibrate
+from simulate_data import simulate_data
+from analyse_giessen import analyse_giessen
+from compute_pca import compute_pca
+from build_emulator import build_emulator
+from calibrate_parameters import calibrate_parameters
+from utils import plot_utils
 import os
 import argparse
 
@@ -25,8 +25,8 @@ def run_pipeline(config):
             raise ValueError("n_params must be provided in the configuration if step 1 is not being executed.")
 
         # Define the output directory for the current simulations
-        output_dir_sims = f"{output_path}/output_{nsamples}_{n_params}params"
-        print("Saving simulations to:", output_dir_sims)
+        output_dir_sims = os.path.join(output_path, f'output_{nsamples}_{n_params}_params')
+        print("Simulation output directory is: ", output_dir_sims)
 
     os.makedirs(output_path, exist_ok=True)
 
@@ -43,11 +43,14 @@ def run_pipeline(config):
             param_path=config.get("input_parameters"),
             n_samples=nsamples,
             output_path=output_path,
+            sample_parameters=True
         )
 
     if "2" in steps:
         print("Step 2: Analysing Giessen (resample)")
-        analyse_giessen(output_dir_sims)
+        analyse_giessen(output_dir_sims,
+                        config.get('gaussian_sigmas')
+        )
 
     if "3" in steps:
         print("Step 3: Compute PCA")
@@ -69,16 +72,40 @@ def run_pipeline(config):
                        output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
     if "5" in steps:
-        print("Step 5: Simulating Posterior Data")
-        simulate_posterior()
+        print("Step 5: Calibrating parameters using config output keys")
+
+        output_keys = config.get("output_keys")
+        if output_keys is None:
+            raise ValueError("output keys must be provided in the configuration to run calibration.")
+        
+        output_dir_bayesian = calibrate_parameters(n_samples=nsamples,
+                                    n_params=n_params,
+                                    output_path=output_path,
+                                    output_keys=output_keys,
+                                    config=config)
 
     if "6" in steps:
-        print("Step 6: Calibration")
-        calibrate()
+        print("Step 6: Simulating posterior pressure waves.")
+       
+       
+        if not "5" in steps:
+            output_dir_bayesian = config.get("output_dir_bayesian")
+            print(f"Reading parameter file from {output_dir_bayesian} as pre-defined in the configuration file.")
+
+        output_dir_bayesian, n_params = simulate_data(
+            param_path=config.get("input_parameters"),
+            n_samples=nsamples,
+            output_path=output_dir_bayesian,
+            sample_parameters = False
+        )
+
 
     if "7" in steps:
-        print("Step 7: Final Resampling")
-        analyse_giessen("outputs/posterior_simulations.csv")
+        print("Step 7: Resampling posterior pressure waves.")
+        analyse_giessen(output_dir_bayesian, 
+                        config.get('gaussian_sigmas')
+                        )
+        plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian)
 
     print("Pipeline complete.")
 
