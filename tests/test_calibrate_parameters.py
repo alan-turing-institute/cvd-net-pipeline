@@ -57,7 +57,7 @@ def test_calibrate_parameters():
             'bayesian_calibration_results/17_output_keys',
             'calibration_*'
         ))
-        print(calibration_dirs)
+
         assert len(calibration_dirs) == 1, "Expected exactly one calibration_* directory"
         calibration_dir = calibration_dirs[0]
 
