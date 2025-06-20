@@ -38,7 +38,7 @@ def test_calibrate_parameters():
                                                     'posterior_covariance.csv'))
         expected_posterior_mean       = pd.read_csv(os.path.join(expected_output_dir,
                                                     'posterior_mean.csv'))        
-        expected_posterior_samples = pd.read_csv(os.path.join(expected_output_dir,
+        expected_posterior_samples    = pd.read_csv(os.path.join(expected_output_dir,
                                                     'posterior_samples.csv'))        
         
         # List all files in the tmp_path to verify the output files
