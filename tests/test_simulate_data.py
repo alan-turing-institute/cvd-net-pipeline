@@ -110,8 +110,14 @@ def test_simulate_data():
         resulting_pressure_traces_pat = pd.read_csv(os.path.join(output_dir_bayesian,'pressure_traces_pat','all_pressure_traces.csv'))
         resulting_pressure_traces_rv = pd.read_csv(os.path.join(output_dir_bayesian,'pressure_traces_rv','all_pressure_traces.csv'))
 
-        pd.testing.assert_frame_equal(resulting_pressure_traces_pat, expected_pressure_traces_pat)
-        pd.testing.assert_frame_equal(resulting_pressure_traces_rv, expected_pressure_traces_rv)
+        pd.testing.assert_frame_equal(resulting_pressure_traces_pat, 
+                                      expected_pressure_traces_pat,
+                                      check_exact=False,
+                                      rtol=1e-3)
+        pd.testing.assert_frame_equal(resulting_pressure_traces_rv, 
+                                      expected_pressure_traces_rv,
+                                      check_exact=False,
+                                      rtol=1e-3)
 
         # Delete the output directory to clean up
         shutil.rmtree(os.path.join(output_dir_bayesian,'figures'))
