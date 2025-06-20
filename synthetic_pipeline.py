@@ -116,7 +116,7 @@ def run_pipeline(config):
             print(f"Loading posterior samples from {output_dir_bayesian} as pre-defined in the configuration file.")
 
         analyse_giessen(output_dir_bayesian)
-        plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian, e_obs)
+        plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian, epsilon_obs_scale=config.get("epsilon_obs_scale", 0.05))
 
     print("Pipeline complete.")
 
