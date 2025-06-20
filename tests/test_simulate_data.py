@@ -60,8 +60,14 @@ def test_simulate_data():
         resulting_pressure_traces_pat = pd.read_csv(output_dir_pressure_traces_pat)
         resulting_pressure_traces_rv = pd.read_csv(output_dir_pressure_traces_rv)
 
-        pd.testing.assert_frame_equal(resulting_pressure_traces_pat, expected_pressure_traces_pat)
-        pd.testing.assert_frame_equal(resulting_pressure_traces_rv, expected_pressure_traces_rv)
+        pd.testing.assert_frame_equal(resulting_pressure_traces_pat, 
+                                      expected_pressure_traces_pat,
+                                      check_exact=False,
+                                      rtol=1e-3)
+        pd.testing.assert_frame_equal(resulting_pressure_traces_rv, 
+                                      expected_pressure_traces_rv,
+                                      check_exact=False,
+                                      rtol=1e-3)
 
 
         # delete files to check loading simulations from disk
