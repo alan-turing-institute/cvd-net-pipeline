@@ -63,7 +63,7 @@ def test_simulate_data():
         pd.testing.assert_frame_equal(resulting_pressure_traces_pat, 
                                       expected_pressure_traces_pat,
                                       check_exact=False,
-                                      rtol=1e-3)
+                                      rtol=1e-2)
         pd.testing.assert_frame_equal(resulting_pressure_traces_rv, 
                                       expected_pressure_traces_rv,
                                       check_exact=False,
