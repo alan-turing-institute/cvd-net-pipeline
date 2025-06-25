@@ -87,12 +87,8 @@ def run_pipeline(config):
             if output_keys is None:
                 raise ValueError("output keys must be provided in the configuration to run calibration.")
             
-            include_timeseries = config.get("include_timeseries")
-            if include_timeseries == 1:
-                include_timeseries = True
-                #print("Including time-series in calibraiton as specified in config file.")
-            else:
-                include_timeseries = False
+            include_timeseries = bool(config.get("include_timeseries"))
+
             print(f"Include time-series in calibration: {include_timeseries}")
 
             output_dir_bayesian, e_obs = calibrate_parameters(n_samples=nsamples,
@@ -129,7 +125,7 @@ def run_pipeline(config):
                             data_type=data_type,
                             gaussian_sigmas=config.get('gaussian_sigmas')
                             )
-            plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian, epsilon_obs_scale=config.get("epsilon_obs_scale", 0.05))
+            plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian, e_obs_scale=config.get("epsilon_obs_scale", 0.05))
 
         print("Pipeline complete.")
 
@@ -168,12 +164,7 @@ def run_pipeline(config):
             emulator_path = config.get("emulator_path")
             nsamples = config.get("n_samples")
             n_params = config.get("n_params")
-            include_timeseries = config.get("include_timeseries")
-            if include_timeseries == 1:
-                include_timeseries = True
-                #print("Including time-series in calibraiton as specified in config file.")
-            else:
-                include_timeseries = False
+            include_timeseries = bool(config.get("include_timeseries"))
 
             calibrate_parameters_real(n_samples=nsamples,
                                         n_params=n_params,
@@ -184,7 +175,6 @@ def run_pipeline(config):
                                         config=config)
 
         print("Pipeline complete.")
-
 
     else:
         raise ValueError(f"Unknown data type: {data_type}. Supported types are 'synthetic' and 'real'.")
