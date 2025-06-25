@@ -167,7 +167,7 @@ cython_debug/
 output_real/
 output_synthetic/
 notebooks/
-
+output/
 *.pyc
 
 # Ignore the PyPI configuration file
