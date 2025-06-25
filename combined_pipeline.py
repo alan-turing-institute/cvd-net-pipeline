@@ -71,7 +71,8 @@ def run_pipeline(config):
             compute_pca(n_samples=nsamples, 
                         n_params=n_params, 
                         n_pca_components=n_pca_components,
-                        output_path=output_path)
+                        output_path=output_path,
+                        data_type=data_type,)
 
         if "4" in steps:
             print("Step 4: Building Emulator")
@@ -150,9 +151,9 @@ def run_pipeline(config):
             if n_pca_components is None:
                 raise ValueError("n_pca_components must be provided in the configuration to run PCA.")
 
-            compute_pca_real(n_pca_components=n_pca_components,
-                        output_path=output_path)
-
+            compute_pca(n_pca_components=n_pca_components,
+                        output_path=output_path,
+                        data_type=data_type,)
 
         if "5" in steps:
             print("Step 5: Calibrating parameters using config output keys")
