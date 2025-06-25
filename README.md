@@ -33,11 +33,22 @@ The configuration file should define the steps to run and other parameters such 
 
 ```json
 {
-    "steps": ["1", "2", "3"],
-    "nsamples": 10000,
-    "input_parameters": "config/parameters_sensitive.json",
-    "output_path": "data/output"
+  "input_parameters": "parameters_pulmonary_sensitive_summarystats.json",
+  "output_path": "output_synthetic/",
+  "steps": ["3"],  
+  "nsamples": 64,
+  "n_pca_components": 10,
+  "n_params": 9,
+  "include_timeseries": 0,
+  "output_keys": [
+    "t_max_dpdt", "a_epad", "epad", "s_a_epad", "s_epad",
+    "min_dpdt", "max_dpdt", "A_p", "P_max", "esp", "sys",
+    "EF", "dia", "Ees/Ea", "iT", "PC1", "PC2", "PC3"
+  ],
+  "epsilon_obs_scale": 0.05,
+  "output_dir_bayesian": "output_synthetic/output_5000_9params/bayesian_calibration_results/18_output_keys/calibration_20250619_135107"
 }
+
 ```
 
 ### Running the Pipeline
