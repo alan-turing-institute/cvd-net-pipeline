@@ -1,7 +1,6 @@
 import json
 from simulate_data import simulate_data
 from analyse_giessen import analyse_giessen
-from analyse_giessen_real import analyse_giessen_real
 from compute_pca import compute_pca
 from compute_pca_real import compute_pca_real
 from build_emulator import build_emulator
@@ -57,8 +56,9 @@ def run_pipeline(config):
 
         if "2" in steps:
             print("Step 2: Analysing Giessen (resample)")
-            analyse_giessen(output_dir_sims,
-                            config.get('gaussian_sigmas')
+            analyse_giessen(file_path=output_dir_sims,
+                            data_type=data_type,
+                            gaussian_sigmas=config.get('gaussian_sigmas'),
             )
 
         if "3" in steps:
@@ -125,8 +125,9 @@ def run_pipeline(config):
                 output_dir_bayesian = config.get("output_dir_bayesian")
                 print(f"Loading posterior samples from {output_dir_bayesian} as pre-defined in the configuration file.")
 
-            analyse_giessen(output_dir_bayesian, 
-                            config.get('gaussian_sigmas')
+            analyse_giessen(file_path=output_dir_bayesian, 
+                            data_type=data_type,
+                            gaussian_sigmas=config.get('gaussian_sigmas')
                             )
             plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian, epsilon_obs_scale=config.get("epsilon_obs_scale", 0.05))
 
@@ -143,7 +144,8 @@ def run_pipeline(config):
         
         if "2" in steps:
             print("Step 2: Analysing Giessen (resample)")
-            analyse_giessen_real(output_path)
+            analyse_giessen(file_path=output_path,
+                            data_type=data_type,)
 
         if "3" in steps:
             print("Step 3: Compute PCA")
