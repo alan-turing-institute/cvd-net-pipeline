@@ -2,7 +2,7 @@
   "data_type": "synthetic",
   "input_parameters": "parameters_pulmonary_sensitive_summarystats.json",
   "output_path": "output_synthetic/",
-  "steps": ["1","2","3","4","5", "6", "7"],  
+  "steps": ["5","6","7"],  
   "nsamples": 64,
   "n_pca_components": 10,
   "n_params": 9,
@@ -14,5 +14,5 @@
   ],
   "include_timeseries": 0,
   "epsilon_obs_scale": 0.05,
-  "output_dir_bayesian": "output_synthetic/output_5000_9_params/bayesian_calibration_results/18_output_keys/calibration_20250619_135107"
+  "output_dir_bayesian": "output_synthetic/output_64_9_params/bayesian_calibration_results/18_output_keys/calibration_20250619_135107"
 }
