@@ -25,7 +25,7 @@ def run_pipeline(config):
             raise ValueError("n_params must be provided in the configuration if step 1 is not being executed.")
 
         # Define the output directory for the current simulations
-        output_dir_sims = f"{output_path}/output_{nsamples}_{n_params}params"
+        output_dir_sims = os.path.join(output_path, f'output_{nsamples}_{n_params}_params')
         print("Simulation output directory is: ", output_dir_sims)
 
     os.makedirs(output_path, exist_ok=True)
@@ -48,7 +48,9 @@ def run_pipeline(config):
 
     if "2" in steps:
         print("Step 2: Analysing Giessen (resample)")
-        analyse_giessen(output_dir_sims)
+        analyse_giessen(output_dir_sims,
+                        config.get('gaussian_sigmas')
+        )
 
     if "3" in steps:
         print("Step 3: Compute PCA")
@@ -100,7 +102,9 @@ def run_pipeline(config):
 
     if "7" in steps:
         print("Step 7: Resampling posterior pressure waves.")
-        analyse_giessen(output_dir_bayesian)
+        analyse_giessen(output_dir_bayesian, 
+                        config.get('gaussian_sigmas')
+                        )
         plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian)
 
     print("Pipeline complete.")

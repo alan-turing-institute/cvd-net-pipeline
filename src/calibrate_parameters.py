@@ -16,16 +16,18 @@ def calibrate_parameters(n_samples:int=50,
                          config:dict=None):
 
 
+    file_suffix = f'_{n_samples}_{n_params}_params'
+
     # Data
-    input_params = pd.read_csv(f'{output_path}/input_{n_samples}_{n_params}params.csv')
-    output_file = pd.read_csv(f"{output_path}/output_{n_samples}_{n_params}params/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+    input_params = pd.read_csv(f'{output_path}/input{file_suffix}.csv')
+    output_file = pd.read_csv(f"{output_path}/output{file_suffix}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
     # emulators
-    emulators = pd.read_pickle(f"{output_path}/output_{n_samples}_{n_params}params/emulators/linear_models_and_r2_scores_{n_samples}.pkl")
+    emulators = pd.read_pickle(f"{output_path}/output{file_suffix}/emulators/linear_models_and_r2_scores_{n_samples}.pkl")
     
 
     # Direcotry for saving results
-    output_dir = f"{output_path}/output_{n_samples}_{n_params}params/bayesian_calibration_results/"
+    output_dir = f"{output_path}/output{file_suffix}/bayesian_calibration_results/"
 
     # Make directory if it doesn't exist
     if not os.path.exists(output_dir):
