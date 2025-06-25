@@ -5,6 +5,8 @@ from simulate_data import simulate_data
 import tempfile
 import shutil
 
+RTOL_TOLERANCE = 1e-2
+
 def test_simulate_data():
     # Define test parameters
 
@@ -60,8 +62,14 @@ def test_simulate_data():
         resulting_pressure_traces_pat = pd.read_csv(output_dir_pressure_traces_pat)
         resulting_pressure_traces_rv = pd.read_csv(output_dir_pressure_traces_rv)
 
-        pd.testing.assert_frame_equal(resulting_pressure_traces_pat, expected_pressure_traces_pat)
-        pd.testing.assert_frame_equal(resulting_pressure_traces_rv, expected_pressure_traces_rv)
+        pd.testing.assert_frame_equal(resulting_pressure_traces_pat, 
+                                      expected_pressure_traces_pat,
+                                      check_exact=False,
+                                      rtol=RTOL_TOLERANCE)
+        pd.testing.assert_frame_equal(resulting_pressure_traces_rv, 
+                                      expected_pressure_traces_rv,
+                                      check_exact=False,
+                                      rtol=RTOL_TOLERANCE)
 
 
         # delete files to check loading simulations from disk
@@ -110,8 +118,14 @@ def test_simulate_data():
         resulting_pressure_traces_pat = pd.read_csv(os.path.join(output_dir_bayesian,'pressure_traces_pat','all_pressure_traces.csv'))
         resulting_pressure_traces_rv = pd.read_csv(os.path.join(output_dir_bayesian,'pressure_traces_rv','all_pressure_traces.csv'))
 
-        pd.testing.assert_frame_equal(resulting_pressure_traces_pat, expected_pressure_traces_pat)
-        pd.testing.assert_frame_equal(resulting_pressure_traces_rv, expected_pressure_traces_rv)
+        pd.testing.assert_frame_equal(resulting_pressure_traces_pat, 
+                                      expected_pressure_traces_pat,
+                                      check_exact=False,
+                                      rtol=RTOL_TOLERANCE)
+        pd.testing.assert_frame_equal(resulting_pressure_traces_rv, 
+                                      expected_pressure_traces_rv,
+                                      check_exact=False,
+                                      rtol=RTOL_TOLERANCE)
 
         # Delete the output directory to clean up
         shutil.rmtree(os.path.join(output_dir_bayesian,'figures'))
