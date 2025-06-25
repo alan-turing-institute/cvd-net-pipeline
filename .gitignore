@@ -164,12 +164,11 @@ cython_debug/
 /Tutorials
 .DS_Store
 /playground_files
-
-# Ignore the output directory
 /output/ 
-
+output_real/
+output_synthetic/
 notebooks/
-
+output/
 *.pyc
 
 # Ignore the PyPI configuration file

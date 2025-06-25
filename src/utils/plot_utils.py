@@ -127,9 +127,7 @@ def plot_pca_explained_variance(pipeline, output_path):
     # Explained variance
     explained_variance_ratio = pca.explained_variance_ratio_
     axs[0].bar(grid, explained_variance_ratio, log=True)
-    axs[0].set(
-        xlabel="Component", title="% Explained Variance", ylim=(0.0, 1.0)
-    )
+    axs[0].set(xlabel="Component", title="% Explained Variance", ylim=(1e-3, 1.0))
 
     # Cumulative Variance
     cumulative_explained_variance = np.cumsum(explained_variance_ratio)
@@ -240,7 +238,7 @@ def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_pa
     plt.suptitle(f'Posterior Covariance Matrix')
     plt.savefig(f'{output_path_figures}/posterior_covariance_matrix.png') 
 
-def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
+def plot_posterior_simulations(output_dir_sims, output_dir_bayesian, e_obs_scale):
     
     true_waveforms = pd.read_csv(f"{output_dir_sims}/waveform_resampled_all_pressure_traces_rv.csv")
     posterior_waveforms = pd.read_csv(f"{output_dir_bayesian}/waveform_resampled_all_pressure_traces_rv.csv")
@@ -261,7 +259,6 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
     fig, ax = plt.subplots(figsize=(10, 5))
     output_path_figures = os.path.join(output_dir_bayesian, "figures")
     os.makedirs(output_path_figures, exist_ok=True)
-    ax.plot(mean_waveform, color='darkorange', linewidth=1.5, label="Mean Calibrated Waveform")
 
     
     
@@ -271,7 +268,8 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
     S, T = posterior_preds.shape            # S = 100, T = 101
 
     # Set Gaussian likelihood standard deviation (fixed)
-    sigma = 1.0  # Adjust if your model has a known or estimated σ
+    sigma = 1 # Dynamically adjust from observation model? Or is it always 1 as it is only concerned with waveform even if calibrated on something else?
+    
 
     # Compute log pointwise predictive density
     log_likelihoods = -0.5 * np.log(2 * np.pi * sigma**2) \
@@ -294,14 +292,18 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
     sqe = (y_obs - mean_waveform) ** 2
     rmse = np.sqrt(sqe.mean(axis=0))
     
-    # Plot y_true
-    ax.plot(y_true.values, label="True Waveform", color='c', linewidth=2)
+    
     
     # Plot all waveforms in faded orange
     for j in range(samples.shape[0]):
-        ax.plot(samples[j, :], color='orange', alpha=0.1)
+        ax.plot(samples[j, :], color='orange', alpha=0.001)
     
-    
+    # Plot y_true
+    ax.plot(y_true.values, label="True Waveform", color='c', linewidth=2)
+
+    # Plot mean waveform
+    ax.plot(mean_waveform, color='darkorange', linewidth=1.5, label="Mean Calibrated Waveform")
+
     ax.set_xticks(np.arange(0, 110, 10))
     ax.set_xlabel("Time Index")
     ax.set_title(f"Posterior Simulations\nRMSE = {rmse:.4f}, NLPD = {nlpd:.2f}, WAIC = {waic:.2f}")
