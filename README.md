@@ -84,8 +84,8 @@ python main.py --config config/pipeline_config.json
 2. **Analyze Giessen**: Performs analysis on the simulated pressure waveform data.
 3. **Compute PCA**: Performs a PCA on the output data.
 4. **Build Emulator**: Builds an emulator for the data.
-5. **Simulate Posterior Data**: Simulates data from posterior samples.
-6. **Calibration**: Calibrates the model.
+5.  **Calibration**: Calibrates the model.
+6.  **Simulate Posterior Data**: Simulates data from posterior samples.
 7. **Final Resampling**: Performs final resampling on posterior simulations.
 
 ### Example
