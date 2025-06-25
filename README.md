@@ -63,11 +63,11 @@ The configuration file should define the steps to run and other parameters such 
 
 ```n_params```: The number of non-fixed parameters sampled.
 
-```include_timeseries```: Whether the timeseries waveform should be included in the calibration 0/1 for true/false.
+```include_timeseries```: (Not implemented yet) Whether the timeseries waveform should be included in the calibration 0/1 for true/false.
 
 ```output_keys```: The outputs you want to calibrate on.
 
-```epsilon_obs_scale```: Observation error
+```epsilon_obs_scale```: (Hard coded for now) Observation error
 
 ```output_dir_bayesian```: The directory where calibration files are saved if you are only running steps 6 onwards.  
 
