@@ -25,7 +25,6 @@ class BayesianCalibrationGiessen:
         
         # Parameter names
         self.param_names = input_prior.loc[:, :'T'].columns.to_list()
-        
 
         # Model error
         self.epsilon_model = np.diag(emulator_output['RSE']**2) 

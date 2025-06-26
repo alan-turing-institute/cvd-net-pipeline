@@ -8,7 +8,7 @@ import math
 
 class BayesianCalibration:
     def __init__(self, input_prior, emulator_output, epsilon_obs, 
-                 filtered_output=None, which_obs=None, observation_data=None):
+                 filtered_output=None, which_obs=None, observation_data=None, data_type="synthetic"):
         """
         Bayesian calibration for both synthetic and real data.
         
@@ -18,19 +18,18 @@ class BayesianCalibration:
         self.input_prior = input_prior
         self.emulator_output = emulator_output
         self.epsilon_obs = epsilon_obs 
+        self.data_type = data_type
         
         # Determine if we're using synthetic or real data
-        if observation_data is not None:
+        if data_type == "real":
             # Real data mode
             self.observation_data = observation_data
-            self.is_real_data = True
-        elif filtered_output is not None and which_obs is not None:
+        elif data_type == "synthetic":
             # Synthetic data mode
             self.filtered_output = filtered_output
             self.which_obs = which_obs
-            self.is_real_data = False
         else:
-            raise ValueError("Must provide either observation_data (real) or both filtered_output and which_obs (synthetic)")
+            raise ValueError("data_type must be either 'real' or 'synthetic'")
 
         # Setup priors
         self._setup_priors()
@@ -46,18 +45,24 @@ class BayesianCalibration:
 
     def _setup_priors(self):
         """Setup prior parameters based on data type"""
+
         self.mu_0 = np.array(self.input_prior.mean().loc[:'T'])
-        self.mu_0 = self.mu_0.reshape(-1, 1)
-        self.Sigma_0 = np.diag(self.input_prior.var().loc[:'T'])
-        
-        if self.is_real_data:
-            # Real data: use iT from observation_data
-            self.mu_0[-1, 0] = self.observation_data['iT'].iloc[0]
-        else:
-            # Synthetic data: use T from specific observation
-            self.mu_0[-1, 0] = self.input_prior.iloc[self.which_obs]['T']
-        
+
+        if self.data_type == "synthetic":
+            self.mu_0[-1] = self.input_prior.iloc[self.which_obs]['T']  # Assuming 'T' is the last parameter
+            self.mu_0 = self.mu_0.reshape(-1, 1)
+            self.Sigma_0 = np.diag(self.input_prior.var().loc[:'T'])
+
+        elif self.data_type == "real":
+
+            self.mu_0 = self.mu_0.reshape(-1, 1)
+            self.Sigma_0 = np.diag(self.input_prior.var().loc[:'T'])
+
+            # dynamically define prior on T
+            self.mu_0[-1,-1] = self.observation_data['iT'].iloc[0]
+
         self.Sigma_0[-1, -1] = 0.0000001
+
 
     def compute_posterior(self):
         full_error = self.epsilon_obs + self.epsilon_model
@@ -75,7 +80,7 @@ class BayesianCalibration:
         intercept = np.array(intercept).reshape(len(intercept), 1)
 
         # Select observation based on data type
-        if self.is_real_data:
+        if self.data_type == "real":
             Y_obs = np.array(self.observation_data.T).reshape(-1, 1)
         else:
             Y_obs = np.array(self.filtered_output.T[self.which_obs]).reshape(-1, 1)
