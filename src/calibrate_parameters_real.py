@@ -1,7 +1,7 @@
 
 import pandas as pd
 import numpy as np
-from utils.bayesian_calibration_real import BayesianCalibrationGiessen
+from utils.bayesian_calibration_combined import BayesianCalibration
 import os
 from utils import plot_utils
 import json
@@ -62,7 +62,7 @@ def calibrate_parameters_real(n_samples:int=50,
     e_obs = np.diag(diagonal_values) * epsilon_obs_scale
 
     for row in range(len(observation_data)):
-        bc = BayesianCalibrationGiessen(input_params, emulator_output, observation_data.iloc[row:row+1], epsilon_obs = e_obs)
+        bc = BayesianCalibration(input_params, emulator_output, observation_data.iloc[row:row+1], epsilon_obs = e_obs)
         bc.compute_posterior()
         posterior_means.append(bc.Mu_post.squeeze())
 
