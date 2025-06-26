@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 import os
 from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import r2_score
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
@@ -87,7 +89,11 @@ def emulate_linear(input, output):
     Y = output
 
     # Initialize the model
-    model = LinearRegression()
+    model = Pipeline([
+        ('scaler', StandardScaler()),
+        ('regressor', LinearRegression())
+    ])
+    
 
     # Fit the model to the training data
     model.fit(X, Y)
