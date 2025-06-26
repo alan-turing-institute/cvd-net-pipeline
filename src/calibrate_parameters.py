@@ -19,7 +19,7 @@ def calibrate_parameters(n_samples:int=50,
     file_suffix = f'_{n_samples}_{n_params}_params'
 
     # Data
-    input_params = pd.read_csv(f'{output_path}/input{file_suffix}.csv')
+    input_params = pd.read_csv(f'{output_path}/pure_input{file_suffix}.csv')
     output_file = pd.read_csv(f"{output_path}/output{file_suffix}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
     # emulators

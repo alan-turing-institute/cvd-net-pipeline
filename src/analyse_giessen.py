@@ -29,7 +29,8 @@ def analyse_giessen(file_path: str, data_type: str, gaussian_sigmas : list[float
             ag.sigma_filter_d2pdt2   = sigma_filter_d2pdt2
 
             ag.compute_derivatives()
-            ag.compute_points_of_interest(height=10, use_filter=False) # , export_true_derivates=True, export_true_p=True, distance=90 (we should consder adding these options)
+            # Should change start_at_edp bask to False
+            ag.compute_points_of_interest(height=10, use_filter=False, start_at_edp=True) # , export_true_derivates=True, export_true_p=True, distance=90 (we should consder adding these options)
             beats = pd.DataFrame(ag.resample_heart_beat())
             sumstats = ag.points_df
 
@@ -44,6 +45,8 @@ def analyse_giessen(file_path: str, data_type: str, gaussian_sigmas : list[float
             resampled_df['MC_eivc'] = rv_file.loc[ind, min_ind]
             # add MC version of dia
             resampled_df['MC_dia'] = rv_file.loc[ind].min()
+            # add t_pulse
+            resampled_df['t_pulse'] = (100 + resampled_df['dia_ind'] - resampled_df['edp_ind']) * dt
             
             all_pressure_traces = pd.concat([all_pressure_traces, resampled_df.iloc[[2]]], axis=0)
 

@@ -20,8 +20,12 @@ def simulate_data(param_path: str, n_samples: int, output_path: str, repeat_simu
         # remove any #s from column names
         posterior_samples.columns = posterior_samples.columns.str.lstrip('#').str.strip()
 
-        for i, col in enumerate(br._samples.columns[:len(posterior_samples.columns)]):
+        for i, col in enumerate(posterior_samples.columns):
             br._samples.loc[:, col] = posterior_samples.loc[:,col]
+            
+    col_test = [col for col in br._samples.columns if col in br._parameters_2_sample.keys()]
+    _pure_samples = br._samples[col_test].copy()
+
     
     map_ = {
             'delay': ['la.delay', 'ra.delay'],
@@ -38,11 +42,8 @@ def simulate_data(param_path: str, n_samples: int, output_path: str, repeat_simu
     br._samples[['lv.td', 'rv.td']] = br._samples[['lv.tr', 'rv.tr']].values + br._samples[['lv.td0', 'rv.td0']].values
     br._samples.drop(['lv.td0', 'rv.td0'], axis=1, inplace=True)
 
-    # count number of sampled parameters
-    relevant_columns = []
-    for col in br.samples.columns:
-        relevant_columns.append(col)
-        if col == 'T': break
+    # get relevant columns and count them
+    relevant_columns = _pure_samples.columns.to_list()
 
     n_params = len(relevant_columns)
     br.map_vessel_volume()
@@ -53,6 +54,7 @@ def simulate_data(param_path: str, n_samples: int, output_path: str, repeat_simu
     input_header = ','.join(br.samples.columns)
     file_suffix  = f'_{n_samples}_{n_params}_params'
 
+    np.savetxt(os.path.join(output_path,f'pure_input{file_suffix}.csv'), _pure_samples, header=','.join(_pure_samples.columns), delimiter=',')
     np.savetxt(os.path.join(output_path,f'input{file_suffix}.csv'), br.samples, header=input_header, delimiter=',')
 
     if sample_parameters:
