@@ -48,7 +48,7 @@ def calibrate_parameters(n_samples:int=50,
         diagonal_values = sd_values
 
 
-        # Select emulators and data for specified output_keys
+    # Select emulators and data for specified output_keys
     emulator_output = emulators.loc[all_output_keys]
     observation_data = output_file.loc[:, all_output_keys]
         
