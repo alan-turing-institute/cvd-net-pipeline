@@ -78,7 +78,7 @@ def run_pipeline(config):
         if output_keys is None:
             raise ValueError("output keys must be provided in the configuration to run calibration.")
         
-        output_dir_bayesian = calibrate_parameters(n_samples=nsamples,
+        output_dir_bayesian, e_obs = calibrate_parameters(n_samples=nsamples,
                                     n_params=n_params,
                                     output_path=output_path,
                                     output_keys=output_keys,
@@ -92,6 +92,7 @@ def run_pipeline(config):
             output_dir_bayesian = config.get("output_dir_bayesian")
             print(f"Reading parameter file from {output_dir_bayesian} as pre-defined in the configuration file.")
 
+        print(output_dir_bayesian)
         output_dir_bayesian, n_params = simulate_data(
             param_path=config.get("input_parameters"),
             n_samples=nsamples,
