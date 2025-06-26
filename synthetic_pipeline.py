@@ -48,8 +48,9 @@ def run_pipeline(config):
 
     if "2" in steps:
         print("Step 2: Analysing Giessen (resample)")
-        analyse_giessen(output_dir_sims,
-                        config.get('gaussian_sigmas')
+        analyse_giessen(output_dir_sims, 
+                        data_type='synthetic',
+                        gaussian_sigmas=config.get('gaussian_sigmas')
         )
 
     if "3" in steps:
@@ -118,9 +119,10 @@ def run_pipeline(config):
             print(f"Loading posterior samples from {output_dir_bayesian} as pre-defined in the configuration file.")
 
         analyse_giessen(output_dir_bayesian, 
-                        config.get('gaussian_sigmas')
+                        data_type='synthetic',
+                        gaussian_sigmas=config.get('gaussian_sigmas')
                         )
-        plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian, epsilon_obs_scale=config.get("epsilon_obs_scale", 0.05))
+        plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian)
 
     print("Pipeline complete.")
 

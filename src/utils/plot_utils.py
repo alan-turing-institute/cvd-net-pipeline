@@ -238,7 +238,7 @@ def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_pa
     plt.suptitle(f'Posterior Covariance Matrix')
     plt.savefig(f'{output_path_figures}/posterior_covariance_matrix.png') 
 
-def plot_posterior_simulations(output_dir_sims, output_dir_bayesian, e_obs_scale):
+def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
     
     true_waveforms = pd.read_csv(f"{output_dir_sims}/waveform_resampled_all_pressure_traces_rv.csv")
     posterior_waveforms = pd.read_csv(f"{output_dir_bayesian}/waveform_resampled_all_pressure_traces_rv.csv")
@@ -314,10 +314,10 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian, e_obs_scale
     fig.tight_layout()
     fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
 
-def plot_sensitivity_heatmap(directory, selected_keys=[], output_path="output"):
+def plot_sensitivity_heatmap(directory, saveto, selected_keys=[]):
         """Plots a heatmap of sensitivity indices for each parameter across all CSV files."""
 
-        output_path_figures = os.path.join(output_path,"figures/sensititvity_heatmaps")
+        output_path_figures = os.path.join(directory,"figures/sensititvity_heatmaps")
         os.makedirs(output_path_figures, exist_ok=True)
         
         
@@ -345,6 +345,6 @@ def plot_sensitivity_heatmap(directory, selected_keys=[], output_path="output"):
         plt.xlabel("Parameters")
         plt.ylabel("Output")
         plt.xticks(rotation=45)
-        plt.yticks(rotation=0)
+        plt.yticks(rotation=0) 
         plt.tight_layout()
-        plt.savefig(os.path.join(output_path_figures, "sensitivity_heatmap.png"))
+        plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.png")
