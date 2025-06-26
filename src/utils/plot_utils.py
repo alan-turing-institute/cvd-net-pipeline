@@ -313,3 +313,38 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian, e_obs_scale
     fig.suptitle("Calibrated Pressure Waveforms for Different Methods")
     fig.tight_layout()
     fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
+
+def plot_sensitivity_heatmap(directory, selected_keys=[], output_path="output"):
+        """Plots a heatmap of sensitivity indices for each parameter across all CSV files."""
+
+        output_path_figures = os.path.join(output_path,"figures/sensititvity_heatmaps")
+        os.makedirs(output_path_figures, exist_ok=True)
+        
+        
+        csv_files = [f for f in os.listdir(directory) if f.endswith(".csv")]
+
+        """Load data from selected CSV files."""
+        files_to_read = csv_files if not selected_keys else selected_keys
+        data = {}
+        for file in files_to_read:
+            file_path = os.path.join(directory, file)
+            data[file] = pd.read_csv(file_path, index_col=0)
+
+        
+        combined_df = pd.DataFrame()
+        
+        for file_name, df in data.items():
+            combined_df[file_name] = df["ST"]
+        
+        combined_df = combined_df.fillna(0).T  # Transpose to have CSV files on Y-axis and parameters on X-axis
+        combined_df['means'] = combined_df.mean(axis=1)
+        cols = 0.5 * len(combined_df.index)
+        plt.figure(figsize=(25, cols))
+        sns.heatmap(combined_df, annot=True, cmap="coolwarm", linewidths=0.5, cbar_kws={"shrink": 0.25})
+        plt.title("Sensitivity Heatmap")
+        plt.xlabel("Parameters")
+        plt.ylabel("Output")
+        plt.xticks(rotation=45)
+        plt.yticks(rotation=0)
+        plt.tight_layout()
+        plt.savefig(os.path.join(output_path_figures, "sensitivity_heatmap.png"))
