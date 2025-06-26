@@ -1,9 +1,8 @@
 {
-  "data_type": "synthetic",
+  "data_type": "real",
   "input_parameters": "parameters_pulmonary_sensitive_summarystats.json",
-  "output_path": "output_synthetic/",
-  "steps": ["5","6","7"],  
-  "nsamples": 64,
+  "output_path": "CohortDataRaw/output_real/pat_4",
+  "steps": ["2"],
   "n_pca_components": 10,
   "n_params": 9,
   "gaussian_sigmas": [0.001, 0.001, 0.001],
@@ -13,6 +12,5 @@
     "EF", "Ees/Ea", "iT", "PC1", "PC2", "PC3", "MC_EF"
   ],
   "include_timeseries": 0,
-  "epsilon_obs_scale": 0.05,
-  "output_dir_bayesian": "output_synthetic/output_64_9_params/bayesian_calibration_results/18_output_keys/calibration_20250619_135107"
+  "epsilon_obs_scale": 0.05
 }

@@ -10,8 +10,9 @@ class BayesianCalibrationGiessen:
                  epsilon_obs):
         self.input_prior = input_prior
         self.emulator_output = emulator_output
+        self.epsilon_obs = epsilon_obs 
         self.observation_data = observation_data
-        self.epsilon_obs= epsilon_obs 
+
 
         # Priors
         self.mu_0 = np.array(input_prior.mean().loc[:'T'])
@@ -29,12 +30,11 @@ class BayesianCalibrationGiessen:
         # Model error
         self.epsilon_model = np.diag(emulator_output['RSE']**2) 
        
-        
+      
         # Compute posterior
         self.compute_posterior()
-        
 
- 
+
     def compute_posterior(self):
         full_error = self.epsilon_obs + self.epsilon_model
        
@@ -53,7 +53,7 @@ class BayesianCalibrationGiessen:
         # Select observation and scale by intercept
         Y_obs = np.array(self.observation_data.T).reshape(-1, 1)
         Y_scaled = Y_obs - intercept
-    
+
 
         # Compute posterior covariance
         Sigma_post_inv = (beta_matrix.T @ np.linalg.inv(full_error) @ beta_matrix) + np.linalg.inv(self.Sigma_0)

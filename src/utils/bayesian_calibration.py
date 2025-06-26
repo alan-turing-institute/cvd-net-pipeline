@@ -7,40 +7,40 @@ import math
 
 
 class BayesianCalibration:
-    def __init__(self, input, emulator_output, filtered_output, which_obs, 
+    def __init__(self, input_prior, emulator_output, filtered_output, which_obs, 
                  epsilon_obs):
-        self.input = input
+        self.input_prior = input_prior
         self.emulator_output = emulator_output
-        self.filtered_output = filtered_output
-        self.which_obs = which_obs
         self.epsilon_obs = epsilon_obs 
-        
+        self.filtered_output = filtered_output
+        self.which_obs = which_obs        
 
 
         # Priors
-        self.mu_0 = np.array(input.mean().loc[:'T'])
-        self.mu_0[-1] = input.iloc[which_obs]['T']  # Assuming 'T' is the last parameter
+        self.mu_0 = np.array(input_prior.mean().loc[:'T'])
+        self.mu_0[-1] = input_prior.iloc[which_obs]['T']  # Assuming 'T' is the last parameter
         self.mu_0 = self.mu_0.reshape(-1, 1)
-        self.Sigma_0 = np.diag(input.var().loc[:'T'])
+        self.Sigma_0 = np.diag(input_prior.var().loc[:'T'])
         self.Sigma_0[-1, -1] = 0.0000001
         
         # Parameter names
-        self.param_names = input.loc[:, :'T'].columns.to_list()
+        self.param_names = input_prior.loc[:, :'T'].columns.to_list()
 
         # Model error
         self.epsilon_model = np.diag(emulator_output['RSE']**2) 
        
-                      
+      
         # Compute posterior
         self.compute_posterior()
-   
-    
+
+
     def compute_posterior(self):
         full_error = self.epsilon_obs + self.epsilon_model
        
         # Construct beta matrix and intercepts
         beta_matrix = []
         intercept = []
+
         for _, row_entry in self.emulator_output.iterrows():
             model = row_entry['Model']
             beta_matrix.append(model.coef_)
@@ -52,7 +52,7 @@ class BayesianCalibration:
         # Select observation and scale by intercept
         Y_obs = np.array(self.filtered_output.T[self.which_obs]).reshape(-1, 1)
         Y_scaled = Y_obs - intercept
-        
+
 
         # Compute posterior covariance
         Sigma_post_inv = (beta_matrix.T @ np.linalg.inv(full_error) @ beta_matrix) + np.linalg.inv(self.Sigma_0)

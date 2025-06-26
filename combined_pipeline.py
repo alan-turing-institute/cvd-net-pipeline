@@ -142,7 +142,8 @@ def run_pipeline(config):
         if "2" in steps:
             print("Step 2: Analysing Giessen (resample)")
             analyse_giessen(file_path=output_path,
-                            data_type=data_type,)
+                            data_type=data_type,
+                            gaussian_sigmas=config.get('gaussian_sigmas'))
 
         if "3" in steps:
             print("Step 3: Compute PCA")
