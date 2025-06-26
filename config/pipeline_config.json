@@ -1,15 +1,40 @@
 {
-  "data_type": "real",
+  "data_type": "synthetic",
   "input_parameters": "parameters_pulmonary_sensitive_summarystats.json",
-  "output_path": "CohortDataRaw/output_real/pat_4",
-  "steps": ["2"],
+  "output_path": "output",
+  "steps": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
+  ],
   "n_pca_components": 10,
-  "n_params": 9,
-  "gaussian_sigmas": [0.001, 0.001, 0.001],
+  "n_params": 8,
+  "nsamples": 50,
+  "gaussian_sigmas": [
+    0.00001,
+    0.00001,
+    0.00001
+  ],
   "output_keys": [
-    "t_max_dpdt", "a_epad", "epad", "s_a_epad", "s_epad",
-    "min_dpdt", "max_dpdt", "A_p", "P_max", "esp", "sys",
-    "EF", "Ees/Ea", "iT", "PC1", "PC2", "PC3", "MC_EF"
+    "t_max_dpdt",
+    "a_epad",
+    "epad",
+    "s_a_epad",
+    "s_epad",
+    "A_p",
+    "P_max",
+    "esp",
+    "sys",
+    "iT",
+    "PC1",
+    "PC2",
+    "PC3",
+    "MC_EF",
+    "MC_edp",
+    "MC_eivc"
   ],
   "include_timeseries": 0,
   "epsilon_obs_scale": 0.05
