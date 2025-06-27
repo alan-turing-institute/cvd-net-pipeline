@@ -18,7 +18,7 @@ def run_pipeline(config):
 
         print("Processing the pipeline for synthetic data.")
 
-        nsamples = config.get("nsamples", 5000)
+        n_samples = config.get("n_samples", 5000)
 
         # Parent folder for all simulations
         output_path = config.get("output_path")
@@ -31,7 +31,7 @@ def run_pipeline(config):
                 raise ValueError("n_params must be provided in the configuration if step 1 is not being executed.")
 
             # Define the output directory for the current simulations
-            output_dir_sims = os.path.join(output_path, f'output_{nsamples}_{n_params}_params')
+            output_dir_sims = os.path.join(output_path, f'output_{n_samples}_{n_params}_params')
             print("Simulation output directory is: ", output_dir_sims)
 
         os.makedirs(output_path, exist_ok=True)
@@ -47,7 +47,7 @@ def run_pipeline(config):
 
             output_dir_sims, n_params = simulate_data(
                 param_path=config.get("input_parameters"),
-                n_samples=nsamples,
+                n_samples=n_samples,
                 output_path=output_path,
                 sample_parameters=True
             )
@@ -66,7 +66,7 @@ def run_pipeline(config):
             if n_pca_components is None:
                 raise ValueError("n_pca_components must be provided in the configuration to run PCA.")
 
-            compute_pca(n_samples=nsamples, 
+            compute_pca(n_samples=n_samples, 
                         n_params=n_params, 
                         n_pca_components=n_pca_components,
                         output_path=output_path,
@@ -74,7 +74,7 @@ def run_pipeline(config):
 
         if "4" in steps:
             print("Step 4: Building Emulator")
-            build_emulator(n_samples=nsamples,
+            build_emulator(n_samples=n_samples,
                         n_params=n_params, 
                         output_path=output_path, 
                         output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv")
@@ -92,7 +92,7 @@ def run_pipeline(config):
 
             output_dir_bayesian, e_obs = calibrate_parameters(
                                         data_type=data_type,
-                                        n_samples=nsamples,
+                                        n_samples=n_samples,
                                         n_params=n_params,
                                         output_path=output_path,
                                         output_keys=output_keys,
@@ -110,7 +110,7 @@ def run_pipeline(config):
 
             output_dir_bayesian, n_params = simulate_data(
                 param_path=config.get("input_parameters"),
-                n_samples=nsamples,
+                n_samples=n_samples,
                 output_path=output_dir_bayesian,
                 sample_parameters = False
             )
@@ -164,12 +164,12 @@ def run_pipeline(config):
                 raise ValueError("output keys must be provided in the configuration to run calibration.")
             
             emulator_path = config.get("emulator_path")
-            nsamples = config.get("n_samples")
+            n_samples = config.get("n_samples")
             n_params = config.get("n_params")
             include_timeseries = bool(config.get("include_timeseries"))
 
             calibrate_parameters(data_type=data_type,
-                                 n_samples=nsamples,
+                                 n_samples=n_samples,
                                         n_params=n_params,
                                         output_path=output_path,
                                         emulator_path=emulator_path,

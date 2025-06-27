@@ -136,21 +136,21 @@ def calibrate_parameters(data_type="synthetic",
     with open(os.path.join(output_dir_bayesian, 'used_config.json'), 'w') as f:
         json.dump(config, f, indent=4)
    
-    # Plot the prior and posteior distributions
-    plot_utils.plot_posterior_distributions(input_params, 
-                                             bc.mu_0,
-                                             bc.Sigma_0,
-                                             bc.Mu_post,
-                                             bc.Sigma_post,
-                                             bc.which_obs,
-                                             bc.param_names,
-                                             output_path=output_dir_bayesian)
+    # # Plot the prior and posteior distributions
+    # plot_utils.plot_posterior_distributions(input_params, 
+    #                                          bc.mu_0,
+    #                                          bc.Sigma_0,
+    #                                          bc.Mu_post,
+    #                                          bc.Sigma_post,
+    #                                          bc.which_obs,
+    #                                          bc.param_names,
+    #                                          output_path=output_dir_bayesian)
 
-    # Plot posterior covariance matrix
-    plot_utils.plot_posterior_covariance_matrix(bc.Sigma_0,
-                                                 bc.Sigma_post,
-                                                 bc.param_names,
-                                                 output_path=output_dir_bayesian)
+    # # Plot posterior covariance matrix
+    # plot_utils.plot_posterior_covariance_matrix(bc.Sigma_0,
+    #                                              bc.Sigma_post,
+    #                                              bc.param_names,
+    #                                              output_path=output_dir_bayesian)
 
     
     return output_dir_bayesian, e_obs
