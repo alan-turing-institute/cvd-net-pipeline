@@ -133,22 +133,87 @@ def calibrate_parameters(data_type="synthetic",
     # Save the config file
     with open(os.path.join(output_dir_bayesian, 'used_config.json'), 'w') as f:
         json.dump(config, f, indent=4)
-   
-    # # Plot the prior and posteior distributions
-    # plot_utils.plot_posterior_distributions(input_params, 
-    #                                          bc.mu_0,
-    #                                          bc.Sigma_0,
-    #                                          bc.Mu_post,
-    #                                          bc.Sigma_post,
-    #                                          bc.which_obs,
-    #                                          bc.param_names,
-    #                                          output_path=output_dir_bayesian)
 
-    # # Plot posterior covariance matrix
-    # plot_utils.plot_posterior_covariance_matrix(bc.Sigma_0,
-    #                                              bc.Sigma_post,
-    #                                              bc.param_names,
-    #                                              output_path=output_dir_bayesian)
+    if data_type == "synthetic":
+
+        # Plot the prior and posteior distributions
+        plot_utils.plot_posterior_distributions(input_params, 
+                                                bc.mu_0,
+                                                bc.Sigma_0,
+                                                bc.Mu_post,
+                                                bc.Sigma_post,
+                                                bc.which_obs,
+                                                bc.param_names,
+                                                output_path=output_dir_bayesian)
+
+        # Plot posterior covariance matrix
+        plot_utils.plot_posterior_covariance_matrix(bc.Sigma_0,
+                                                    bc.Sigma_post,
+                                                    bc.param_names,
+                                                    output_path=output_dir_bayesian)
+        
+    elif data_type == "real":
+
+        class ResolutionController:
+            def __init__(self, window_size):
+                self.window_size = window_size
+
+            def downsample(self, data):
+                """Downsamples the data by averaging over non-overlapping windows."""
+                if data.shape[0] < self.window_size:
+                    raise ValueError(f"Data has fewer than {self.window_size} time steps!")
+
+                num_windows = data.shape[0] // self.window_size  # Compute number of full windows
+                return data[:num_windows * self.window_size].reshape(num_windows, self.window_size, -1).mean(axis=1)
+
+        # Initialize resolution controller
+        window_size = 5
+        res_controller = ResolutionController(window_size)
+
+        # Define time range before downsampling
+        time_range = (1, 4000)  # Specify the indices from the original data
+
+        # Ensure posterior_variances has shape (3888, p)
+        posterior_variances_corrected = np.array(Sigma_post).diagonal().reshape(1, -1)  # (1, p)
+        posterior_variances_corrected = np.tile(posterior_variances_corrected, (posterior_means.shape[0], 1))  # (3888, p)
+
+
+        # Slice the original data before downsampling
+        posterior_means_trimmed = posterior_means[time_range[0]:time_range[1]]
+        posterior_variances_trimmed = posterior_variances_corrected[time_range[0]:time_range[1]]
+
+        # Downsample the sliced data
+        posterior_means_smooth = res_controller.downsample(posterior_means_trimmed)  # (new_length, p)
+        posterior_variances_smooth = res_controller.downsample(np.sqrt(posterior_variances_trimmed))  # (new_length, p)
+
+
+        # Generate new time indices based on downsampling
+        T_smooth = np.arange(posterior_means_smooth.shape[0]) * window_size + time_range[0]
+
+        # Colors for different parameters
+        param_names = bc.param_names
+        colors = plt.cm.get_cmap('Set1', len(param_names)).colors
+
+        # Plot each parameter on a separate subplot
+        fig, axes = plt.subplots(len(param_names), 1, figsize=(10, 8), sharex=True)
+
+        for i in range(len(param_names)):
+            mean = posterior_means_smooth[:, i]  # Smoothed mean
+            std_dev = posterior_variances_smooth[:, i]  # Smoothed standard deviation
+
+            axes[i].plot(T_smooth, mean, color=colors[i], label=param_names[i])
+            axes[i].fill_between(T_smooth, mean - 2 * std_dev, mean + 2 * std_dev, color=colors[i], alpha=0.2)
+
+            axes[i].set_ylabel('Value')
+            axes[i].legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
+            axes[i].grid()
+
+        axes[-1].set_xlabel('Time')
+        fig.suptitle(f'Parameter Trajectories (Averaged Over {window_size} Steps) [Original Range: {time_range}]')
+
+        plt.tight_layout()
+        plt.subplots_adjust(right=0.85)  # Make space for legends on the right
+        plt.show()
 
     
     return output_dir_bayesian, e_obs
