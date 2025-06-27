@@ -55,7 +55,11 @@ def calibrate_parameters(n_samples:int=50,
     # Create the diagonal matrix
     e_obs = np.diag(diagonal_values) * epsilon_obs_scale
     
-    bc = BayesianCalibration(input_params, emulator_output, observation_data, which_obs=3, epsilon_obs = e_obs)
+    bc = BayesianCalibration(input_prior=input_params, 
+                             emulator_output=emulator_output, 
+                             observation_data=observation_data, 
+                             which_obs=3, 
+                             epsilon_obs = e_obs)
 
     bc.compute_posterior()
 

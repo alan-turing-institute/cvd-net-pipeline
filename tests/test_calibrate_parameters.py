@@ -30,6 +30,8 @@ def test_calibrate_parameters():
                              n_params=n_params,
                              output_path=str(tmp_path),
                              output_keys=output_keys,
+                             include_timeseries=False,
+                             epsilon_obs_scale=0.05,
                              config=[])
 
         # Compare the output files to the expected output files
