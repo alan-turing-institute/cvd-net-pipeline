@@ -89,10 +89,7 @@ def emulate_linear(input, output):
     Y = output
 
     # Initialize the model
-    model = Pipeline([
-        ('scaler', StandardScaler()),
-        ('regressor', LinearRegression())
-    ])
+    model = LinearRegression()
     
 
     # Fit the model to the training data

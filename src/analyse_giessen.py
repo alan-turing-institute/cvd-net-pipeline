@@ -30,7 +30,7 @@ def analyse_giessen(file_path: str, data_type: str, gaussian_sigmas : list[float
 
             ag.compute_derivatives()
             # Should change start_at_edp bask to False
-            ag.compute_points_of_interest(height=10, use_filter=False, start_at_edp=True) # , export_true_derivates=True, export_true_p=True, distance=90 (we should consder adding these options)
+            ag.compute_points_of_interest(height=10, use_filter=False, start_at_edp=False) # , export_true_derivates=True, export_true_p=True, distance=90 (we should consder adding these options)
             beats = pd.DataFrame(ag.resample_heart_beat())
             sumstats = ag.points_df
 

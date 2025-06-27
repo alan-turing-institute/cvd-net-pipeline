@@ -19,10 +19,10 @@ class BayesianCalibration:
         # Priors
         self.mu_0 = np.array(input_prior.mean())
         self.ind = input_prior.columns.get_loc("T")
-        # self.mu_0[self.ind] = input_prior.iloc[which_obs]['T']  
+        self.mu_0[self.ind] = input_prior.iloc[which_obs]['T']  
         self.mu_0 = self.mu_0.reshape(-1, 1)
         self.Sigma_0 = np.diag(input_prior.var(ddof=0))
-        # self.Sigma_0[self.ind, self.ind] = 0.0000001                
+        self.Sigma_0[self.ind, self.ind] = 0.0000001                
         
         # Parameter names
         self.param_names = input_prior.columns.to_list()
@@ -43,8 +43,7 @@ class BayesianCalibration:
         intercept = []
 
         for _, row_entry in self.emulator_output.iterrows():
-            model = row_entry['Model'].named_steps['regressor']
-            scaler = row_entry['Model'].named_steps['scaler']
+            model = row_entry['Model']
             beta_matrix.append(model.coef_)
             intercept.append(model.intercept_)
         
@@ -57,21 +56,13 @@ class BayesianCalibration:
 
 
         # Compute posterior covariance
-        scaled_Sigma_0 = np.eye(self.Sigma_0.shape[0])
-        # scaled_Sigma_0[self.ind, self.ind] = 1e5
-        # Sigma_post_inv = (beta_matrix.T @ np.linalg.inv(full_error) @ beta_matrix) # + scaled_Sigma_0
-        Sigma_post_inv = (beta_matrix.T @ np.linalg.inv(full_error) @ beta_matrix) # + np.linalg.inv(scaled_Sigma_0)
+        Sigma_post_inv = (beta_matrix.T @ np.linalg.inv(full_error) @ beta_matrix) + np.linalg.inv(self.Sigma_0)
         self.Sigma_post = np.linalg.inv(Sigma_post_inv)        
         
         # Compute posterior mean
-        self.Mu_post = self.Sigma_post @ (beta_matrix.T @ np.linalg.inv(full_error) @ Y_scaled)
-        self.Mu_post = scaler.inverse_transform(self.Mu_post.T).T
+        self.Mu_post = self.Sigma_post @ (beta_matrix.T @ np.linalg.inv(full_error) @ Y_scaled + np.linalg.inv(self.Sigma_0) @ self.mu_0)
+                
         
-        self.Sigma_post = scaler.scale_.reshape((-1,1)) * self.Sigma_post * scaler.scale_.reshape((1,-1))
-        # raise Exception(self.Mu_post)
-        
-        
-       
     def sample_posterior(self, n_samples):
         rg = np.random.default_rng(1)
         self.samples = rg.multivariate_normal(self.Mu_post.flatten(), self.Sigma_post, size=n_samples)  # Generate 10 samples
