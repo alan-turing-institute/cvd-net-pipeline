@@ -15,16 +15,17 @@ class BayesianCalibrationGiessen:
 
 
         # Priors
-        self.mu_0 = np.array(input_prior.mean().loc[:'T'])
+        self.mu_0 = np.array(input_prior.mean())
+        self.ind = input_prior.columns.get_loc("T")
         self.mu_0 = self.mu_0.reshape(-1, 1)
-        self.Sigma_0 = np.diag(input_prior.var().loc[:'T'])
+        self.Sigma_0 = np.diag(input_prior.var())
 
         # dynamically define prior on T
-        self.mu_0[-1,-1] = observation_data['iT'].iloc[0]
-        self.Sigma_0[-1, -1] = 0.0000001
+        self.mu_0[self.ind,self.ind] = observation_data['iT'].iloc[0]
+        self.Sigma_0[self.ind, self.ind] = 0.0000001
         
         # Parameter names
-        self.param_names = input_prior.loc[:, :'T'].columns.to_list()
+        self.param_names = input_prior.columns.to_list()
         
 
         # Model error
