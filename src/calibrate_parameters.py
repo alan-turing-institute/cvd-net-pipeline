@@ -17,8 +17,6 @@ def calibrate_parameters(data_type="synthetic",
                          epsilon_obs_scale:float=0.05,
                          config:dict=None):
 
-
-
     if data_type == "synthetic":
     
         file_suffix = f'_{n_samples}_{n_params}_params'
