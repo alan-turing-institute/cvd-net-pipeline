@@ -2,10 +2,8 @@ import json
 from simulate_data import simulate_data
 from analyse_giessen import analyse_giessen
 from compute_pca import compute_pca
-from compute_pca_real import compute_pca_real
 from build_emulator import build_emulator
 from calibrate_parameters import calibrate_parameters
-from calibrate_parameters_real import calibrate_parameters_real
 from utils import plot_utils
 import os
 import argparse
@@ -170,7 +168,8 @@ def run_pipeline(config):
             n_params = config.get("n_params")
             include_timeseries = bool(config.get("include_timeseries"))
 
-            calibrate_parameters_real(n_samples=nsamples,
+            calibrate_parameters(data_type=data_type,
+                                 n_samples=nsamples,
                                         n_params=n_params,
                                         output_path=output_path,
                                         emulator_path=emulator_path,

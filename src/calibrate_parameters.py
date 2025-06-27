@@ -8,7 +8,7 @@ import json
 from datetime import datetime
 
 def calibrate_parameters(data_type="synthetic",
-                         n_samples:int=50, 
+                         n_samples:int=64, 
                          n_params:int=9, 
                          output_path:str='output', 
                          emulator_path:str=None,
@@ -18,9 +18,10 @@ def calibrate_parameters(data_type="synthetic",
                          config:dict=None):
 
 
-    file_suffix = f'_{n_samples}_{n_params}_params'
 
     if data_type == "synthetic":
+    
+        file_suffix = f'_{n_samples}_{n_params}_params'
 
         dir_name = f"{output_path}/output{file_suffix}"
 
