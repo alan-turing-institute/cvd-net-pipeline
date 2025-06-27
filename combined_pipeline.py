@@ -92,7 +92,9 @@ def run_pipeline(config):
 
             print(f"Include time-series in calibration: {include_timeseries}")
 
-            output_dir_bayesian, e_obs = calibrate_parameters(n_samples=nsamples,
+            output_dir_bayesian, e_obs = calibrate_parameters(
+                                        data_type=data_type,
+                                        n_samples=nsamples,
                                         n_params=n_params,
                                         output_path=output_path,
                                         output_keys=output_keys,

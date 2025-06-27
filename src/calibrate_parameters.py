@@ -7,7 +7,8 @@ from utils import plot_utils
 import json
 from datetime import datetime
 
-def calibrate_parameters(n_samples:int=50, 
+def calibrate_parameters(data_type="synthetic",
+                         n_samples:int=50, 
                          n_params:int=9, 
                          output_path:str='output', 
                          output_keys:list=None,
@@ -59,7 +60,8 @@ def calibrate_parameters(n_samples:int=50,
                              emulator_output=emulator_output, 
                              observation_data=observation_data, 
                              which_obs=3, 
-                             epsilon_obs = e_obs)
+                             epsilon_obs = e_obs,
+                             data_type=data_type)
 
     bc.compute_posterior()
 
