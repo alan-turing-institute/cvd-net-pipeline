@@ -70,7 +70,7 @@ def run_pipeline(config):
                         n_params=n_params, 
                         n_pca_components=n_pca_components,
                         output_path=output_path,
-                        data_type=data_type,)
+                        data_type=data_type)
 
         if "4" in steps:
             print("Step 4: Building Emulator")
@@ -170,12 +170,12 @@ def run_pipeline(config):
 
             calibrate_parameters(data_type=data_type,
                                  n_samples=n_samples,
-                                        n_params=n_params,
-                                        output_path=output_path,
-                                        emulator_path=emulator_path,
-                                        output_keys=output_keys,
-                                        include_timeseries=include_timeseries,
-                                        config=config)
+                                 n_params=n_params,
+                                 output_path=output_path,
+                                 emulator_path=emulator_path,
+                                 output_keys=output_keys,
+                                 include_timeseries=include_timeseries,
+                                 config=config)
 
         print("Pipeline complete.")
 

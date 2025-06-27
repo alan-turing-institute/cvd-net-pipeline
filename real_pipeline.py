@@ -8,7 +8,7 @@ import argparse
 
 def run_pipeline(config):
 
-    steps = config.get("steps", ["2", "3", "4", "5"])
+    steps = config.get("steps", ["2", "3", "5"])
     
     # Parent folder for all simulations
     output_path = config.get("output_path")

@@ -1,12 +1,12 @@
 {
   "input_parameters": "parameters_pulmonary_sensitive_summarystats.json",
-  "output_path": "output_real/pat_4",
-  "steps": ["5"],
+  "output_path": "CohortDataRaw/output_real/pat_4",
+  "steps": ["2","3","5"],
   "n_pca_components": 10,
-  "n_samples": 4096,
+  "n_samples": 64,
   "n_params": 9,
   "emulator_path": "output_synthetic/",
-  "include_timeseries": 1,
+  "include_timeseries": 0,
   "output_keys": [
     "t_max_dpdt", "a_epad", "epad", "s_a_epad", "s_epad",
     "min_dpdt", "max_dpdt", "A_p", "P_max", "esp", "sys",

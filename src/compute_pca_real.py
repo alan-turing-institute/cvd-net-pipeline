@@ -2,8 +2,9 @@ import pandas as pd
 import os
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, PowerTransformer
 from utils import plot_utils
+from sklearn.pipeline import Pipeline
 
 
 def compute_pca_real(n_pca_components:int=10, output_path:str="output"):
@@ -26,14 +27,15 @@ def compute_pca_real(n_pca_components:int=10, output_path:str="output"):
     # Copy the data and separate the target variable (only pressure traces)
     X = df.iloc[:,:100].copy() # traces only
 
-    # Create an instance of StandardScaler
-    scaler = StandardScaler()
+    # Create an instance of the pipeline including StandardScaler and PCA
+    pipeline = Pipeline(
+        [ ('scl', StandardScaler()),
+        ('pca', PCA(n_components=n_pca_components)),
+        ('post',PowerTransformer())]
+    )
 
-    # Fit the scaler to the data and transform it - standardize
-    X_scaled = scaler.fit_transform(X)
-
-    pca = PCA(n_pca_components)
-    X_pca = pca.fit_transform(X_scaled)
+    # Fit the pipeline to the data
+    X_pca = pipeline.fit_transform(X)
 
     # Convert to dataframe
     component_names = [f"PC{i+1}" for i in range(X_pca.shape[1])]
@@ -49,14 +51,11 @@ def compute_pca_real(n_pca_components:int=10, output_path:str="output"):
 
     df_pca.to_csv(f'{output_path}/{output_file_name_pca}', index=False)
 
-    output_parameters = os.path.join(output_path)
-
     # Plot the PCA histogram
-    plot_utils.plot_pca_histogram(X_pca, output_path=output_parameters, n_pca_components=n_pca_components)
+    plot_utils.plot_pca_histogram(X_pca, output_path=output_path, n_pca_components=n_pca_components)
 
     # Plot the explained variance ratio
-    plot_utils.plot_pca_explained_variance(pca, output_path=output_parameters)
+    plot_utils.plot_pca_explained_variance(pipeline, output_path=output_path)
 
     # Plot the PCA transformed data
-    plot_utils.plot_pca_transformed(pca, X_scaled, output_path=output_parameters)
-
+    plot_utils.plot_pca_transformed(pipeline, X, output_path=output_path)

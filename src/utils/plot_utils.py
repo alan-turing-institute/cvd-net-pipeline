@@ -315,7 +315,8 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian, e_obs_scale
     fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
 
 def plot_parameter_trajectories(Sigma_post,
-                                posterior_means):
+                                posterior_means,
+                                bc):
     
     class ResolutionController:
         def __init__(self, window_size):
@@ -377,3 +378,5 @@ def plot_parameter_trajectories(Sigma_post,
     plt.tight_layout()
     plt.subplots_adjust(right=0.85)  # Make space for legends on the right
     plt.show()
+
+    fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
