@@ -21,7 +21,7 @@ class BayesianCalibration:
         self.ind = input_prior.columns.get_loc("T")
         self.mu_0[self.ind] = input_prior.iloc[which_obs]['T']  
         self.mu_0 = self.mu_0.reshape(-1, 1)
-        self.Sigma_0 = np.diag(input_prior.var(ddof=0))
+        self.Sigma_0 = np.diag(input_prior.var(ddof=0)) # Need to check
         self.Sigma_0[self.ind, self.ind] = 0.0000001                
         
         # Parameter names
