@@ -296,7 +296,7 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
     
     # Plot all waveforms in faded orange
     for j in range(samples.shape[0]):
-        ax.plot(samples[j, :], color='orange', alpha=0.001)
+        ax.plot(samples[j, :], color='bisque', alpha=0.01)
     
     # Plot y_true
     ax.plot(y_true.values, label="True Waveform", color='c', linewidth=2)
@@ -337,7 +337,20 @@ def plot_sensitivity_heatmap(directory, saveto, selected_keys=[]):
             combined_df[file_name] = df["ST"]
         
         combined_df = combined_df.fillna(0).T  # Transpose to have CSV files on Y-axis and parameters on X-axis
-        combined_df['means'] = combined_df.mean(axis=1)
+        combined_df.index = combined_df.index.str.replace('sensitivity_', '', regex=False).str.replace('.csv', '', regex=False)
+
+        # Add a column for row means (mean ST for each output)
+        combined_df['rowmeans'] = combined_df.mean(axis=1)
+        
+        # Order columns by the mean across output for each parameter (column)
+        #parameter_means = combined_df.mean()
+        #ordered_columns = parameter_means.sort_values(ascending=False).index.tolist()
+        #combined_df = combined_df[ordered_columns]  # Reorder columns
+
+        parameter_max = combined_df.max()
+        ordered_columns = parameter_max.sort_values(ascending=False).index.tolist()
+        combined_df = combined_df[ordered_columns]  # Reorder column
+        
         cols = 0.5 * len(combined_df.index)
         plt.figure(figsize=(25, cols))
         sns.heatmap(combined_df, annot=True, cmap="coolwarm", linewidths=0.5, cbar_kws={"shrink": 0.25})
