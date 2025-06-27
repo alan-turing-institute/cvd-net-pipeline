@@ -87,18 +87,22 @@ def calibrate_parameters(data_type="synthetic",
         posterior_cov = pd.DataFrame(bc.Sigma_post, index=bc.param_names, columns=bc.param_names)
 
         
-        # Smaple from the posterior distribution
+        # Sample from the posterior distribution
         bc.sample_posterior(n_samples=n_samples)
 
     elif data_type == "real":
-        
+
         posterior_means = []
 
         # Create the diagonal matrix
         e_obs = np.diag(diagonal_values) * epsilon_obs_scale
 
         for row in range(len(observation_data)):
-            bc = BayesianCalibration(input_params, emulator_output, observation_data.iloc[row:row+1], epsilon_obs = e_obs)
+            bc = BayesianCalibration(input_prior=input_params, 
+                                     emulator_output=emulator_output, 
+                                     observation_data=observation_data.iloc[row:row+1], 
+                                     epsilon_obs = e_obs,
+                                     data_type=data_type)
             bc.compute_posterior()
             posterior_means.append(bc.Mu_post.squeeze())
 
