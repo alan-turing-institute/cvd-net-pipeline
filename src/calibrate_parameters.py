@@ -155,7 +155,8 @@ def calibrate_parameters(data_type="synthetic",
 
         plot_utils.plot_parameter_trajectories(Sigma_post=Sigma_post,
                                                posterior_means=posterior_means,
-                                               bc=bc)
+                                               bc=bc,
+                                               output_path=output_dir_bayesian)
 
     
     return output_dir_bayesian, e_obs
