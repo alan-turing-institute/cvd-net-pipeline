@@ -316,8 +316,12 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian, e_obs_scale
 
 def plot_parameter_trajectories(Sigma_post,
                                 posterior_means,
-                                bc):
+                                bc,
+                                output_path):
     
+    output_path_figures = os.path.join(output_path,"figures")
+    os.makedirs(output_path_figures, exist_ok=True)
+
     class ResolutionController:
         def __init__(self, window_size):
             self.window_size = window_size
