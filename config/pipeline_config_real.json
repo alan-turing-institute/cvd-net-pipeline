@@ -2,7 +2,7 @@
 
   "input_parameters": "parameters_pulmonary_sensitive_summarystats.json",
   "output_path": "CohortDataRaw/output_real/pat_4",
-  "steps": ["5"],
+  "steps": ["2","3","5"],
   "n_pca_components": 10,
   "n_samples": 64,
   "n_params": 9,
@@ -14,4 +14,4 @@
   "include_timeseries": 0,  
   "epsilon_obs_scale": 0.05,
   "emulator_path": "output_synthetic/"
- }
+}
