@@ -219,7 +219,7 @@ def plot_posterior_distributions(input, mu_0, Sigma_0, Mu_post, Sigma_post, whic
         ax.legend()
 
     fig.tight_layout()
-    plt.suptitle(f'Posterior Distributions of Calibrated Parameters')
+    plt.suptitle(f'Posterior Distributions of Calibrated Parameters', y=1.03)
     plt.savefig(f'{output_path_figures}/posterior_distributions_calibrated_params.png')    
 
 
