@@ -80,7 +80,7 @@ def simulate_data(param_path: str, n_samples: int, output_path: str, repeat_simu
     if repeat_simulations:
         os.makedirs(output_parameters_simulations, exist_ok=True)
         simulations = br.run_batch(
-            n_jobs=10,
+            n_jobs=7,
             output_path=output_parameters_simulations
         )
 
