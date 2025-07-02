@@ -11,6 +11,8 @@ import seaborn as sns
 from scipy.stats import norm
 
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+
 import numpy as np
 import math
 import os
@@ -353,11 +355,13 @@ def plot_sensitivity_heatmap(directory, saveto, selected_keys=[]):
         
         cols = 0.5 * len(combined_df.index)
         plt.figure(figsize=(25, cols))
+
+
         sns.heatmap(
                 combined_df, 
                 cmap="Greens", 
                 linewidths=0.5, 
-                cbar=True, 
+                cbar=False, 
                 cbar_kws={
                     "orientation": "horizontal", 
                     "shrink": 0.5, 
@@ -365,10 +369,12 @@ def plot_sensitivity_heatmap(directory, saveto, selected_keys=[]):
                     "label": "Sensitivity Index (ST)"
                 }
         )
-        plt.title("Sensitivity Heatmap")
-        plt.xlabel("Parameters", fontsize=16, fontweight='bold')
-        plt.ylabel("Output", fontsize=16, fontweight='bold')
-        plt.xticks(rotation=45, fontsize=12, fontweight='bold')
-        plt.yticks(rotation=0, fontsize=12, fontweight='bold') 
+
+        
+        plt.title("")
+        plt.ylabel("Output", fontsize=20, fontweight='bold')
+        plt.xticks(rotation=45, fontsize=16, fontweight='bold')
+        plt.xlabel("Parameters", fontsize=20, fontweight='bold')
+        plt.yticks(rotation=0, fontsize=16, fontweight='bold') 
         plt.tight_layout()
-        plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.png")
+        plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.png", dpi=700)
