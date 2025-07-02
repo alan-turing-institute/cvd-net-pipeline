@@ -340,7 +340,7 @@ def plot_sensitivity_heatmap(directory, saveto, selected_keys=[]):
         combined_df.index = combined_df.index.str.replace('sensitivity_', '', regex=False).str.replace('.csv', '', regex=False)
 
         # Add a column for row means (mean ST for each output)
-        combined_df['rowmeans'] = combined_df.mean(axis=1)
+        combined_df['Threshold Value'] = combined_df.mean(axis=1)
         
         # Order columns by the mean across output for each parameter (column)
         #parameter_means = combined_df.mean()
@@ -353,11 +353,22 @@ def plot_sensitivity_heatmap(directory, saveto, selected_keys=[]):
         
         cols = 0.5 * len(combined_df.index)
         plt.figure(figsize=(25, cols))
-        sns.heatmap(combined_df, annot=True, cmap="coolwarm", linewidths=0.5, cbar_kws={"shrink": 0.25})
+        sns.heatmap(
+                combined_df, 
+                cmap="Greens", 
+                linewidths=0.5, 
+                cbar=True, 
+                cbar_kws={
+                    "orientation": "horizontal", 
+                    "shrink": 0.5, 
+                    "pad": 0.3,
+                    "label": "Sensitivity Index (ST)"
+                }
+        )
         plt.title("Sensitivity Heatmap")
-        plt.xlabel("Parameters")
-        plt.ylabel("Output")
-        plt.xticks(rotation=45)
-        plt.yticks(rotation=0) 
+        plt.xlabel("Parameters", fontsize=16, fontweight='bold')
+        plt.ylabel("Output", fontsize=16, fontweight='bold')
+        plt.xticks(rotation=45, fontsize=12, fontweight='bold')
+        plt.yticks(rotation=0, fontsize=12, fontweight='bold') 
         plt.tight_layout()
         plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.png")
