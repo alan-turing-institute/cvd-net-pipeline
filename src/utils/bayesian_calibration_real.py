@@ -21,16 +21,12 @@ class BayesianCalibrationGiessen:
         self.Sigma_0 = np.diag(input_prior.var())
 
         # dynamically define prior on T
-        self.mu_0[0,self.ind] = observation_data['iT'].iloc[0]
+        self.mu_0[self.ind,-1] = observation_data['iT'].iloc[0]
         self.Sigma_0[self.ind, self.ind] = 0.0000001
         
         # Parameter names
-<<<<<<< HEAD
-        self.param_names = input_prior.loc[:, :'T'].columns.to_list()
-=======
         self.param_names = input_prior.columns.to_list()
         
->>>>>>> 35-add-new-mc-computed-output-features
 
         # Model error
         self.epsilon_model = np.diag(emulator_output['RSE']**2) 
