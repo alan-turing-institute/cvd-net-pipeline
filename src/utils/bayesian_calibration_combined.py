@@ -49,7 +49,6 @@ class BayesianCalibration:
         self.mu_0 = np.array(self.input_prior.mean())
         self.ind = self.input_prior.columns.get_loc("T")
 
-        self.mu_0 = self.mu_0.reshape(-1, 1)
         self.Sigma_0 = np.diag(self.input_prior.var().loc[:'T'])
         
         if self.is_real_data:
