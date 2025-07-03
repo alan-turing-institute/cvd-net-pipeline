@@ -26,7 +26,8 @@ def test_calibrate_parameters():
                         tmp_path,
                         dirs_exist_ok=True)
 
-        calibrate_parameters(n_samples=n_samples,
+        calibrate_parameters(data_type="synthetic",
+                             n_samples=n_samples,
                              n_params=n_params,
                              output_path=str(tmp_path),
                              output_keys=output_keys,
