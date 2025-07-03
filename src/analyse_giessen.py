@@ -4,9 +4,10 @@ from AnalysisGiessen import analyseGiessen
 def analyse_giessen(file_path: str, data_type: str, gaussian_sigmas : list[float]):
 
     rv_file = pd.read_csv(f"{file_path}/pressure_traces_rv/all_pressure_traces.csv")
-    ar_file = pd.read_csv(f"{file_path}/pressure_traces_pat/all_pressure_traces.csv")
     
     if data_type == 'synthetic':
+
+        ar_file = pd.read_csv(f"{file_path}/pressure_traces_pat/all_pressure_traces.csv")
 
         # unpack sigmas
         sigma_filter_pressure, sigma_filter_dpdt, sigma_filter_d2pdt2 = gaussian_sigmas
