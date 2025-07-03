@@ -46,20 +46,19 @@ class BayesianCalibration:
     def _setup_priors(self):
         """Setup prior parameters based on data type"""
 
-        self.mu_0 = np.array(self.input_prior.mean().loc[:'T'])
+        self.mu_0 = np.array(self.input_prior.mean())
+        self.ind = self.input_prior.columns.get_loc("T")
 
         if self.data_type == "synthetic":
-            self.mu_0[-1] = self.input_prior.iloc[self.which_obs]['T']  # Assuming 'T' is the last parameter
-            self.mu_0 = self.mu_0.reshape(-1, 1)
+            self.mu_0[-1] = self.input_prior.iloc[self.which_obs]['T']
             self.Sigma_0 = np.diag(self.input_prior.var().loc[:'T'])
 
         elif self.data_type == "real":
 
-            self.mu_0 = self.mu_0.reshape(-1, 1)
             self.Sigma_0 = np.diag(self.input_prior.var().loc[:'T'])
 
             # dynamically define prior on T
-            self.mu_0[-1,-1] = self.observation_data['iT'].iloc[0]
+            self.mu_0[-1] = self.observation_data['iT'].iloc[0]
 
         self.Sigma_0[-1, -1] = 0.0000001
 

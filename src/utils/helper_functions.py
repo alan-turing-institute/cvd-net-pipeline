@@ -88,6 +88,7 @@ def emulate_linear(input, output):
 
     # Initialize the model
     model = LinearRegression()
+    
 
     # Fit the model to the training data
     model.fit(X, Y)

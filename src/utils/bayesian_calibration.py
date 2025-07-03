@@ -17,14 +17,15 @@ class BayesianCalibration:
 
 
         # Priors
-        self.mu_0 = np.array(input_prior.mean().loc[:'T'])
-        self.mu_0[-1] = input_prior.iloc[which_obs]['T']  # Assuming 'T' is the last parameter
+        self.mu_0 = np.array(input_prior.mean())
+        self.ind = input_prior.columns.get_loc("T")
+        self.mu_0[self.ind] = input_prior.iloc[which_obs]['T']  
         self.mu_0 = self.mu_0.reshape(-1, 1)
-        self.Sigma_0 = np.diag(input_prior.var().loc[:'T'])
-        self.Sigma_0[-1, -1] = 0.0000001
+        self.Sigma_0 = np.diag(input_prior.var()) # Need to check
+        self.Sigma_0[self.ind, self.ind] = 0.0000001                
         
         # Parameter names
-        self.param_names = input_prior.loc[:, :'T'].columns.to_list()
+        self.param_names = input_prior.columns.to_list()
 
         # Model error
         self.epsilon_model = np.diag(emulator_output['RSE']**2) 
@@ -56,12 +57,12 @@ class BayesianCalibration:
 
         # Compute posterior covariance
         Sigma_post_inv = (beta_matrix.T @ np.linalg.inv(full_error) @ beta_matrix) + np.linalg.inv(self.Sigma_0)
-        self.Sigma_post = np.linalg.inv(Sigma_post_inv)
+        self.Sigma_post = np.linalg.inv(Sigma_post_inv)        
         
         # Compute posterior mean
         self.Mu_post = self.Sigma_post @ (beta_matrix.T @ np.linalg.inv(full_error) @ Y_scaled + np.linalg.inv(self.Sigma_0) @ self.mu_0)
+                
         
-       
     def sample_posterior(self, n_samples):
         rg = np.random.default_rng(1)
         self.samples = rg.multivariate_normal(self.Mu_post.flatten(), self.Sigma_post, size=n_samples)  # Generate 10 samples

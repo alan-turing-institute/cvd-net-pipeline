@@ -74,10 +74,12 @@ def run_pipeline(config):
 
         if "4" in steps:
             print("Step 4: Building Emulator")
+            output_keys = config.get("output_keys")
             build_emulator(n_samples=n_samples,
                         n_params=n_params, 
                         output_path=output_path, 
-                        output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+                        output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv",
+                        output_keys_red=output_keys)
 
         if "5" in steps:
             print("Step 5: Calibrating parameters using config output keys")
