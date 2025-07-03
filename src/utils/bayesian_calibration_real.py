@@ -21,7 +21,7 @@ class BayesianCalibrationGiessen:
         self.Sigma_0 = np.diag(input_prior.var())
 
         # dynamically define prior on T
-        self.mu_0[self.ind,self.ind] = observation_data['iT'].iloc[0]
+        self.mu_0[0,self.ind] = observation_data['iT'].iloc[0]
         self.Sigma_0[self.ind, self.ind] = 0.0000001
         
         # Parameter names

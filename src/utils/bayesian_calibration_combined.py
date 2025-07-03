@@ -46,7 +46,9 @@ class BayesianCalibration:
 
     def _setup_priors(self):
         """Setup prior parameters based on data type"""
-        self.mu_0 = np.array(self.input_prior.mean().loc[:'T'])
+        self.mu_0 = np.array(self.input_prior.mean())
+        self.ind = self.input_prior.columns.get_loc("T")
+
         self.mu_0 = self.mu_0.reshape(-1, 1)
         self.Sigma_0 = np.diag(self.input_prior.var().loc[:'T'])
         
