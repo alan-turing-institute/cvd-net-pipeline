@@ -312,7 +312,7 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
     ax.set_ylabel("Pressure (mmHg)")
     ax.legend()
 
-    fig.suptitle("Calibrated Pressure Waveforms for Different Methods")
+    #fig.suptitle("Calibrated Pressure Waveforms for Different Methods")
     fig.tight_layout()
     fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
 
@@ -372,9 +372,10 @@ def plot_sensitivity_heatmap(directory, saveto, selected_keys=[]):
 
         
         plt.title("")
-        plt.ylabel("Output", fontsize=20, fontweight='bold')
-        plt.xticks(rotation=45, fontsize=16, fontweight='bold')
-        plt.xlabel("Parameters", fontsize=20, fontweight='bold')
-        plt.yticks(rotation=0, fontsize=16, fontweight='bold') 
+        plt.ylabel("Output", fontsize=24, fontweight='bold')
+        plt.xticks(rotation=45, fontsize=20, fontweight='bold')
+        plt.xlabel("Parameters", fontsize=24, fontweight='bold')
+        plt.yticks(rotation=0, fontsize=20, fontweight='bold') 
         plt.tight_layout()
         plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.png", dpi=700)
+        plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.pdf", dpi=700)
