@@ -22,11 +22,11 @@ def calibrate_parameters_real(n_samples:int=50,
     output_file = pd.read_csv(f"{output_path}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
     
     # Input for priors
-    input_params = pd.read_csv(f'{emulator_path}/input_{n_samples}_{n_params}params.csv')
+    input_params = pd.read_csv(f'{emulator_path}/input_{n_samples}_{n_params}_params.csv')
 
     # emulators
-    emulators = pd.read_pickle(f"{emulator_path}/output_{n_samples}_{n_params}params/emulators/linear_models_and_r2_scores_{n_samples}.pkl")
-    print(f"Using trained emulators from: {emulator_path}/output_{n_samples}_{n_params}params.")
+    emulators = pd.read_pickle(f"{emulator_path}/output_{n_samples}_{n_params}_params/emulators/linear_models_and_r2_scores_{n_samples}.pkl")
+    print(f"Using trained emulators from: {emulator_path}/output_{n_samples}_{n_params}_params.")
 
     # Direcotry for saving results
     output_dir = f"{output_path}/bayesian_calibration_results/"

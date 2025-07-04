@@ -27,8 +27,15 @@ def run_pipeline(config):
         if n_pca_components is None:
             raise ValueError("n_pca_components must be provided in the configuration to run PCA.")
 
-        compute_pca_real(n_pca_components=n_pca_components,
-                    output_path=output_path)
+        nsamples = config.get("n_samples")
+        n_params = config.get("n_params")
+        n_pca_components = config.get("n_pca_components", 10)
+
+        compute_pca_real(n_samples=nsamples, 
+                    n_params=n_params, 
+                    n_pca_components=n_pca_components,
+                    output_path=output_path,
+                    data_type='real')
 
 
     if "5" in steps:
@@ -42,6 +49,7 @@ def run_pipeline(config):
         nsamples = config.get("n_samples")
         n_params = config.get("n_params")
         include_timeseries = config.get("include_timeseries")
+        
         if include_timeseries == 1:
             include_timeseries = True
             #print("Including time-series in calibraiton as specified in config file.")
