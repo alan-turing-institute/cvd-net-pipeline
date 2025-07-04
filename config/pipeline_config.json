@@ -1,44 +1,43 @@
 {
-    "data_type": "synthetic",
-    "input_parameters": "parameters_sensitive_ci_6.json",
-    "output_path": "output_synthetic/",
-    "steps": [
-        "5",
-        "6",
-        "7"
-    ],
-    "nsamples": 4096,
-    "n_pca_components": 10,
-    "n_params": 6,
-    "gaussian_sigmas": [
-        0.001,
-        0.001,
-        0.001
-    ],
-    "output_keys": [
-        "a_epad",
-        "epad",
-        "s_a_epad",
-        "s_epad",
-        "min_dpdt",
-        "max_dpdt",
-        "a_alpha",
-        "b_alpha",
-        "a_beta",
-        "b_beta",
-        "cross_max",
-        "A_p",
-        "P_max",
-        "esp",
-        "sys",
-        "EF",
-        "dia",
-        "Ees/Ea",
-        "edp",
-        "eivc",
-        "iT"
-    ],
-    "include_timeseries": 0,
-    "epsilon_obs_scale": 0.05,
-    "output_dir_bayesian": "output_synthetic/output_4096_6_params/bayesian_calibration_results/21_output_keys/calibration_20250619_135107"
+  "data_type": "synthetic",
+  "input_parameters": "parameters_pulmonary_sensitive_summarystats.json",
+  "output_path": "output_synthetic/",
+  "steps": ["3"],  
+  "nsamples": 64,
+  "n_pca_components": 10,
+  "n_params": 9,
+  "include_timeseries": 0,
+  "output_keys": [
+    "t_max_dpdt", "a_epad", "epad", "s_a_epad", "s_epad",
+    "min_dpdt", "max_dpdt", "A_p", "P_max", "esp", "sys",
+    "EF", "dia", "Ees/Ea", "iT", "PC1", "PC2", "PC3"
+  ],
+  "n_pca_components": 10,
+  "n_params": 8,
+  "nsamples": 50,
+  "gaussian_sigmas": [
+    0.00001,
+    0.00001,
+    0.00001
+  ],
+  "output_keys": [
+    "t_max_dpdt",
+    "a_epad",
+    "epad",
+    "s_a_epad",
+    "s_epad",
+    "A_p",
+    "P_max",
+    "esp",
+    "sys",
+    "iT",
+    "PC1",
+    "PC2",
+    "PC3",
+    "MC_EF",
+    "MC_edp",
+    "MC_eivc"
+  ],
+  "include_timeseries": 0,
+  "epsilon_obs_scale": 0.05
 }

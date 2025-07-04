@@ -298,24 +298,31 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
     
     # Plot all waveforms in faded orange
     for j in range(samples.shape[0]):
-        ax.plot(samples[j, :], color='bisque', alpha=0.01)
+        if j == 0:
+            ax.plot(samples[j, :], color='bisque', label="Posterior Samples")
+        else:
+            ax.plot(samples[j, :], color='bisque', alpha=0.05)
     
     # Plot y_true
     ax.plot(y_true.values, label="True Waveform", color='c', linewidth=2)
 
     # Plot mean waveform
     ax.plot(mean_waveform, color='darkorange', linewidth=1.5, label="Mean Calibrated Waveform")
-
+    
+    
     ax.set_xticks(np.arange(0, 110, 10))
-    ax.set_xlabel("Time Index")
-    ax.set_title(f"Posterior Simulations\nRMSE = {rmse:.4f}, NLPD = {nlpd:.2f}, WAIC = {waic:.2f}")
-    ax.set_ylabel("Pressure (mmHg)")
+    ax.tick_params(axis='x', labelsize=14)
+    ax.tick_params(axis='y', labelsize=14)
+    ax.set_xlabel("Time Index", fontsize=16)
+    ax.set_title(f"RMSE = {rmse:.4f}, NLPD = {nlpd:.2f}, WAIC = {waic:.2f}")
+    ax.set_ylabel("Pressure (mmHg)", fontsize=16)
+    ax.set_yticks(np.arange(0,80, 10))
     ax.legend()
 
     #fig.suptitle("Calibrated Pressure Waveforms for Different Methods")
     fig.tight_layout()
     fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
-
+    
 def plot_sensitivity_heatmap(directory, saveto, selected_keys=[]):
         """Plots a heatmap of sensitivity indices for each parameter across all CSV files."""
 
