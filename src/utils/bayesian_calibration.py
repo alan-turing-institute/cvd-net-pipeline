@@ -35,7 +35,7 @@ class BayesianCalibration:
         self._setup_priors()
         
         # Parameter names
-        self.param_names = input_prior.loc[:, :'T'].columns.to_list() # Unclear if need to do this for real data. The .loc stuff.
+        self.param_names = input_prior.columns.to_list() # Unclear if need to do this for real data. The .loc stuff.
 
         # Model error
         self.epsilon_model = np.diag(emulator_output['RSE']**2) 
@@ -57,7 +57,7 @@ class BayesianCalibration:
         elif self.data_type == "real":
 
             self.mu_0 = self.mu_0.reshape(-1, 1)
-            self.Sigma_0 = np.diag(self.input_prior.var().loc[:'T'])
+            self.Sigma_0 = np.diag(self.input_prior.var())
 
             # dynamically define prior on T
             self.mu_0[self.ind,-1] = self.observation_data['iT'].iloc[0]
