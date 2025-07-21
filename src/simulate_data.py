@@ -5,7 +5,11 @@ import numpy as np
 import pandas as pd
 from utils import helper_functions, plot_utils
 
-def simulate_data(param_path: str, n_samples: int, output_path: str, repeat_simulations: bool = True, sample_parameters: bool = True) -> str:
+def simulate_data(param_path: str, 
+                  n_samples: int, 
+                  output_path: str, 
+                  repeat_simulations: bool = True, 
+                  sample_parameters: bool = True) -> str:
     
     # Sample parameters or read in from file
     
