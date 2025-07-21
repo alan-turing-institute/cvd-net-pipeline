@@ -164,11 +164,11 @@ cython_debug/
 /Tutorials
 .DS_Store
 /playground_files
-/output/ 
 output_real/
 output_synthetic/
 notebooks/
 output/
+CohortDataRaw/
 *.pyc
 
 # Ignore the PyPI configuration file

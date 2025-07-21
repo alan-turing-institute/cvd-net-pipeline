@@ -24,7 +24,8 @@ def test_compute_pca(cleanup_output):
     compute_pca(n_samples=64, 
                 n_params=9,
                 n_pca_components=10,
-                output_path='tests/inputs_for_tests/compute_pca_module')
+                output_path='tests/inputs_for_tests/compute_pca_module',
+                data_type="synthetic")
 
     # Check if the output data matches the expected output
     output_data = pd.read_csv(cleanup_output)
