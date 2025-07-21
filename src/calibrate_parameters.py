@@ -1,7 +1,7 @@
 
 import pandas as pd
 import numpy as np
-from utils.bayesian_calibration import BayesianCalibration
+from utils.bayesian_calibration_combined import BayesianCalibration
 import os
 from utils import plot_utils
 import json
@@ -23,7 +23,7 @@ def calibrate_parameters(data_type="synthetic",
 
         dir_name = f"{output_path}/output{file_suffix}"
 
-        input_params = pd.read_csv(f'{output_path}/input{file_suffix}.csv')
+        input_params = pd.read_csv(f'{output_path}/pure_input{file_suffix}.csv')
 
         # emulators
         emulators = pd.read_pickle(f"{dir_name}/emulators/linear_models_and_r2_scores_{n_samples}.pkl")

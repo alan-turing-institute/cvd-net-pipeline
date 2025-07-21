@@ -35,7 +35,7 @@ class BayesianCalibration:
         self._setup_priors()
         
         # Parameter names
-        self.param_names = input_prior.loc[:, :'T'].columns.to_list()
+        self.param_names = input_prior.loc[:, :'T'].columns.to_list() # Unclear if need to do this for real data. The .loc stuff.
 
         # Model error
         self.epsilon_model = np.diag(emulator_output['RSE']**2) 
@@ -52,7 +52,7 @@ class BayesianCalibration:
         if self.data_type == "synthetic":
             self.mu_0[self.ind] = self.input_prior.iloc[self.which_obs]['T']
             self.mu_0 = self.mu_0.reshape(-1, 1)
-            self.Sigma_0 = np.diag(self.input_prior.var().loc[:'T'])
+            self.Sigma_0 = np.diag(self.input_prior.var())
 
         elif self.data_type == "real":
 
