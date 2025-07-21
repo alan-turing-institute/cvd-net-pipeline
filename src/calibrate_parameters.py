@@ -1,7 +1,7 @@
 
 import pandas as pd
 import numpy as np
-from utils.bayesian_calibration_combined import BayesianCalibration
+from utils.bayesian_calibration import BayesianCalibration
 import os
 from utils import plot_utils
 import json
@@ -77,7 +77,7 @@ def calibrate_parameters(data_type="synthetic",
                                 filtered_output=observation_data, 
                                 which_obs=3, 
                                 epsilon_obs = e_obs,
-                                data_type=data_type)
+                                )
 
         bc.compute_posterior()
 
