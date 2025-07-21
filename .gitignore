@@ -169,6 +169,7 @@ output_synthetic/
 notebooks/
 output/
 CohortDataRaw/
+CohortDataRaw2/
 *.pyc
 
 # Ignore the PyPI configuration file
