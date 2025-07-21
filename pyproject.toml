@@ -17,7 +17,6 @@ dependencies = [
     "pytest",
     "my-package @ git+https://github.com/MaxBalmus/GiessenDataAnalysis.git@main",
     "seaborn"
-
 ]
 
 [project.optional-dependencies]
