@@ -7,7 +7,7 @@ from analyse_giessen import analyse_giessen
 
 @pytest.fixture
 def cleanup_output_file():
-    output_file = "tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/waveform_resampled_all_pressure_traces_rv.csv"
+    output_file = "tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/synthetic_data/waveform_resampled_all_pressure_traces_rv.csv"
     yield output_file
     if os.path.exists(output_file):
         os.remove(output_file)
@@ -15,7 +15,7 @@ def cleanup_output_file():
 
 @pytest.fixture
 def cleanup_calibration_output_file():
-    output_file = "tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/bayesian_calibration_results/17_output_keys/calibration_20250604_154542/waveform_resampled_all_pressure_traces_rv.csv"
+    output_file = "tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/synthetic_data/bayesian_calibration_results/17_output_keys/calibration_20250604_154542/waveform_resampled_all_pressure_traces_rv.csv"
     yield output_file
     if os.path.exists(output_file):
         os.remove(output_file)        
@@ -24,7 +24,7 @@ def cleanup_calibration_output_file():
 def test_analyse_giessen_valid_input(cleanup_output_file):
 
     # Call the function with the input file
-    analyse_giessen(file_path='tests/inputs_for_tests/analyse_giessen_module/output_64_9_params', 
+    analyse_giessen(file_path='tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/synthetic_data/', 
                     data_type="synthetic",
                     gaussian_sigmas=[6., 4., 2.])
 
@@ -45,7 +45,7 @@ def test_analyse_giessen_invalid_input():
 def test_analyse_giessen_valid_calibrated_input(cleanup_calibration_output_file):
 
     # Call the function with the input file
-    analyse_giessen(file_path='tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/bayesian_calibration_results/17_output_keys/calibration_20250604_154542/',
+    analyse_giessen(file_path='tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/synthetic_data/bayesian_calibration_results/17_output_keys/calibration_20250604_154542/',
                     data_type="synthetic",
                      gaussian_sigmas=[6., 4., 2.])
 
