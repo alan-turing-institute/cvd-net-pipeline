@@ -3,6 +3,10 @@
   "input_parameters": "parameters_pulmonary_sensitive_summarystats.json",
   "output_path": "output_synthetic",
   "steps": [
+    "1",
+    "2",
+    "3",
+    "4",
     "5",
     "6"
   ],
