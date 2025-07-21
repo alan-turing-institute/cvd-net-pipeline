@@ -60,7 +60,7 @@ class BayesianCalibration:
             self.Sigma_0 = np.diag(self.input_prior.var().loc[:'T'])
 
             # dynamically define prior on T
-            self.mu_0[self.ind,0] = self.observation_data['iT'].iloc[0]
+            self.mu_0[self.ind,-1] = self.observation_data['iT'].iloc[0]
 
         self.Sigma_0[self.ind, self.ind] = 0.0000001
 
