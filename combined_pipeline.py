@@ -2,10 +2,8 @@ import json
 from simulate_data import simulate_data
 from analyse_giessen import analyse_giessen
 from compute_pca import compute_pca
-from compute_pca_real import compute_pca_real
 from build_emulator import build_emulator
 from calibrate_parameters import calibrate_parameters
-from calibrate_parameters_real import calibrate_parameters_real
 from utils import plot_utils
 import os
 import argparse
@@ -20,7 +18,7 @@ def run_pipeline(config):
 
         print("Processing the pipeline for synthetic data.")
 
-        nsamples = config.get("nsamples", 5000)
+        n_samples = config.get("n_samples", 5000)
 
         # Parent folder for all simulations
         output_path = config.get("output_path")
@@ -33,7 +31,7 @@ def run_pipeline(config):
                 raise ValueError("n_params must be provided in the configuration if step 1 is not being executed.")
 
             # Define the output directory for the current simulations
-            output_dir_sims = os.path.join(output_path, f'output_{nsamples}_{n_params}_params')
+            output_dir_sims = os.path.join(output_path, f'output_{n_samples}_{n_params}_params')
             print("Simulation output directory is: ", output_dir_sims)
 
         os.makedirs(output_path, exist_ok=True)
@@ -49,7 +47,7 @@ def run_pipeline(config):
 
             output_dir_sims, n_params = simulate_data(
                 param_path=config.get("input_parameters"),
-                n_samples=nsamples,
+                n_samples=n_samples,
                 output_path=output_path,
                 sample_parameters=True
             )
@@ -68,18 +66,20 @@ def run_pipeline(config):
             if n_pca_components is None:
                 raise ValueError("n_pca_components must be provided in the configuration to run PCA.")
 
-            compute_pca(n_samples=nsamples, 
+            compute_pca(n_samples=n_samples, 
                         n_params=n_params, 
                         n_pca_components=n_pca_components,
                         output_path=output_path,
-                        data_type=data_type,)
+                        data_type=data_type)
 
         if "4" in steps:
             print("Step 4: Building Emulator")
-            build_emulator(n_samples=nsamples,
+            output_keys = config.get("output_keys")
+            build_emulator(n_samples=n_samples,
                         n_params=n_params, 
                         output_path=output_path, 
-                        output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+                        output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv",
+                        output_keys_red=output_keys)
 
         if "5" in steps:
             print("Step 5: Calibrating parameters using config output keys")
@@ -92,7 +92,9 @@ def run_pipeline(config):
 
             print(f"Include time-series in calibration: {include_timeseries}")
 
-            output_dir_bayesian, e_obs = calibrate_parameters(n_samples=nsamples,
+            output_dir_bayesian, e_obs = calibrate_parameters(
+                                        data_type=data_type,
+                                        n_samples=n_samples,
                                         n_params=n_params,
                                         output_path=output_path,
                                         output_keys=output_keys,
@@ -110,7 +112,7 @@ def run_pipeline(config):
 
             output_dir_bayesian, n_params = simulate_data(
                 param_path=config.get("input_parameters"),
-                n_samples=nsamples,
+                n_samples=n_samples,
                 output_path=output_dir_bayesian,
                 sample_parameters = False
             )
@@ -142,7 +144,8 @@ def run_pipeline(config):
         if "2" in steps:
             print("Step 2: Analysing Giessen (resample)")
             analyse_giessen(file_path=output_path,
-                            data_type=data_type,)
+                            data_type=data_type,
+                            gaussian_sigmas=config.get('gaussian_sigmas'))
 
         if "3" in steps:
             print("Step 3: Compute PCA")
@@ -163,17 +166,18 @@ def run_pipeline(config):
                 raise ValueError("output keys must be provided in the configuration to run calibration.")
             
             emulator_path = config.get("emulator_path")
-            nsamples = config.get("n_samples")
+            n_samples = config.get("n_samples")
             n_params = config.get("n_params")
             include_timeseries = bool(config.get("include_timeseries"))
 
-            calibrate_parameters_real(n_samples=nsamples,
-                                        n_params=n_params,
-                                        output_path=output_path,
-                                        emulator_path=emulator_path,
-                                        output_keys=output_keys,
-                                        include_timeseries=include_timeseries,
-                                        config=config)
+            calibrate_parameters(data_type=data_type,
+                                 n_samples=n_samples,
+                                 n_params=n_params,
+                                 output_path=output_path,
+                                 emulator_path=emulator_path,
+                                 output_keys=output_keys,
+                                 include_timeseries=include_timeseries,
+                                 config=config)
 
         print("Pipeline complete.")
 
