@@ -12,8 +12,8 @@ def build_emulator(n_samples:int=200,
     
     file_suffix = f'_{n_samples}_{n_params}_params'
 
-    input_file = pd.read_csv(f"{output_path}/pure_input{file_sufix}.csv")
-    output_file = pd.read_csv(f"{output_path}/output{file_sufix}/{output_file_name}")
+    input_file = pd.read_csv(f"{output_path}/pure_input{file_suffix}.csv")
+    output_file = pd.read_csv(f"{output_path}/output{file_suffix}/{output_file_name}")
 
     # Select only first relevant inputs 
     filtered_input = input_file.copy()
@@ -53,9 +53,9 @@ def build_emulator(n_samples:int=200,
     emulator_results_df.to_csv(f'{output_path}/output{file_suffix}/emulators/linear_models_and_r2_scores_{n_samples}.csv')
 
     # To save the DataFrame with models, use pickle
-    emulator_results_df.to_pickle(f'{output_path}/output{file_sufix}/emulators/linear_models_and_r2_scores_{n_samples}.pkl')
+    emulator_results_df.to_pickle(f'{output_path}/output{file_suffix}/emulators/linear_models_and_r2_scores_{n_samples}.pkl')
     
     # Save reduced Dataframe to a csv
     reduced_emulator_results_df = emulator_results_df.loc[output_keys_red].copy()
-    reduced_emulator_results_df.to_csv(f'{output_path}/output{file_sufix}/emulators/calibration_features_linear_models_and_r2_scores_{n_samples}.csv')
+    reduced_emulator_results_df.to_csv(f'{output_path}/output{file_suffix}/emulators/calibration_features_linear_models_and_r2_scores_{n_samples}.csv')
     

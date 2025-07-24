@@ -128,7 +128,7 @@ def run_pipeline(config):
                             data_type=data_type,
                             gaussian_sigmas=config.get('gaussian_sigmas')
                             )
-            plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian, e_obs_scale=config.get("epsilon_obs_scale", 0.05))
+            plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian)
 
         print("Pipeline complete.")
 
