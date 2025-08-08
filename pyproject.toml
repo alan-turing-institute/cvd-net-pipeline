@@ -16,7 +16,8 @@ dependencies = [
     "ModularCirc",
     "pytest",
     "my-package @ git+https://github.com/MaxBalmus/GiessenDataAnalysis.git@main",
-    "seaborn"
+    "seaborn",
+    "salib"
 ]
 
 [project.optional-dependencies]

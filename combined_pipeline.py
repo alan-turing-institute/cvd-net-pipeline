@@ -46,7 +46,7 @@ def run_pipeline(config):
                 print("Warning: output_dir_sims is pre-defined in the configuration file. It will be overwritten by the value from the simulation step.")
 
             output_dir_sims, n_params = simulate_data(
-                param_path=config.get("input_parameters"),
+                param_path=os.path.join('./input_parameters_jsons', config.get("input_parameters")),
                 n_samples=n_samples,
                 output_path=output_path,
                 sample_parameters=True
@@ -111,7 +111,7 @@ def run_pipeline(config):
                 print(f"Reading parameter file from {output_dir_bayesian} as pre-defined in the configuration file.")
 
             output_dir_bayesian, n_params = simulate_data(
-                param_path=config.get("input_parameters"),
+                param_path=os.path.join('./input_parameters_jsons', config.get("input_parameters")),
                 n_samples=n_samples,
                 output_path=output_dir_bayesian,
                 sample_parameters = False
@@ -128,7 +128,7 @@ def run_pipeline(config):
                             data_type=data_type,
                             gaussian_sigmas=config.get('gaussian_sigmas')
                             )
-            plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian, e_obs_scale=config.get("epsilon_obs_scale", 0.05))
+            plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian)
 
         print("Pipeline complete.")
 
