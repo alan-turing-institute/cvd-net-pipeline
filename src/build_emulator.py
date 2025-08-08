@@ -56,6 +56,7 @@ def build_emulator(n_samples:int=200,
     emulator_results_df.to_pickle(f'{output_path}/output{file_suffix}/emulators/linear_models_and_r2_scores_{n_samples}.pkl')
     
     # Save reduced Dataframe to a csv
-    reduced_emulator_results_df = emulator_results_df.loc[output_keys_red].copy()
-    reduced_emulator_results_df.to_csv(f'{output_path}/output{file_suffix}/emulators/calibration_features_linear_models_and_r2_scores_{n_samples}.csv')
+    if output_keys_red is None:
+        reduced_emulator_results_df = emulator_results_df.loc[output_keys_red].copy()
+        reduced_emulator_results_df.to_csv(f'{output_path}/output{file_suffix}/emulators/calibration_features_linear_models_and_r2_scores_{n_samples}.csv')
     
