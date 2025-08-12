@@ -39,8 +39,10 @@ def calibrate_parameters(data_type="synthetic",
         print(f"Using trained emulators from: {emulator_path}/output_{n_samples}_{n_params}_params.")
 
     # Data
-    output_file = pd.read_csv(f"{dir_name}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
-
+    #output_file = pd.read_csv(f"{dir_name}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+    output_file = pd.read_csv(f"{output_path}/output_2000_21_params/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+    ##### attempt to change get truewaveform consitent
+    
     # Direcotry for saving results
     output_dir = f"{dir_name}/bayesian_calibration_results/"
 
@@ -65,9 +67,10 @@ def calibrate_parameters(data_type="synthetic",
 
     # Select emulators and data for specified output_keys
     emulator_output = emulators.loc[all_output_keys]
-    # observation_data = output_file.loc[:, all_output_keys]. ##### attempt to change get truewaveform consitent
-    true_waveforms = pd.read_csv(f"{output_path}/output_2000_21_params/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
-    observation_data = true_waveforms.loc[:, all_output_keys]
+    observation_data = output_file.loc[:, all_output_keys] 
+    ##### attempt to change get truewaveform consitent
+    # true_waveforms = pd.read_csv(f"{output_path}/output_2000_21_params/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+    # observation_data = true_waveforms.loc[:, all_output_keys]
     # input_params_new = pd.read_csv(f"{output_path}/input_2000_21_params.csv")
 
     if data_type == "synthetic":
