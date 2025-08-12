@@ -6,10 +6,5 @@
   "n_samples": 64,
   "n_pca_components": 10,
   "n_params": 21,
-  "gaussian_sigmas": [0.001, 0.001, 0.001],
-  "output_keys": [
-    "t_max_dpdt",
-    "a_epad",
-    "epad"
-  ]
+  "gaussian_sigmas": [0.001, 0.001, 0.001]
 }

@@ -72,7 +72,6 @@ def run_pipeline(config):
         build_emulator(n_samples=n_samples,
                        n_params=n_params, 
                        output_path=output_path, 
-                       output_keys_red = output_keys,
                        output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
     if "5" in steps:
