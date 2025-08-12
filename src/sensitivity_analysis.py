@@ -10,16 +10,7 @@ def sensitivity_analysis(n_samples: int,
     file_suffix = f'_{n_samples}_{n_params}_params'
 
     # Read Input Data
-    input_params = pd.read_csv(f"{output_path}/input{file_suffix}.csv")
-
-    # Select relevant inputs only
-    relevant_columns = []
-    for col in input_params.columns:
-        relevant_columns.append(col)
-        if col == 'T': break
-
-    # Select only first relevant inputs 
-    filtered_input = input_params[relevant_columns]
+    pure_input_params = pd.read_csv(f"{output_path}/pure_input{file_suffix}.csv")s]
 
     # Import Emulators
     emulators = pd.read_pickle(f"{output_path}/output{file_suffix}/emulators/linear_models_and_r2_scores_{n_samples}.pkl")
@@ -37,9 +28,9 @@ def sensitivity_analysis(n_samples: int,
 
         # Define problem spec for sensitivity analysis
         problem = ProblemSpec({
-            'num_vars': len(relevant_columns),
-            'names': relevant_columns,
-            'bounds': filtered_input[relevant_columns].describe().loc[['min', 'max']].T.values,
+            'num_vars': len(pure_input_params.columns),
+            'names': pure_input_params.columns.tolist(),
+            'bounds': pure_input_params.describe().loc[['min', 'max']].T.values,
             "outputs": [emulator_name],
         })
 

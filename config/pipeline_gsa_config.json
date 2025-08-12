@@ -2,7 +2,7 @@
   "data_type": "synthetic",
   "input_parameters": "parameters_pulmonary.json",
   "output_path": "output_synthetic/",
-  "steps": ["1", "2", "3", "4", "5"],  
+  "steps": ["5"],  
   "n_samples": 64,
   "n_pca_components": 10,
   "n_params": 21,
