@@ -13,7 +13,7 @@ def run_pipeline(config):
 
     steps = config.get("steps", ["1", "2", "3", "4", "5"])
 
-    nsamples = config.get("nsamples", 2000)
+    n_samples = config.get("n_samples", 2000)
 
     # Parent folder for all simulations
     output_path = config.get("output_path")
@@ -26,7 +26,7 @@ def run_pipeline(config):
             raise ValueError("n_params must be provided in the configuration if step 1 is not being executed.")
 
         # Define the output directory for the current simulations
-        output_dir_sims = os.path.join(output_path, f'output_{nsamples}_{n_params}_params')
+        output_dir_sims = os.path.join(output_path, f'output_{n_samples}_{n_params}_params')
         print("Simulation output directory is: ", output_dir_sims)
 
     os.makedirs(output_path, exist_ok=True)
@@ -41,8 +41,8 @@ def run_pipeline(config):
             print("Warning: output_dir_sims is pre-defined in the configuration file. It will be overwritten by the value from the simulation step.")
 
         output_dir_sims, n_params = simulate_data(
-            param_path=config.get("input_parameters"),
-            n_samples=nsamples,
+            param_path=os.path.join('./input_parameters_jsons', config.get("input_parameters")),
+            n_samples=n_samples,
             output_path=output_path,
             sample_parameters=True
         )
@@ -61,7 +61,7 @@ def run_pipeline(config):
         if n_pca_components is None:
             raise ValueError("n_pca_components must be provided in the configuration to run PCA.")
 
-        compute_pca(n_samples=nsamples, 
+        compute_pca(n_samples=n_samples, 
                     n_params=n_params, 
                     n_pca_components=n_pca_components,
                     output_path=output_path,
@@ -69,8 +69,7 @@ def run_pipeline(config):
 
     if "4" in steps:
         print("Step 4: Building Emulator")
-        output_keys = config.get("output_keys") ## this is only necessary for build_emulator to run. Need a way to remove this for GSA. 
-        build_emulator(n_samples=nsamples,
+        build_emulator(n_samples=n_samples,
                        n_params=n_params, 
                        output_path=output_path, 
                        output_keys_red = output_keys,
@@ -78,7 +77,7 @@ def run_pipeline(config):
 
     if "5" in steps:
         print("Step 5: Sensitivity Analysis")
-        sensitivity_analysis(n_samples=nsamples,
+        sensitivity_analysis(n_samples=n_samples,
                              n_params=n_params, 
                              output_path=output_path)
 

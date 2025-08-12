@@ -3,7 +3,9 @@ import numpy as np
 import pandas as pd
 from SALib import ProblemSpec
 
-def sensitivity_analysis(n_samples: int, n_params: int, output_path: str):
+def sensitivity_analysis(n_samples: int, 
+                         n_params: int, 
+                         output_path: str):
 
     file_suffix = f'_{n_samples}_{n_params}_params'
 
@@ -29,7 +31,7 @@ def sensitivity_analysis(n_samples: int, n_params: int, output_path: str):
     output_dir = f"{output_path}/output{file_suffix}/sensitivity_analysis_results"
     os.makedirs(output_dir, exist_ok=True)
 
-        # Iterate over each emulator
+    # Iterate over each emulator
     for emulator_name in emulator_list:
         print(f"Processing {emulator_name}...")
 
@@ -78,9 +80,9 @@ def sensitivity_analysis(n_samples: int, n_params: int, output_path: str):
             "ST": total['ST'],
             "ST_conf": total['ST_conf']
         })
-        safe_emulator_name = emulator_name.replace("/", "_") # Avoid slashes in file names
+        save_emulator_name = emulator_name.replace("/", "_") # Avoid slashes in file names
 
-        result_file = os.path.join(output_dir, f"sensitivity_{safe_emulator_name}.csv")
+        result_file = os.path.join(output_dir, f"sensitivity_{save_emulator_name}.csv")
         result_data.to_csv(result_file, index=False)
 
     print("All analyses completed.")
