@@ -49,7 +49,8 @@ def run_pipeline(config):
 
     if "2" in steps:
         print("Step 2: Analysing Giessen (resample)")
-        analyse_giessen(output_dir_sims, data_type='synthetic',
+        analyse_giessen(file_path=output_dir_sims, 
+                        data_type='synthetic',
                         gaussian_sigmas=config.get('gaussian_sigmas')
         )
 
@@ -63,13 +64,16 @@ def run_pipeline(config):
         compute_pca(n_samples=nsamples, 
                     n_params=n_params, 
                     n_pca_components=n_pca_components,
-                    output_path=output_path)
+                    output_path=output_path,
+                    data_type='synthetic')
 
     if "4" in steps:
         print("Step 4: Building Emulator")
+        output_keys = config.get("output_keys") ## this is only necessary for build_emulator to run. Need a way to remove this for GSA. 
         build_emulator(n_samples=nsamples,
                        n_params=n_params, 
                        output_path=output_path, 
+                       output_keys_red = output_keys,
                        output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
     if "5" in steps:

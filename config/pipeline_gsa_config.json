@@ -3,8 +3,13 @@
   "input_parameters": "parameters_pulmonary.json",
   "output_path": "output_synthetic/",
   "steps": ["1", "2", "3", "4", "5"],  
-  "nsamples": 64,
+  "nsamples": 2000,
   "n_pca_components": 10,
   "n_params": 21,
-  "gaussian_sigmas": [0.001, 0.001, 0.001]
+  "gaussian_sigmas": [0.001, 0.001, 0.001],
+  "output_keys": [
+    "t_max_dpdt",
+    "a_epad",
+    "epad"
+  ]
 }
