@@ -40,7 +40,7 @@ def calibrate_parameters(data_type="synthetic",
 
     # Data
     #output_file = pd.read_csv(f"{dir_name}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
-    output_file = pd.read_csv(f"{output_path}/output_2000_21_params/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+    output_file = pd.read_csv(f"{output_path}/output_4096_11_params/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
     ##### attempt to change get truewaveform consitent
     
     # Direcotry for saving results
@@ -68,6 +68,7 @@ def calibrate_parameters(data_type="synthetic",
     # Select emulators and data for specified output_keys
     emulator_output = emulators.loc[all_output_keys]
     observation_data = output_file.loc[:, all_output_keys] 
+    true_input = pd.read_csv(f"{output_path}/input_4096_11_params.csv")
     ##### attempt to change get truewaveform consitent
     # true_waveforms = pd.read_csv(f"{output_path}/output_2000_21_params/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
     # observation_data = true_waveforms.loc[:, all_output_keys]
@@ -142,7 +143,7 @@ def calibrate_parameters(data_type="synthetic",
     if data_type == "synthetic":
 
         # Plot the prior and posteior distributions
-        plot_utils.plot_posterior_distributions(input_params, 
+        plot_utils.plot_posterior_distributions(true_input, 
                                                 bc.mu_0,
                                                 bc.Sigma_0,
                                                 bc.Mu_post,

@@ -128,7 +128,9 @@ def run_pipeline(config):
                             data_type=data_type,
                             gaussian_sigmas=config.get('gaussian_sigmas')
                             )
-            plot_utils.plot_posterior_simulations(output_dir_sims, output_dir_bayesian)
+            true_waveform = config.get("true_waveform")
+            print(f"Reading true waveform from {true_waveform} as pre-defined in the configuration file.")
+            plot_utils.plot_posterior_simulations(true_waveform, output_dir_bayesian)
 
         print("Pipeline complete.")
 

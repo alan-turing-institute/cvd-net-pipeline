@@ -50,9 +50,11 @@ class BayesianCalibration:
         self.ind = self.input_prior.columns.get_loc("T")
 
         if self.data_type == "synthetic":
-            self.mu_0[self.ind] = self.input_prior.iloc[self.which_obs]['T']
+            self.mu_0[self.ind] = self.input_prior.iloc[self.which_obs]['T'] ### this needs to come from the observation? 
             self.mu_0 = self.mu_0.reshape(-1, 1)
             self.Sigma_0 = np.diag(self.input_prior.var())
+            # dynamically define prior on T
+            self.mu_0[self.ind,-1] = self.filtered_output['iT'].iloc[self.which_obs]
 
         elif self.data_type == "real":
 
@@ -62,7 +64,7 @@ class BayesianCalibration:
             # dynamically define prior on T
             self.mu_0[self.ind,-1] = self.observation_data['iT'].iloc[0]
 
-        self.Sigma_0[self.ind, self.ind] = 0.0000001
+        self.Sigma_0[self.ind, self.ind] = 0.01
 
 
     def compute_posterior(self):

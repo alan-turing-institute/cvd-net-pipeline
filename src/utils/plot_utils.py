@@ -182,7 +182,7 @@ def plot_pca_histogram(X_pca, output_path, n_pca_components=10):
     plt.savefig(f'{output_path_figures}/histograms_pca.png')    
 
 
-def plot_posterior_distributions(input, mu_0, Sigma_0, Mu_post, Sigma_post, which_obs, param_names, output_path):
+def plot_posterior_distributions(true_input, mu_0, Sigma_0, Mu_post, Sigma_post, which_obs, param_names, output_path):
 
     output_path_figures = os.path.join(output_path,"figures")
     os.makedirs(output_path_figures, exist_ok=True)
@@ -191,7 +191,8 @@ def plot_posterior_distributions(input, mu_0, Sigma_0, Mu_post, Sigma_post, whic
     prior_stds = np.sqrt(np.diag(Sigma_0))
     posterior_means = Mu_post.flatten()
     posterior_stds = np.sqrt(np.diag(Sigma_post))
-    true_values = input.iloc[which_obs].values
+    true_values = true_input.loc[which_obs, param_names].values
+   
     
     
     fig, axes = plt.subplots(2, math.ceil(len(param_names)/2), figsize=(18, 8))  
@@ -240,9 +241,11 @@ def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_pa
     plt.suptitle(f'Posterior Covariance Matrix')
     plt.savefig(f'{output_path_figures}/posterior_covariance_matrix.png') 
 
-def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
+def plot_posterior_simulations(true_waveform, output_dir_bayesian):
     
-    true_waveforms = pd.read_csv(f"{output_dir_sims}/waveform_resampled_all_pressure_traces_rv.csv")
+    #true_waveforms = pd.read_csv(f"{output_dir_sims}/waveform_resampled_all_pressure_traces_rv.csv")
+    true_waveforms = pd.read_csv(true_waveform)
+    print(f"Reading in true waveforms from {true_waveform}")
     posterior_waveforms = pd.read_csv(f"{output_dir_bayesian}/waveform_resampled_all_pressure_traces_rv.csv")
     
     # Ground truth waveform
