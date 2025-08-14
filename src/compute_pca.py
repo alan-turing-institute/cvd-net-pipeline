@@ -7,7 +7,11 @@ from sklearn.pipeline import Pipeline
 from utils import plot_utils
 
 
-def compute_pca(n_samples:int=50, n_params:int=9, n_pca_components:int=10, output_path:str="output", data_type: str="synthetic"):
+def compute_pca(n_samples:int=50, 
+                n_params:int=9, 
+                n_pca_components:int=10, 
+                output_path:str="output", 
+                data_type: str="synthetic"):
     
     output_file_name = 'waveform_resampled_all_pressure_traces_rv.csv' 
 
