@@ -57,17 +57,10 @@ def simulate_data(param_path: str,
 
     input_header = ','.join(br.samples.columns)
     file_suffix  = f'_{n_samples}_{n_params}_params'
-
-    np.savetxt(os.path.join(output_path,
-                            f'pure_input{file_suffix}.csv'),
-                            _pure_samples,
-                            header=','.join(_pure_samples.columns),
-                            delimiter=',')
-    np.savetxt(os.path.join(output_path,
-                            f'input{file_suffix}.csv'),
-                            br.samples,
-                            header=input_header,
-                            delimiter=',')
+    
+    # Save as CSV files 
+    _pure_samples.to_csv(os.path.join(output_path, f'pure_input{file_suffix}.csv'), index=False)
+    br.samples.to_csv(os.path.join(output_path, f'input{file_suffix}.csv'), index=False)
 
     if sample_parameters:
         output_parameters = os.path.join(output_path, f'output{file_suffix}')
