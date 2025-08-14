@@ -191,6 +191,7 @@ def plot_posterior_distributions(true_input, mu_0, Sigma_0, Mu_post, Sigma_post,
     prior_stds = np.sqrt(np.diag(Sigma_0))
     posterior_means = Mu_post.flatten()
     posterior_stds = np.sqrt(np.diag(Sigma_post))
+    print(f"Parameter names: {param_names}")
     true_values = true_input.loc[which_obs, param_names].values
    
     
@@ -319,7 +320,7 @@ def plot_posterior_simulations(true_waveform, output_dir_bayesian):
     ax.set_xlabel("Time Index", fontsize=16)
     ax.set_title(f"RMSE = {rmse:.4f}, NLPD = {nlpd:.2f}, WAIC = {waic:.2f}")
     ax.set_ylabel("Pressure (mmHg)", fontsize=16)
-    ax.set_yticks(np.arange(0,80, 10))
+    ax.set_yticks(np.arange(0,70, 10))
     ax.legend()
 
     #fig.suptitle("Calibrated Pressure Waveforms for Different Methods")

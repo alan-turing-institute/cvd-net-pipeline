@@ -1,6 +1,6 @@
 {
     "data_type": "synthetic",
-    "input_parameters": "parameters_sensitive_timeseries_7.json",
+    "input_parameters": "parameters_sensitive_pca_11.json",
     "output_path": "output_synthetic",
     "steps": [
         "1",
@@ -12,16 +12,26 @@
         "7"
     ],
     "n_pca_components": 10,
-    "n_params": 7,
-    "n_samples": 4096,
+    "n_params": 11,
+    "n_samples": 64,
     "gaussian_sigmas": [
         1e-05,
         1e-05,
         1e-05
     ],
     "output_keys": [
+        "PC1",
+        "PC2",
+        "PC3",
+        "PC4",
+        "PC5",
+        "PC6",      
+        "PC7",
+        "PC8",
+        "PC9",
+        "PC10",
         "iT"],
-    "include_timeseries": 1,
+    "include_timeseries": 0,
     "epsilon_obs_scale": 0.05,
-    "true_waveform": "output_synthetic/output_4096_11_params/waveform_resampled_all_pressure_traces_rv_with_pca.csv"
+    "true_waveform": "output_synthetic/output_2000_21_params/waveform_resampled_all_pressure_traces_rv_with_pca.csv"
 }
