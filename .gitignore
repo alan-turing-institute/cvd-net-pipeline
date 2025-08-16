@@ -166,7 +166,7 @@ cython_debug/
 /playground_files
 output_real/
 output_synthetic/
-notebooks/
+notebooks/scratchpad.ipynb
 output/
 CohortDataRaw/
 CohortDataRaw2/
