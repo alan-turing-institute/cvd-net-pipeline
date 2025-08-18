@@ -10,7 +10,7 @@ def sensitivity_analysis(n_samples: int,
     file_suffix = f'_{n_samples}_{n_params}_params'
 
     # Read Input Data
-    pure_input_params = pd.read_csv(f"{output_path}/pure_input{file_suffix}.csv")s]
+    pure_input_params = pd.read_csv(f"{output_path}/pure_input{file_suffix}.csv")
 
     # Import Emulators
     emulators = pd.read_pickle(f"{output_path}/output{file_suffix}/emulators/linear_models_and_r2_scores_{n_samples}.pkl")

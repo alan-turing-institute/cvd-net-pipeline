@@ -191,7 +191,6 @@ def plot_posterior_distributions(true_input, mu_0, Sigma_0, Mu_post, Sigma_post,
     prior_stds = np.sqrt(np.diag(Sigma_0))
     posterior_means = Mu_post.flatten()
     posterior_stds = np.sqrt(np.diag(Sigma_post))
-    print(f"Parameter names: {param_names}")
     true_values = true_input.loc[which_obs, param_names].values
    
     
