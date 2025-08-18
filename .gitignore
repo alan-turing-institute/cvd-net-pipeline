@@ -166,6 +166,8 @@ cython_debug/
 /playground_files
 output_real/
 output_synthetic/
+output_synthetic_new_gaussian_sigmas/
+output_synthetic_old_gaussian_sigmas/
 notebooks/scratchpad.ipynb
 output/
 CohortDataRaw/
