@@ -15,6 +15,7 @@ def calibrate_parameters(data_type="synthetic",
                          output_keys:list=None,
                          include_timeseries:bool=True,
                          epsilon_obs_scale:float=0.05,
+                         dummy_data_dir:str=None,
                          config:dict=None):
 
     if data_type == "synthetic":
@@ -39,9 +40,7 @@ def calibrate_parameters(data_type="synthetic",
         print(f"Using trained emulators from: {emulator_path}/output_{n_samples}_{n_params}_params.")
 
     # Data
-    #output_file = pd.read_csv(f"{dir_name}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
-    output_file = pd.read_csv(f"{output_path}/output_dummy_data/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
-    ##### attempt to change get truewaveform consitent --- this is specific to synthetic data. Need to adjust for real data.
+    output_file = pd.read_csv(f"{dummy_data_dir}/output_dummy_data/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
     
     # Direcotry for saving results
     output_dir = f"{dir_name}/bayesian_calibration_results/"
@@ -68,7 +67,7 @@ def calibrate_parameters(data_type="synthetic",
     # Select emulators and data for specified output_keys
     emulator_output = emulators.loc[all_output_keys]
     observation_data = output_file.loc[:, all_output_keys] 
-    true_input = pd.read_csv(f"{output_path}/input_dummy_data.csv")
+    true_input = pd.read_csv(f"{dummy_data_dir}/input_dummy_data.csv")
     ##### attempt to change get truewaveform consitent
     
 

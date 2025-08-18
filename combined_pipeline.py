@@ -91,7 +91,11 @@ def run_pipeline(config):
             include_timeseries = bool(config.get("include_timeseries"))
 
             print(f"Include time-series in calibration: {include_timeseries}")
-
+            
+            dummy_data_dir = config.get("dummy_data_dir")
+            if dummy_data_dir is None and not data_type == "real":
+                raise ValueError("Dummy data directory 'dummy_data_dir', must be provided in the configuration to run calibration for synthetic data.")
+            
             output_dir_bayesian, e_obs = calibrate_parameters(
                                         data_type=data_type,
                                         n_samples=n_samples,
@@ -100,6 +104,7 @@ def run_pipeline(config):
                                         output_keys=output_keys,
                                         include_timeseries=include_timeseries,
                                         epsilon_obs_scale=config.get("epsilon_obs_scale", 0.05),
+                                        dummy_data_dir=dummy_data_dir,
                                         config=config)
 
         if "6" in steps:
@@ -128,9 +133,9 @@ def run_pipeline(config):
                             data_type=data_type,
                             gaussian_sigmas=config.get('gaussian_sigmas')
                             )
-            true_waveform = config.get("true_waveform")
-            print(f"Reading true waveform from {true_waveform} as pre-defined in the configuration file.")
-            plot_utils.plot_posterior_simulations(true_waveform, output_dir_bayesian)
+            dummy_data_dir = config.get("dummy_data_dir")
+            print(f"Reading true waveform from {dummy_data_dir} as pre-defined in the configuration file.")
+            plot_utils.plot_posterior_simulations(dummy_data_dir, output_dir_bayesian)
 
         print("Pipeline complete.")
 

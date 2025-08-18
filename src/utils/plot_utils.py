@@ -241,11 +241,10 @@ def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_pa
     plt.suptitle(f'Posterior Covariance Matrix')
     plt.savefig(f'{output_path_figures}/posterior_covariance_matrix.png') 
 
-def plot_posterior_simulations(true_waveform, output_dir_bayesian):
-    
-    #true_waveforms = pd.read_csv(f"{output_dir_sims}/waveform_resampled_all_pressure_traces_rv.csv")
-    true_waveforms = pd.read_csv(true_waveform)
-    print(f"Reading in true waveforms from {true_waveform}")
+def plot_posterior_simulations(dummy_data_dir, output_dir_bayesian):
+
+    true_waveforms = pd.read_csv(f"{dummy_data_dir}/output_dummy_data/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+    print(f"Reading in true waveforms from {dummy_data_dir}")
     posterior_waveforms = pd.read_csv(f"{output_dir_bayesian}/waveform_resampled_all_pressure_traces_rv.csv")
     
     # Ground truth waveform
