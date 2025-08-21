@@ -60,7 +60,15 @@ def analyse_giessen(file_path: str, data_type: str, gaussian_sigmas : list[float
 
         ag = analyseGiessen(df=rv_file)
 
+        # Print ag._df
+        print(f"Dataframe shape: {ag._df.shape}")
+        print(f"First row of dataframe: {ag._df.iloc[0].values}")
+
         ag.compute_derivatives()
+
+        print(f"After compute derivatives Dataframe shape: {ag._df.shape}")
+        print(f"First row of dataframe: {ag._df.iloc[0].values}")
+
         ag.compute_points_of_interest()
 
         # Print out ag._points_df
