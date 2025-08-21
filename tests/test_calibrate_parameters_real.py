@@ -6,7 +6,7 @@ import tempfile
 import shutil
 import glob
 
-def test_calibrate_parameters():
+def test_calibrate_parameters_real():
     # Define test parameters
 
     with tempfile.TemporaryDirectory() as tmp_path:
