@@ -172,6 +172,7 @@ notebooks/scratchpad.ipynb
 output/
 CohortDataRaw/
 *.pyc
+logs/
 
 # Ignore the PyPI configuration file
 .pypirc
