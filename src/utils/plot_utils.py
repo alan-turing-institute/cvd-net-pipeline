@@ -11,6 +11,8 @@ import seaborn as sns
 from scipy.stats import norm
 
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
+
 import numpy as np
 import math
 import os
@@ -219,7 +221,7 @@ def plot_posterior_distributions(input, mu_0, Sigma_0, Mu_post, Sigma_post, whic
         ax.legend()
 
     fig.tight_layout()
-    plt.suptitle(f'Posterior Distributions of Calibrated Parameters')
+    plt.suptitle(f'Posterior Distributions of Calibrated Parameters', y=1.03)
     plt.savefig(f'{output_path_figures}/posterior_distributions_calibrated_params.png')    
 
 
@@ -238,7 +240,7 @@ def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_pa
     plt.suptitle(f'Posterior Covariance Matrix')
     plt.savefig(f'{output_path_figures}/posterior_covariance_matrix.png') 
 
-def plot_posterior_simulations(output_dir_sims, output_dir_bayesian, e_obs_scale):
+def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
     
     true_waveforms = pd.read_csv(f"{output_dir_sims}/waveform_resampled_all_pressure_traces_rv.csv")
     posterior_waveforms = pd.read_csv(f"{output_dir_bayesian}/waveform_resampled_all_pressure_traces_rv.csv")
@@ -296,21 +298,28 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian, e_obs_scale
     
     # Plot all waveforms in faded orange
     for j in range(samples.shape[0]):
-        ax.plot(samples[j, :], color='orange', alpha=0.001)
+        if j == 0:
+            ax.plot(samples[j, :], color='bisque', label="Posterior Samples")
+        else:
+            ax.plot(samples[j, :], color='bisque', alpha=0.05)
     
     # Plot y_true
     ax.plot(y_true.values, label="True Waveform", color='c', linewidth=2)
 
     # Plot mean waveform
     ax.plot(mean_waveform, color='darkorange', linewidth=1.5, label="Mean Calibrated Waveform")
-
+    
+    
     ax.set_xticks(np.arange(0, 110, 10))
-    ax.set_xlabel("Time Index")
-    ax.set_title(f"Posterior Simulations\nRMSE = {rmse:.4f}, NLPD = {nlpd:.2f}, WAIC = {waic:.2f}")
-    ax.set_ylabel("Pressure (mmHg)")
+    ax.tick_params(axis='x', labelsize=14)
+    ax.tick_params(axis='y', labelsize=14)
+    ax.set_xlabel("Time Index", fontsize=16)
+    ax.set_title(f"RMSE = {rmse:.4f}, NLPD = {nlpd:.2f}, WAIC = {waic:.2f}")
+    ax.set_ylabel("Pressure (mmHg)", fontsize=16)
+    ax.set_yticks(np.arange(0,80, 10))
     ax.legend()
 
-    fig.suptitle("Calibrated Pressure Waveforms for Different Methods")
+    #fig.suptitle("Calibrated Pressure Waveforms for Different Methods")
     fig.tight_layout()
     fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
 
@@ -384,3 +393,67 @@ def plot_parameter_trajectories(Sigma_post,
     plt.show()
 
     fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
+
+def plot_sensitivity_heatmap(directory, saveto, selected_keys=[]):
+        """Plots a heatmap of sensitivity indices for each parameter across all CSV files."""
+
+        output_path_figures = os.path.join(directory,"figures/sensititvity_heatmaps")
+        os.makedirs(output_path_figures, exist_ok=True)
+        
+        
+        csv_files = [f for f in os.listdir(directory) if f.endswith(".csv")]
+
+        """Load data from selected CSV files."""
+        files_to_read = csv_files if not selected_keys else selected_keys
+        data = {}
+        for file in files_to_read:
+            file_path = os.path.join(directory, file)
+            data[file] = pd.read_csv(file_path, index_col=0)
+
+        
+        combined_df = pd.DataFrame()
+        
+        for file_name, df in data.items():
+            combined_df[file_name] = df["ST"]
+        
+        combined_df = combined_df.fillna(0).T  # Transpose to have CSV files on Y-axis and parameters on X-axis
+        combined_df.index = combined_df.index.str.replace('sensitivity_', '', regex=False).str.replace('.csv', '', regex=False)
+
+        # Add a column for row means (mean ST for each output)
+        combined_df['Threshold Value'] = combined_df.mean(axis=1)
+        
+        # Order columns by the mean across output for each parameter (column)
+        #parameter_means = combined_df.mean()
+        #ordered_columns = parameter_means.sort_values(ascending=False).index.tolist()
+        #combined_df = combined_df[ordered_columns]  # Reorder columns
+
+        parameter_max = combined_df.max()
+        ordered_columns = parameter_max.sort_values(ascending=False).index.tolist()
+        combined_df = combined_df[ordered_columns]  # Reorder column
+        
+        cols = 0.5 * len(combined_df.index)
+        plt.figure(figsize=(25, cols))
+
+
+        sns.heatmap(
+                combined_df, 
+                cmap="Greens", 
+                linewidths=0.5, 
+                cbar=False, 
+                cbar_kws={
+                    "orientation": "horizontal", 
+                    "shrink": 0.5, 
+                    "pad": 0.3,
+                    "label": "Sensitivity Index (ST)"
+                }
+        )
+
+        
+        plt.title("")
+        plt.ylabel("Output", fontsize=24, fontweight='bold')
+        plt.xticks(rotation=45, fontsize=20, fontweight='bold')
+        plt.xlabel("Parameters", fontsize=24, fontweight='bold')
+        plt.yticks(rotation=0, fontsize=20, fontweight='bold') 
+        plt.tight_layout()
+        plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.png", dpi=700)
+        plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.pdf", dpi=700)

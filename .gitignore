@@ -171,7 +171,6 @@ output_synthetic_old_gaussian_sigmas/
 notebooks/scratchpad.ipynb
 output/
 CohortDataRaw/
-CohortDataRaw2/
 *.pyc
 
 # Ignore the PyPI configuration file
