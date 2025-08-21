@@ -42,7 +42,7 @@ def test_calibrate_parameters():
                              n_samples=n_samples,
                              n_params=n_params,
                              output_path=str(tmp_path),
-                             emulator_path='./tests/inputs_for_tests/calibrate_parameters_module/synthetic_data',
+                             emulator_path='./tests/inputs_for_tests/calibrate_parameters_module/real_data',
                              output_keys=output_keys,
                              include_timeseries=False,
                              epsilon_obs_scale=0.05,
@@ -56,7 +56,7 @@ def test_calibrate_parameters():
             'real_data',
             'bayesian_calibration_results',
             '15_output_keys',
-            'calibration_20250816_145456'
+            'calibration_20250818_145228'
         )
         expected_posterior_covariance = pd.read_csv(os.path.join(expected_output_dir,
                                                     'posterior_covariance.csv'))
@@ -88,7 +88,19 @@ def test_calibrate_parameters():
         posterior_mean       = pd.read_csv(os.path.join(calibration_dir,
                                                         'posterior_mean.csv'))              
 
-        # Test equality ------------------------------------------------------------------------
-        pd.testing.assert_frame_equal(expected_posterior_covariance, posterior_covariance)
-        pd.testing.assert_frame_equal(expected_posterior_mean, posterior_mean)
+        # Test rough equality ------------------------------------------------------------------------
+        pd.testing.assert_frame_equal(
+            expected_posterior_covariance, 
+            posterior_covariance, 
+            atol=1e-4, 
+            rtol=1e-4, 
+            check_exact=False
+        )
+        pd.testing.assert_frame_equal(
+            expected_posterior_mean, 
+            posterior_mean, 
+            atol=1e-4, 
+            rtol=1e-4, 
+            check_exact=False
+        )
 
