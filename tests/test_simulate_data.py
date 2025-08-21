@@ -92,7 +92,9 @@ def test_simulate_data():
         assert os.path.exists(output_dir_pressure_traces_rv), "RV pressure traces file was not created."
 
         # Run the test for calibrated parameters
-        output_dir_bayesian = './tests/expected_outputs/calibrate_parameters_module/output_64_9_params/bayesian_calibration_results/17_output_keys/calibration_20250604_100806'
+        output_dir_bayesian = os.path.join('./tests/expected_outputs/calibrate_parameters_module',
+                                           'synthetic_data/output_64_9_params/bayesian_calibration_results',
+                                           '17_output_keys/calibration_20250604_100806')
 
         output_dir_sims, n_params = simulate_data(
             param_path=param_path,
