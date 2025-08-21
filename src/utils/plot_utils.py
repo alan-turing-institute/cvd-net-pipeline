@@ -397,65 +397,58 @@ def plot_parameter_trajectories(Sigma_post,
     fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
 
 def plot_sensitivity_heatmap(directory, saveto, selected_keys=[]):
-        """Plots a heatmap of sensitivity indices for each parameter across all CSV files."""
+    """Plots a heatmap of sensitivity indices for each parameter across all CSV files."""
 
-        output_path_figures = os.path.join(directory,"figures/sensititvity_heatmaps")
-        os.makedirs(output_path_figures, exist_ok=True)
-        
-        
-        csv_files = [f for f in os.listdir(directory) if f.endswith(".csv")]
+    output_path_figures = os.path.join(directory, "figures/sensititvity_heatmaps")
+    os.makedirs(output_path_figures, exist_ok=True)
 
-        """Load data from selected CSV files."""
-        files_to_read = csv_files if not selected_keys else selected_keys
-        data = {}
-        for file in files_to_read:
-            file_path = os.path.join(directory, file)
-            data[file] = pd.read_csv(file_path, index_col=0)
+    csv_files = [f for f in os.listdir(directory) if f.endswith(".csv")]
 
-        
-        combined_df = pd.DataFrame()
-        
-        for file_name, df in data.items():
-            combined_df[file_name] = df["ST"]
-        
-        combined_df = combined_df.fillna(0).T  # Transpose to have CSV files on Y-axis and parameters on X-axis
-        combined_df.index = combined_df.index.str.replace('sensitivity_', '', regex=False).str.replace('.csv', '', regex=False)
+    # Load data from selected CSV files.
+    files_to_read = csv_files if not selected_keys else selected_keys
+    data = {}
+    for file in files_to_read:
+        file_path = os.path.join(directory, file)
+        data[file] = pd.read_csv(file_path, index_col=0)
 
-        # Add a column for row means (mean ST for each output)
-        combined_df['Threshold Value'] = combined_df.mean(axis=1)
-        
-        # Order columns by the mean across output for each parameter (column)
-        #parameter_means = combined_df.mean()
-        #ordered_columns = parameter_means.sort_values(ascending=False).index.tolist()
-        #combined_df = combined_df[ordered_columns]  # Reorder columns
+    combined_df = pd.DataFrame()
+    for file_name, df in data.items():
+        combined_df[file_name] = df["ST"]
 
-        parameter_max = combined_df.max()
-        ordered_columns = parameter_max.sort_values(ascending=False).index.tolist()
-        combined_df = combined_df[ordered_columns]  # Reorder column
-        
-        cols = 0.5 * len(combined_df.index)
-        plt.figure(figsize=(25, cols))
+    combined_df = combined_df.fillna(0).T  # Transpose to have CSV files on Y-axis and parameters on X-axis
+    combined_df.index = combined_df.index.str.replace('sensitivity_', '', regex=False).str.replace('.csv', '', regex=False)
 
+    # Add a column for row means (mean ST for each output)
+    combined_df['Threshold Value'] = combined_df.mean(axis=1)
 
-        sns.heatmap(
-                combined_df, 
-                cmap="Greens", 
-                linewidths=0.5, 
-                cbar=False, 
-                cbar_kws={
-                    "orientation": "horizontal", 
-                    "shrink": 0.5, 
-                    "pad": 0.3,
-                    "label": "Sensitivity Index (ST)"
-                }
-        )
+    # Order columns by the max across output for each parameter (column)
+    parameter_max = combined_df.max()
+    ordered_columns = parameter_max.sort_values(ascending=False).index.tolist()
+    combined_df = combined_df[ordered_columns]  # Reorder columns
 
-        
-        plt.title("")
-        plt.ylabel("Output", fontsize=24, fontweight='bold')
-        plt.xticks(rotation=45, fontsize=20, fontweight='bold')
-        plt.xlabel("Parameters", fontsize=24, fontweight='bold')
-        plt.yticks(rotation=0, fontsize=20, fontweight='bold') 
-        plt.tight_layout()
-        plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.png", dpi=700)
-        plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.pdf", dpi=700)
+    # Set row heights larger by increasing the figure height
+    row_height = 1  # Height per row in inches (increase for larger rows)
+    fig_height = max(6, row_height * len(combined_df.index))
+    plt.figure(figsize=(35, fig_height))
+
+    sns.heatmap(
+        combined_df,
+        cmap="Greens",
+        linewidths=1,
+        cbar=False,
+        cbar_kws={
+            "orientation": "horizontal",
+            "shrink": 0.7,
+            "pad": 0.3,
+            "label": "Sensitivity Index (ST)"
+        }
+    )
+
+    plt.title("")
+    plt.ylabel("Output", fontsize=28, fontweight='bold')
+    plt.xticks(rotation=45, fontsize=24)
+    plt.xlabel("Parameters", fontsize=28, fontweight='bold')
+    plt.yticks(rotation=0, fontsize=24)
+    plt.tight_layout()
+    plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.png", dpi=600)
+    plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.pdf", dpi=600)

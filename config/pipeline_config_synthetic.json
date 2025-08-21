@@ -2,9 +2,7 @@
     "data_type": "synthetic",
     "input_parameters": "parameters_sensitive_timeseries_7.json",
     "output_path": "output_synthetic",
-    "steps": [
-        "7"
-    ],
+    "steps": ["5", "6", "7"],
     "n_pca_components": 10,
     "n_params": 7,
     "n_samples": 4096,

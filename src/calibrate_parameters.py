@@ -132,6 +132,7 @@ def calibrate_parameters(data_type="synthetic",
 
     if data_type == "synthetic":
         bc.samples_df.to_csv(f"{output_dir_bayesian}/posterior_samples.csv", index=False)
+        bc.cleaned_samples.to_csv(f"{output_dir_bayesian}/cleaned_posterior_samples.csv", index=False)
 
     # Save the config file
     with open(os.path.join(output_dir_bayesian, 'used_config.json'), 'w') as f:
