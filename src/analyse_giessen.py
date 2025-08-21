@@ -62,8 +62,19 @@ def analyse_giessen(file_path: str, data_type: str, gaussian_sigmas : list[float
 
         ag.compute_derivatives()
         ag.compute_points_of_interest()
+
+        # Print out ag._points_df
+        print(f"Points dataframe shape: {ag._points_df.shape}")
+        print(f"First row of points: {ag._points_df.iloc[0].values}")
+
         beats = pd.DataFrame(ag.resample_heart_beat())
+        print(f"Beats dataframe shape: {beats.shape}")
+        print(f"First row of beats: {beats.iloc[0].values}")
+        
         sumstats = ag.points_df
+        print(f"Sumstats dataframe shape: {sumstats.shape}")
+        print(f"Sumstats columns: {list(sumstats.columns)}")
+        print(f"First row of sumstats: {sumstats.iloc[0].values}")
 
         resampled_df = pd.concat([beats, sumstats.iloc[:-1, :]], axis=1)
         resampled_df.to_csv(f"{file_path}/waveform_resampled_all_pressure_traces_rv.csv", index=False)
