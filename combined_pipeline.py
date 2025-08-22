@@ -89,8 +89,6 @@ def run_pipeline(config):
                 raise ValueError("output keys must be provided in the configuration to run calibration.")
             
             include_timeseries = bool(config.get("include_timeseries"))
-
-            print(f"Include time-series in calibration: {include_timeseries}")
             
             dummy_data_dir = config.get("dummy_data_dir")
             if dummy_data_dir is None and not data_type == "real":

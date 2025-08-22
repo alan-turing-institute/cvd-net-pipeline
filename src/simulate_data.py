@@ -18,9 +18,9 @@ def simulate_data(param_path: str,
     br.sample(n_samples)
 
     if not sample_parameters:
-        print("Simulating from calibrated parameters.")
+        # print("Simulating from calibrated parameters.")
         posterior_samples = pd.read_csv(f"{output_path}/cleaned_posterior_samples.csv") 
-
+        
         # remove any #s from column names
         posterior_samples.columns = posterior_samples.columns.str.lstrip('#').str.strip()
 
@@ -28,6 +28,7 @@ def simulate_data(param_path: str,
         br._samples = br._samples.loc[posterior_samples.index].reset_index(drop=True)
         posterior_samples = posterior_samples.reset_index(drop=True)
 
+       
         # Copy posterior values into br._samples
         for col in posterior_samples.columns:
             if col in br._samples.columns:

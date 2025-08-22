@@ -132,15 +132,24 @@ def calibrate_parameters(data_type="synthetic",
 
     if data_type == "synthetic":
         bc.samples_df.to_csv(f"{output_dir_bayesian}/posterior_samples.csv", index=False)
-        bc.cleaned_samples.to_csv(f"{output_dir_bayesian}/cleaned_posterior_samples.csv", index=False)
+        
+        # Remove negative samples
+        cleaned_samples = bc.samples_df[(bc.samples_df >= 0).all(axis=1)]
+
+         # Flag number of posterior samples that were removed during cleaning
+        missing_indices = set(bc.samples_df.index) - set(cleaned_samples.index)
+        if missing_indices:
+            print(f"The following posterior_samples were removed due to negativity: {sorted(missing_indices)}")
+            pd.Series(sorted(missing_indices)).to_csv(f"{output_dir_bayesian}/cleaned_posterior_samples_indices.csv", index=False)
+       
+        cleaned_samples.to_csv(f"{output_dir_bayesian}/cleaned_posterior_samples.csv", index=False)
 
     # Save the config file
     with open(os.path.join(output_dir_bayesian, 'used_config.json'), 'w') as f:
         json.dump(config, f, indent=4)
 
     if data_type == "synthetic":
-
-        print(f"Parameter names: {bc.param_names}")
+        
         # Plot the prior and posteior distributions
         plot_utils.plot_posterior_distributions(true_input, 
                                                 bc.mu_0,

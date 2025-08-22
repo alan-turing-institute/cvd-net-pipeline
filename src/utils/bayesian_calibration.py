@@ -102,4 +102,3 @@ class BayesianCalibration:
         self.samples = rg.multivariate_normal(self.Mu_post.flatten(), self.Sigma_post, size=n_samples)
         self.samples_df = pd.DataFrame(self.samples)
         self.samples_df.columns = self.param_names
-        self.cleaned_samples = self.samples_df[(self.samples_df >= 0).all(axis=1)]
