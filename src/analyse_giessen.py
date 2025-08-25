@@ -1,7 +1,11 @@
 import pandas as pd
 from AnalysisGiessen import analyseGiessen
+import numpy as np
 
 def analyse_giessen(file_path: str, data_type: str, gaussian_sigmas : list[float]):
+
+    # Set seeds for reproducibility
+    np.random.seed(42)
 
     rv_file = pd.read_csv(f"{file_path}/pressure_traces_rv/all_pressure_traces.csv")
     
