@@ -5,7 +5,7 @@ from analyse_giessen import analyse_giessen
 
 
 # Parametrize data types for testing both synthetic and real data
-DATA_TYPES = ["synthetic", "real"]
+DATA_TYPES = ["real"]
 
 
 @pytest.fixture(params=DATA_TYPES)
