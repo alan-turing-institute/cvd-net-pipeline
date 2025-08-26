@@ -1,19 +1,34 @@
 {
     "data_type": "synthetic",
-    "input_parameters": "parameters_sensitive_timeseries_7.json",
+    "input_parameters": "parameters_sensitive_pca_11.json",
     "output_path": "output_synthetic",
-    "steps": ["1", "2", "3", "4", "5", "6", "7"],
+    "steps": ["5", "6", "7"],
     "n_pca_components": 10,
-    "n_params": 7,
+    "n_params": 11,
     "n_samples": 4096,
     "gaussian_sigmas": [
         1e-05,
         1e-05,
         1e-05
     ],
-    "output_keys": ["iT"],
-    "include_timeseries": 1,
+    "output_keys": [
+        "edp",
+        "dia",
+        "epad",
+        "eivc",
+        "sys",
+        "esp",
+        "a_epad",
+        "P_max",
+        "EF",
+        "Ees/Ea",
+        "iT",
+        "PC1",
+        "PC2",
+        "PC3"
+        ],
+    "include_timeseries": 0,
     "epsilon_obs_scale": 0.05,
-    "output_dir_bayesian": "output_synthetic/output_4096_6_params/bayesian_calibration_results/11_output_keys/calibration_20250818_141427",
+    "output_dir_bayesian": "output_synthetic/output_4096_11_params/bayesian_calibration_results/11_output_keys/calibration_20250818_141427",
     "dummy_data_dir": "dummy_data"
 }
