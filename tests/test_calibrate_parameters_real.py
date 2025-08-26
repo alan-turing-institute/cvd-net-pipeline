@@ -56,8 +56,9 @@ def test_calibrate_parameters_real():
             'real_data',
             'bayesian_calibration_results',
             '15_output_keys',
-            'calibration_20250818_145228'
+            'calibration_20250826_150209'
         )
+        
         expected_posterior_covariance = pd.read_csv(os.path.join(expected_output_dir,
                                                     'posterior_covariance.csv'))
         expected_posterior_mean       = pd.read_csv(os.path.join(expected_output_dir,
