@@ -1,15 +1,15 @@
 {
   "data_type": "real",
-  "input_parameters": "parameters_pulmonary_sensitive_summarystats.json",
-  "output_path": "CohortDataRaw3/output_real/pat_4",
+  "input_parameters": "parameters_sensitive_ci_6.json",
+  "output_path": "CohortDataRaw/output_real/pat_4",
   "steps": [
     "2",
     "3",
     "5"
   ],
   "n_pca_components": 10,
-  "n_samples": 64,
-  "n_params": 9,
+  "n_samples": 4096,
+  "n_params": 6,
   "output_keys": [
     "t_max_dpdt", 
     "a_epad",
