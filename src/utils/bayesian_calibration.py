@@ -7,8 +7,14 @@ import math
 
 
 class BayesianCalibration:
-    def __init__(self, input_prior, emulator_output, epsilon_obs, 
-                 filtered_output=None, which_obs=None, observation_data=None, data_type="synthetic"):
+    def __init__(self, 
+                 input_prior, 
+                 emulator_output, 
+                 epsilon_obs, 
+                 filtered_output=None, 
+                 which_obs=None, 
+                 observation_data=None, 
+                 data_type="synthetic"):
         """
         Bayesian calibration for both synthetic and real data.
         
@@ -42,6 +48,7 @@ class BayesianCalibration:
         
         # Compute posterior
         self.compute_posterior()
+
 
     def _setup_priors(self):
         """Setup prior parameters based on data type"""
@@ -96,6 +103,7 @@ class BayesianCalibration:
         
         # Compute posterior mean
         self.Mu_post = self.Sigma_post @ (beta_matrix.T @ np.linalg.inv(full_error) @ Y_scaled + np.linalg.inv(self.Sigma_0) @ self.mu_0)
+
 
     def sample_posterior(self, n_samples):
         rg = np.random.default_rng(1)

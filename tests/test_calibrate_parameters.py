@@ -22,7 +22,7 @@ def test_calibrate_parameters():
         n_params = 9
 
         # Copy all the expected input files from /tests/inputs_for_tests/calibrate_parameters_module/ to the temporary directory
-        shutil.copytree('./tests/inputs_for_tests/calibrate_parameters_module',
+        shutil.copytree('./tests/inputs_for_tests/calibrate_parameters_module/synthetic_data',
                         tmp_path,
                         dirs_exist_ok=True)
 
@@ -36,7 +36,16 @@ def test_calibrate_parameters():
                              config=[])
 
         # Compare the output files to the expected output files
-        expected_output_dir = './tests/expected_outputs/calibrate_parameters_module/output_64_9_params/bayesian_calibration_results/17_output_keys/calibration_20250604_100806'
+
+        # Load the expected output ----------------------------------------------------------------------
+        expected_output_dir = os.path.join(
+            './tests/expected_outputs/calibrate_parameters_module',
+            'synthetic_data',
+            'output_64_9_params',
+            'bayesian_calibration_results',
+            '17_output_keys',
+            'calibration_20250604_100806'
+        )
         expected_posterior_covariance = pd.read_csv(os.path.join(expected_output_dir,
                                                     'posterior_covariance.csv'))
         expected_posterior_mean       = pd.read_csv(os.path.join(expected_output_dir,
@@ -51,7 +60,7 @@ def test_calibrate_parameters():
                 print(os.path.join(root, file))
 
 
-        # Load the actual output files
+        # Load the actual output files ------------------------------------------------------------------
 
         # Find the actual calibration_* directory, because the name is created dynamically with a timestamp
         calibration_dirs = glob.glob(os.path.join(
@@ -71,6 +80,7 @@ def test_calibrate_parameters():
         posterior_samples    = pd.read_csv(os.path.join(calibration_dir,
                                                         'posterior_samples.csv'))                
 
+        # Test equality ------------------------------------------------------------------------
         pd.testing.assert_frame_equal(expected_posterior_covariance, posterior_covariance)
         pd.testing.assert_frame_equal(expected_posterior_mean, posterior_mean)
         pd.testing.assert_frame_equal(expected_posterior_samples, posterior_samples)

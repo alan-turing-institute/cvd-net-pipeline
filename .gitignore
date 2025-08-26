@@ -166,13 +166,15 @@ cython_debug/
 /playground_files
 output_real/
 output_synthetic/
-dummy_data/output_dummy_data/simulations/
-dummy_data/output_dummy_data/figures/
-dummy_data/output_dummy_data/pca/
-#notebooks/
+output_synthetic_new_gaussian_sigmas/
+output_synthetic_old_gaussian_sigmas/
+notebooks/scratchpad.ipynb
 output/
 CohortDataRaw/
+CohortDataRaw2_17_keys/
+CohortDataRaw3/
 *.pyc
+logs/
 
 # Ignore the PyPI configuration file
 .pypirc
