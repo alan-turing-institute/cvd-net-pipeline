@@ -45,9 +45,6 @@ def test_compute_pca(cleanup_output):
     """Test compute_pca with valid input for both synthetic and real data."""
     output_file, data_type = cleanup_output
 
-    # if data_type == "synthetic":
-    #     output_path = f'tests/inputs_for_tests/compute_pca_module/output_64_9_params/{data_type}_data',
-
     # Call the function with the input file
     compute_pca(n_samples=64, 
                 n_params=9,
