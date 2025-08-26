@@ -181,7 +181,6 @@ def plot_pca_histogram(X_pca, output_path, n_pca_components=10):
     plt.suptitle(f'Histograms of the First {n_pca_components} Principal Components')
     plt.savefig(f'{output_path_figures}/histograms_pca.png')    
 
-
 def plot_posterior_distributions(true_input, mu_0, Sigma_0, Mu_post, Sigma_post, which_obs, param_names, output_path):
 
     output_path_figures = os.path.join(output_path,"figures")
@@ -193,12 +192,9 @@ def plot_posterior_distributions(true_input, mu_0, Sigma_0, Mu_post, Sigma_post,
     posterior_stds = np.sqrt(np.diag(Sigma_post))
     true_values = true_input.loc[which_obs, param_names].values
    
-    
-    
     fig, axes = plt.subplots(2, math.ceil(len(param_names)/2), figsize=(18, 8))  
     axes = axes.flatten()  # Flatten to 1D array
     for i, ax in enumerate(axes[:len(param_names)]):  # Only iterate over valid axes
-    
         # Define x-range based on prior and posterior means
         x_min = min(prior_means[i] - 3 * prior_stds[i], posterior_means[i] - 3 * posterior_stds[i])
         x_max = max(prior_means[i] + 3 * prior_stds[i], posterior_means[i] + 3 * posterior_stds[i])
@@ -219,12 +215,27 @@ def plot_posterior_distributions(true_input, mu_0, Sigma_0, Mu_post, Sigma_post,
         ax.set_title(param_names[i])
         ax.set_xlabel("Value")
         ax.set_ylabel("Density")
-        ax.legend()
+        # Remove per-axis legends
+        # ax.legend()
+
+    # Remove unused axes if any
+    for ax in axes[len(param_names):]:
+        ax.remove()
+
 
     fig.tight_layout()
-    plt.suptitle(f'Posterior Distributions of Calibrated Parameters', y=1.03)
-    plt.savefig(f'{output_path_figures}/posterior_distributions_calibrated_params.png')    
+    plt.subplots_adjust(bottom=0.14)
 
+    # Add a single legend across the bottom
+    handles = [
+        plt.Line2D([0], [0], color="blue", linestyle="dashed", label="Prior"),
+        plt.Line2D([0], [0], color="red", linestyle="solid", label="Posterior"),
+        plt.Line2D([0], [0], color="green", linestyle="dotted", label="True Value")
+    ]
+    
+    fig.legend(handles=handles, ncol=3, fontsize=14, loc="lower center")
+    plt.savefig(f'{output_path_figures}/posterior_distributions_calibrated_params.png')    
+    
 
 def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_path):
         
@@ -240,11 +251,9 @@ def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_pa
     fig.tight_layout()
     plt.suptitle(f'Posterior Covariance Matrix')
     plt.savefig(f'{output_path_figures}/posterior_covariance_matrix.png') 
-
 def plot_posterior_simulations(dummy_data_dir, output_dir_bayesian):
 
     true_waveforms = pd.read_csv(f"{dummy_data_dir}/output_dummy_data/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
-    print(f"Reading in true waveforms from {dummy_data_dir}")
     posterior_waveforms = pd.read_csv(f"{output_dir_bayesian}/waveform_resampled_all_pressure_traces_rv.csv")
     
     # Ground truth waveform
@@ -313,16 +322,19 @@ def plot_posterior_simulations(dummy_data_dir, output_dir_bayesian):
     
     
     ax.set_xticks(np.arange(0, 110, 10))
+    ax.set_ylim(0,70)
     ax.tick_params(axis='x', labelsize=14)
     ax.tick_params(axis='y', labelsize=14)
     ax.set_xlabel("Time Index", fontsize=16)
-    ax.set_title(f"RMSE = {rmse:.4f}, NLPD = {nlpd:.2f}, WAIC = {waic:.2f}")
+    ax.set_title(f"RMSE = {rmse:.4f}, NLPPD = {nlpd:.2f}")
     ax.set_ylabel("Pressure (mmHg)", fontsize=16)
     ax.set_yticks(np.arange(0,70, 10))
-    ax.legend()
+    
+    #ax.legend()
 
     #fig.suptitle("Calibrated Pressure Waveforms for Different Methods")
     fig.tight_layout()
+    fig.show()
     fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
 
 def plot_parameter_trajectories(Sigma_post,
