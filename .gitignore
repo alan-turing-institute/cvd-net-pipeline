@@ -171,6 +171,8 @@ output_synthetic_old_gaussian_sigmas/
 notebooks/scratchpad.ipynb
 output/
 CohortDataRaw/
+CohortDataRaw2_17_keys/
+CohortDataRaw3/
 *.pyc
 logs/
 
