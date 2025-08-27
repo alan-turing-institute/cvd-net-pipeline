@@ -26,8 +26,6 @@ def simulate_data(param_path: str,
 
         # Align br._samples rows with those available in posterior_samples
         br._samples = br._samples.loc[posterior_samples.index].reset_index(drop=True)
-        posterior_samples = posterior_samples.reset_index(drop=True)
-
        
         # Copy posterior values into br._samples
         for col in posterior_samples.columns:
