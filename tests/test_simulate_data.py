@@ -13,7 +13,8 @@ def test_simulate_data():
     with tempfile.TemporaryDirectory() as tmp_path:
         print(f"Temporary directory created at: {tmp_path}")
 
-        param_path = os.path.join('./input_parameters_jsons', "parameters_pulmonary_sensitive_summarystats.json")  # Ensure this file exists with valid parameters
+        param_path = os.path.join('./tests/inputs_for_tests/simulate_data_module/', 
+                                  "parameters_pulmonary_sensitive_summarystats.json")  # Ensure this file exists with valid parameters
         n_samples = 64
         repeat_simulations = True
 
