@@ -34,8 +34,8 @@ def simulate_data(param_path: str,
             if col in br._samples.columns:
                 br._samples.loc[:, col] = posterior_samples[col].values
             
-    col_test = [col for col in br._samples.columns if col in br._parameters_2_sample.keys()]
-    _pure_samples = br._samples[col_test].copy()
+    relevant_columns = [col for col in br._samples.columns if col in br._parameters_2_sample.keys()]
+    _pure_samples = br._samples[relevant_columns].copy()
 
     
     map_ = {
@@ -54,8 +54,6 @@ def simulate_data(param_path: str,
     br._samples.drop(['lv.td0', 'rv.td0'], axis=1, inplace=True)
 
     # get relevant columns and count them
-    relevant_columns = _pure_samples.columns.to_list()
-
     n_params = len(relevant_columns)
     br.map_vessel_volume()
 
