@@ -2,7 +2,10 @@
     "data_type": "synthetic",
     "input_parameters": "parameters_sensitive_pca123_9.json",
     "output_path": "output_synthetic",
-    "steps": ["5", "6", "7"],
+    "steps": [
+        "5",
+        "6"
+    ],
     "n_pca_components": 10,
     "n_params": 9,
     "n_samples": 4096,

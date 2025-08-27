@@ -95,7 +95,7 @@ def test_simulate_data():
         # Run the test for calibrated parameters
         output_dir_bayesian = os.path.join('./tests/expected_outputs/calibrate_parameters_module',
                                            'synthetic_data/output_64_9_params/bayesian_calibration_results',
-                                           '17_output_keys/calibration_20250604_100806')
+                                           '17_output_keys/calibration_20250827_151335')
 
         output_dir_sims, n_params = simulate_data(
             param_path=param_path,
@@ -110,7 +110,7 @@ def test_simulate_data():
         # Compare the output files to the expected output files
         expected_output_dir = os.path.join('./tests/expected_outputs/simulate_data_module',
                                             f'output_{n_samples}_9_params/',
-                                            'bayesian_calibration_results/17_output_keys/calibration_20250604_100806/')
+                                            'bayesian_calibration_results/17_output_keys/calibration_20250827_151335/')
         expected_pressure_traces_pat = pd.read_csv(os.path.join(expected_output_dir,
                                                     'pressure_traces_pat',
                                                     'all_pressure_traces.csv'))
