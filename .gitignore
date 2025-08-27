@@ -177,7 +177,6 @@ CohortDataRaw2_17_keys/
 CohortDataRaw3/
 *.pyc
 logs/
-dummy_data/output_dummy_data/simulations/
 
 # Ignore the PyPI configuration file
 .pypirc
