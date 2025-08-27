@@ -181,6 +181,7 @@ def plot_pca_histogram(X_pca, output_path, n_pca_components=10):
     plt.suptitle(f'Histograms of the First {n_pca_components} Principal Components')
     plt.savefig(f'{output_path_figures}/histograms_pca.png')    
 
+
 def plot_posterior_distributions(true_input, mu_0, Sigma_0, Mu_post, Sigma_post, which_obs, param_names, output_path):
 
     output_path_figures = os.path.join(output_path,"figures")
@@ -228,8 +229,8 @@ def plot_posterior_distributions(true_input, mu_0, Sigma_0, Mu_post, Sigma_post,
 
     # Add a single legend across the bottom
     handles = [
-        plt.Line2D([0], [0], color="blue", linestyle="dashed", label="Prior"),
-        plt.Line2D([0], [0], color="red", linestyle="solid", label="Posterior"),
+        plt.Line2D([0], [0], color="blue",  linestyle="dashed", label="Prior"),
+        plt.Line2D([0], [0], color="red",   linestyle="solid",  label="Posterior"),
         plt.Line2D([0], [0], color="green", linestyle="dotted", label="True Value")
     ]
     
@@ -251,6 +252,8 @@ def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_pa
     fig.tight_layout()
     plt.suptitle(f'Posterior Covariance Matrix')
     plt.savefig(f'{output_path_figures}/posterior_covariance_matrix.png') 
+
+
 def plot_posterior_simulations(dummy_data_dir, output_dir_bayesian):
 
     true_waveforms = pd.read_csv(f"{dummy_data_dir}/output_dummy_data/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
@@ -326,7 +329,7 @@ def plot_posterior_simulations(dummy_data_dir, output_dir_bayesian):
     ax.tick_params(axis='x', labelsize=14)
     ax.tick_params(axis='y', labelsize=14)
     ax.set_xlabel("Time Index", fontsize=16)
-    ax.set_title(f"RMSE = {rmse:.4f}, NLPPD = {nlpd:.2f}")
+    ax.set_title(f"RMSE = {rmse:.4f}, NLPD = {nlpd:.2f}")
     ax.set_ylabel("Pressure (mmHg)", fontsize=16)
     ax.set_yticks(np.arange(0,70, 10))
     
@@ -336,6 +339,7 @@ def plot_posterior_simulations(dummy_data_dir, output_dir_bayesian):
     fig.tight_layout()
     fig.show()
     fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
+
 
 def plot_parameter_trajectories(Sigma_post,
                                 posterior_means,
@@ -405,6 +409,7 @@ def plot_parameter_trajectories(Sigma_post,
     plt.tight_layout()
     plt.subplots_adjust(right=0.85)  # Make space for legends on the right
     fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
+
 
 def plot_sensitivity_heatmap(directory, saveto, selected_keys=[]):
     """Plots a heatmap of sensitivity indices for each parameter across all CSV files."""
