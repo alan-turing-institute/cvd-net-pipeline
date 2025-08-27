@@ -404,8 +404,6 @@ def plot_parameter_trajectories(Sigma_post,
 
     plt.tight_layout()
     plt.subplots_adjust(right=0.85)  # Make space for legends on the right
-    plt.show()
-
     fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
 
 def plot_sensitivity_heatmap(directory, saveto, selected_keys=[]):
