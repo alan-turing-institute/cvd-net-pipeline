@@ -175,6 +175,10 @@ def run_pipeline(config):
             n_params = config.get("n_params")
             include_timeseries = bool(config.get("include_timeseries"))
 
+            dummy_data_dir = config.get("dummy_data_dir")
+            if dummy_data_dir is None and not data_type == "real":
+                raise ValueError("Dummy data directory 'dummy_data_dir', must be provided in the configuration to run calibration for synthetic data.")
+
             calibrate_parameters(data_type=data_type,
                                  n_samples=n_samples,
                                  n_params=n_params,
@@ -182,6 +186,7 @@ def run_pipeline(config):
                                  emulator_path=emulator_path,
                                  output_keys=output_keys,
                                  include_timeseries=include_timeseries,
+                                 dummy_data_dir=dummy_data_dir,
                                  config=config)
 
         print("Pipeline complete.")
