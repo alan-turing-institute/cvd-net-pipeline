@@ -182,7 +182,7 @@ def plot_pca_histogram(X_pca, output_path, n_pca_components=10):
     plt.savefig(f'{output_path_figures}/histograms_pca.png')    
 
 
-def plot_posterior_distributions(input, mu_0, Sigma_0, Mu_post, Sigma_post, which_obs, param_names, output_path):
+def plot_posterior_distributions(true_input, mu_0, Sigma_0, Mu_post, Sigma_post, which_obs, param_names, output_path):
 
     output_path_figures = os.path.join(output_path,"figures")
     os.makedirs(output_path_figures, exist_ok=True)
@@ -191,13 +191,11 @@ def plot_posterior_distributions(input, mu_0, Sigma_0, Mu_post, Sigma_post, whic
     prior_stds = np.sqrt(np.diag(Sigma_0))
     posterior_means = Mu_post.flatten()
     posterior_stds = np.sqrt(np.diag(Sigma_post))
-    true_values = input.iloc[which_obs].values
-    
-    
+    true_values = true_input.loc[which_obs, param_names].values
+   
     fig, axes = plt.subplots(2, math.ceil(len(param_names)/2), figsize=(18, 8))  
     axes = axes.flatten()  # Flatten to 1D array
     for i, ax in enumerate(axes[:len(param_names)]):  # Only iterate over valid axes
-    
         # Define x-range based on prior and posterior means
         x_min = min(prior_means[i] - 3 * prior_stds[i], posterior_means[i] - 3 * posterior_stds[i])
         x_max = max(prior_means[i] + 3 * prior_stds[i], posterior_means[i] + 3 * posterior_stds[i])
@@ -218,12 +216,27 @@ def plot_posterior_distributions(input, mu_0, Sigma_0, Mu_post, Sigma_post, whic
         ax.set_title(param_names[i])
         ax.set_xlabel("Value")
         ax.set_ylabel("Density")
-        ax.legend()
+        # Remove per-axis legends
+        # ax.legend()
+
+    # Remove unused axes if any
+    for ax in axes[len(param_names):]:
+        ax.remove()
+
 
     fig.tight_layout()
-    plt.suptitle(f'Posterior Distributions of Calibrated Parameters', y=1.03)
-    plt.savefig(f'{output_path_figures}/posterior_distributions_calibrated_params.png')    
+    plt.subplots_adjust(bottom=0.14)
 
+    # Add a single legend across the bottom
+    handles = [
+        plt.Line2D([0], [0], color="blue",  linestyle="dashed", label="Prior"),
+        plt.Line2D([0], [0], color="red",   linestyle="solid",  label="Posterior"),
+        plt.Line2D([0], [0], color="green", linestyle="dotted", label="True Value")
+    ]
+    
+    fig.legend(handles=handles, ncol=3, fontsize=14, loc="lower center")
+    plt.savefig(f'{output_path_figures}/posterior_distributions_calibrated_params.png')    
+    
 
 def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_path):
         
@@ -240,9 +253,10 @@ def plot_posterior_covariance_matrix(Sigma_0, Sigma_post, param_names, output_pa
     plt.suptitle(f'Posterior Covariance Matrix')
     plt.savefig(f'{output_path_figures}/posterior_covariance_matrix.png') 
 
-def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
-    
-    true_waveforms = pd.read_csv(f"{output_dir_sims}/waveform_resampled_all_pressure_traces_rv.csv")
+
+def plot_posterior_simulations(dummy_data_dir, output_dir_bayesian):
+
+    true_waveforms = pd.read_csv(f"{dummy_data_dir}/output_dummy_data/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
     posterior_waveforms = pd.read_csv(f"{output_dir_bayesian}/waveform_resampled_all_pressure_traces_rv.csv")
     
     # Ground truth waveform
@@ -311,17 +325,21 @@ def plot_posterior_simulations(output_dir_sims, output_dir_bayesian):
     
     
     ax.set_xticks(np.arange(0, 110, 10))
+    ax.set_ylim(0,70)
     ax.tick_params(axis='x', labelsize=14)
     ax.tick_params(axis='y', labelsize=14)
     ax.set_xlabel("Time Index", fontsize=16)
-    ax.set_title(f"RMSE = {rmse:.4f}, NLPD = {nlpd:.2f}, WAIC = {waic:.2f}")
+    ax.set_title(f"RMSE = {rmse:.4f}, NLPD = {nlpd:.2f}")
     ax.set_ylabel("Pressure (mmHg)", fontsize=16)
-    ax.set_yticks(np.arange(0,80, 10))
-    ax.legend()
+    ax.set_yticks(np.arange(0,70, 10))
+    
+    #ax.legend()
 
     #fig.suptitle("Calibrated Pressure Waveforms for Different Methods")
     fig.tight_layout()
+    fig.show()
     fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
+
 
 def plot_parameter_trajectories(Sigma_post,
                                 posterior_means,
@@ -390,70 +408,62 @@ def plot_parameter_trajectories(Sigma_post,
 
     plt.tight_layout()
     plt.subplots_adjust(right=0.85)  # Make space for legends on the right
-    plt.show()
-
     fig.savefig(os.path.join(output_path_figures, "posterior_simulated_waveforms.png"))
 
+
 def plot_sensitivity_heatmap(directory, saveto, selected_keys=[]):
-        """Plots a heatmap of sensitivity indices for each parameter across all CSV files."""
+    """Plots a heatmap of sensitivity indices for each parameter across all CSV files."""
 
-        output_path_figures = os.path.join(directory,"figures/sensititvity_heatmaps")
-        os.makedirs(output_path_figures, exist_ok=True)
-        
-        
-        csv_files = [f for f in os.listdir(directory) if f.endswith(".csv")]
+    output_path_figures = os.path.join(directory, "figures/sensititvity_heatmaps")
+    os.makedirs(output_path_figures, exist_ok=True)
 
-        """Load data from selected CSV files."""
-        files_to_read = csv_files if not selected_keys else selected_keys
-        data = {}
-        for file in files_to_read:
-            file_path = os.path.join(directory, file)
-            data[file] = pd.read_csv(file_path, index_col=0)
+    csv_files = [f for f in os.listdir(directory) if f.endswith(".csv")]
 
-        
-        combined_df = pd.DataFrame()
-        
-        for file_name, df in data.items():
-            combined_df[file_name] = df["ST"]
-        
-        combined_df = combined_df.fillna(0).T  # Transpose to have CSV files on Y-axis and parameters on X-axis
-        combined_df.index = combined_df.index.str.replace('sensitivity_', '', regex=False).str.replace('.csv', '', regex=False)
+    # Load data from selected CSV files.
+    files_to_read = csv_files if not selected_keys else selected_keys
+    data = {}
+    for file in files_to_read:
+        file_path = os.path.join(directory, file)
+        data[file] = pd.read_csv(file_path, index_col=0)
 
-        # Add a column for row means (mean ST for each output)
-        combined_df['Threshold Value'] = combined_df.mean(axis=1)
-        
-        # Order columns by the mean across output for each parameter (column)
-        #parameter_means = combined_df.mean()
-        #ordered_columns = parameter_means.sort_values(ascending=False).index.tolist()
-        #combined_df = combined_df[ordered_columns]  # Reorder columns
+    combined_df = pd.DataFrame()
+    for file_name, df in data.items():
+        combined_df[file_name] = df["ST"]
 
-        parameter_max = combined_df.max()
-        ordered_columns = parameter_max.sort_values(ascending=False).index.tolist()
-        combined_df = combined_df[ordered_columns]  # Reorder column
-        
-        cols = 0.5 * len(combined_df.index)
-        plt.figure(figsize=(25, cols))
+    combined_df = combined_df.fillna(0).T  # Transpose to have CSV files on Y-axis and parameters on X-axis
+    combined_df.index = combined_df.index.str.replace('sensitivity_', '', regex=False).str.replace('.csv', '', regex=False)
 
+    # Add a column for row means (mean ST for each output)
+    combined_df['Threshold Value'] = combined_df.mean(axis=1)
 
-        sns.heatmap(
-                combined_df, 
-                cmap="Greens", 
-                linewidths=0.5, 
-                cbar=False, 
-                cbar_kws={
-                    "orientation": "horizontal", 
-                    "shrink": 0.5, 
-                    "pad": 0.3,
-                    "label": "Sensitivity Index (ST)"
-                }
-        )
+    # Order columns by the max across output for each parameter (column)
+    parameter_max = combined_df.max()
+    ordered_columns = parameter_max.sort_values(ascending=False).index.tolist()
+    combined_df = combined_df[ordered_columns]  # Reorder columns
 
-        
-        plt.title("")
-        plt.ylabel("Output", fontsize=24, fontweight='bold')
-        plt.xticks(rotation=45, fontsize=20, fontweight='bold')
-        plt.xlabel("Parameters", fontsize=24, fontweight='bold')
-        plt.yticks(rotation=0, fontsize=20, fontweight='bold') 
-        plt.tight_layout()
-        plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.png", dpi=700)
-        plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.pdf", dpi=700)
+    # Set row heights larger by increasing the figure height
+    row_height = 1  # Height per row in inches (increase for larger rows)
+    fig_height = max(6, row_height * len(combined_df.index))
+    plt.figure(figsize=(35, fig_height))
+
+    sns.heatmap(
+        combined_df,
+        cmap="Greens",
+        linewidths=1,
+        cbar=False,
+        cbar_kws={
+            "orientation": "horizontal",
+            "shrink": 0.7,
+            "pad": 0.3,
+            "label": "Sensitivity Index (ST)"
+        }
+    )
+
+    plt.title("")
+    plt.ylabel("Output", fontsize=28, fontweight='bold')
+    plt.xticks(rotation=45, fontsize=24)
+    plt.xlabel("Parameters", fontsize=28, fontweight='bold')
+    plt.yticks(rotation=0, fontsize=24)
+    plt.tight_layout()
+    plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.png", dpi=600)
+    plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.pdf", dpi=600)

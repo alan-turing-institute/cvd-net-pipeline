@@ -46,6 +46,7 @@ def test_calibrate_parameters_real():
                              output_keys=output_keys,
                              include_timeseries=False,
                              epsilon_obs_scale=0.05,
+                             dummy_data_dir='./tests/inputs_for_tests/calibrate_parameters_module/dummy_data/',
                              config=[])
 
         # Compare the output files to the expected output files
@@ -56,7 +57,7 @@ def test_calibrate_parameters_real():
             'real_data',
             'bayesian_calibration_results',
             '15_output_keys',
-            'calibration_20250826_150209'
+            'calibration_20250827_220413'
         )
         
         expected_posterior_covariance = pd.read_csv(os.path.join(expected_output_dir,

@@ -8,7 +8,13 @@ def analyse_giessen(file_path: str, data_type: str, gaussian_sigmas : list[float
     if data_type == 'synthetic':
 
         ar_file = pd.read_csv(f"{file_path}/pressure_traces_pat/all_pressure_traces.csv")
-
+        
+        # Flag and remove any negative pressure traces
+        negative_indices = rv_file[(rv_file < 0).any(axis=1)].index
+        if not negative_indices.empty:
+            print(f"Removing {len(negative_indices)} negative RV pressure traces at indices: {negative_indices.tolist()}")
+            rv_file = rv_file.drop(index=negative_indices).reset_index(drop=True)
+        
         # unpack sigmas
         sigma_filter_pressure, sigma_filter_dpdt, sigma_filter_d2pdt2 = gaussian_sigmas
 

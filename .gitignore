@@ -168,6 +168,8 @@ output_real/
 output_synthetic/
 output_synthetic_new_gaussian_sigmas/
 output_synthetic_old_gaussian_sigmas/
+dummy_data/output_dummy_data/simulations/
+dummy_data/output_dummy_data/figures/
 notebooks/scratchpad.ipynb
 output/
 CohortDataRaw/
@@ -175,6 +177,7 @@ CohortDataRaw2_17_keys/
 CohortDataRaw3/
 *.pyc
 logs/
+./tests/inputs_for_tests/calibrate_parameters_module/synthetic_data/output_64_9_params/simulations/
 
 # Ignore the PyPI configuration file
 .pypirc

@@ -18,17 +18,22 @@ def simulate_data(param_path: str,
     br.sample(n_samples)
 
     if not sample_parameters:
-        print("Simulating from calibrated parameters.")
-        posterior_samples = pd.read_csv(f"{output_path}/posterior_samples.csv") 
-
+        # print("Simulating from calibrated parameters.")
+        posterior_samples = pd.read_csv(f"{output_path}/cleaned_posterior_samples.csv") 
+        
         # remove any #s from column names
         posterior_samples.columns = posterior_samples.columns.str.lstrip('#').str.strip()
 
-        for i, col in enumerate(posterior_samples.columns):
-            br._samples.loc[:, col] = posterior_samples.loc[:,col]
+        # Align br._samples rows with those available in posterior_samples
+        br._samples = br._samples.loc[posterior_samples.index].reset_index(drop=True)
+       
+        # Copy posterior values into br._samples
+        for col in posterior_samples.columns:
+            if col in br._samples.columns:
+                br._samples.loc[:, col] = posterior_samples[col].values
             
-    col_test = [col for col in br._samples.columns if col in br._parameters_2_sample.keys()]
-    _pure_samples = br._samples[col_test].copy()
+    relevant_columns = [col for col in br._samples.columns if col in br._parameters_2_sample.keys()]
+    _pure_samples = br._samples[relevant_columns].copy()
 
     
     map_ = {
@@ -47,15 +52,12 @@ def simulate_data(param_path: str,
     br._samples.drop(['lv.td0', 'rv.td0'], axis=1, inplace=True)
 
     # get relevant columns and count them
-    relevant_columns = _pure_samples.columns.to_list()
-
     n_params = len(relevant_columns)
     br.map_vessel_volume()
 
     br.setup_model(model=KorakianitisMixedModel, po=KorakianitisMixedModel_parameters,
                    time_setup=TEMPLATE_TIME_SETUP_DICT)
 
-    input_header = ','.join(br.samples.columns)
     file_suffix  = f'_{n_samples}_{n_params}_params'
     
     # Save as CSV files 

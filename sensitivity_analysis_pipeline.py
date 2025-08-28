@@ -49,7 +49,8 @@ def run_pipeline(config):
 
     if "2" in steps:
         print("Step 2: Analysing Giessen (resample)")
-        analyse_giessen(output_dir_sims, data_type='synthetic',
+        analyse_giessen(file_path=output_dir_sims, 
+                        data_type='synthetic',
                         gaussian_sigmas=config.get('gaussian_sigmas')
         )
 
@@ -63,7 +64,8 @@ def run_pipeline(config):
         compute_pca(n_samples=n_samples, 
                     n_params=n_params, 
                     n_pca_components=n_pca_components,
-                    output_path=output_path)
+                    output_path=output_path,
+                    data_type='synthetic')
 
     if "4" in steps:
         print("Step 4: Building Emulator")

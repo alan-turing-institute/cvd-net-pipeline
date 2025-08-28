@@ -71,10 +71,6 @@ def select_feasible_traces(simulated_traces, output_path):
             pressure_traces_list_pat.append(pressure_trace_pat)
             pressure_traces_list_rv.append(pressure_trace_rv)
 
-    # Save the pressure traces to CSV files
-                # Save individual pressure trace to CSV with headers
-
-
     # Convert the list of pressure traces to a DataFrame
     pressure_traces_df_pat = pd.DataFrame(pressure_traces_list_pat, columns=headers)
     pressure_traces_df_rv = pd.DataFrame(pressure_traces_list_rv, columns=headers)

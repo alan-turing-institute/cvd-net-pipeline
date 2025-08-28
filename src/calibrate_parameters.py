@@ -15,6 +15,7 @@ def calibrate_parameters(data_type="synthetic",
                          output_keys:list=None,
                          include_timeseries:bool=True,
                          epsilon_obs_scale:float=0.05,
+                         dummy_data_dir:str=None,
                          config:dict=None):
 
     if data_type == "synthetic":
@@ -39,8 +40,8 @@ def calibrate_parameters(data_type="synthetic",
         print(f"Using trained emulators from: {emulator_path}/output_{n_samples}_{n_params}_params.")
 
     # Data
-    output_file = pd.read_csv(f"{dir_name}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
-
+    output_file = pd.read_csv(f"{dummy_data_dir}/output_dummy_data/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+    
     # Direcotry for saving results
     output_dir = f"{dir_name}/bayesian_calibration_results/"
 
@@ -65,7 +66,10 @@ def calibrate_parameters(data_type="synthetic",
 
     # Select emulators and data for specified output_keys
     emulator_output = emulators.loc[all_output_keys]
-    observation_data = output_file.loc[:, all_output_keys]
+    observation_data = output_file.loc[:, all_output_keys] 
+    true_input = pd.read_csv(f"{dummy_data_dir}/input_dummy_data.csv")
+    ##### attempt to change get truewaveform consitent
+    
 
     if data_type == "synthetic":
 
@@ -128,15 +132,26 @@ def calibrate_parameters(data_type="synthetic",
 
     if data_type == "synthetic":
         bc.samples_df.to_csv(f"{output_dir_bayesian}/posterior_samples.csv", index=False)
+        
+        # Remove negative samples
+        cleaned_samples = bc.samples_df[(bc.samples_df >= 0).all(axis=1)]
+
+         # Flag number of posterior samples that were removed during cleaning
+        missing_indices = set(bc.samples_df.index) - set(cleaned_samples.index)
+        if missing_indices:
+            print(f"The following posterior_samples were removed due to negativity: {sorted(missing_indices)}")
+            pd.Series(sorted(missing_indices)).to_csv(f"{output_dir_bayesian}/cleaned_posterior_samples_indices.csv", index=False)
+       
+        cleaned_samples.to_csv(f"{output_dir_bayesian}/cleaned_posterior_samples.csv", index=False)
 
     # Save the config file
     with open(os.path.join(output_dir_bayesian, 'used_config.json'), 'w') as f:
         json.dump(config, f, indent=4)
 
     if data_type == "synthetic":
-
+        
         # Plot the prior and posteior distributions
-        plot_utils.plot_posterior_distributions(input_params, 
+        plot_utils.plot_posterior_distributions(true_input, 
                                                 bc.mu_0,
                                                 bc.Sigma_0,
                                                 bc.Mu_post,
