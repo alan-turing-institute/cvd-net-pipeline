@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from utils.kf_emulator import KalmanFilterWithEmulator
+from utils.plot_utils import plot_kf_estimates
 
 def KFGiessenSETUP(n_samples:int=4096, 
                 n_params:int=9, 
@@ -82,5 +83,8 @@ def KFGiessenSETUP(n_samples:int=4096,
 
     # Run the filter
     estimates = kf.run(np.array(observation_data))
+
+    # Plot the results
+    plot_kf_estimates(estimates, param_names)
 
     return estimates
