@@ -23,6 +23,7 @@ class KalmanFilterWithEmulator:
         self.mu = mu_0
         self.Sigma = Sigma_0
 
+
     def step(self, y_t):
         """
         Perform one Kalman update step given observation y_t.
@@ -44,6 +45,7 @@ class KalmanFilterWithEmulator:
         self.Sigma = (np.eye(len(self.mu)) - K @ self.B) @ Sigma_pred
 
         return self.mu, self.Sigma
+
 
     def run(self, Y):
         """

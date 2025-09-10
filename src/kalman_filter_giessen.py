@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from utils.kf_emulator import KalmanFilterWithEmulator
 
 def KFGiessenSETUP(n_samples:int=4096, 
                 n_params:int=9, 
@@ -67,4 +68,19 @@ def KFGiessenSETUP(n_samples:int=4096,
     beta_matrix = np.array(beta_matrix)
     intercept = np.array(intercept).reshape(len(intercept), 1)
     
-    return beta_matrix, intercept, e_obs, epsilon_model, mu_0, Sigma_0, param_names, observation_data
+    # Process noise covariance
+    Q = np.eye(n_params) * 0.01
+
+    # Initialize the Kalman Filter with Emulator
+    kf = KalmanFilterWithEmulator(beta_matrix, 
+                                  intercept.flatten(), 
+                                  Q, 
+                                  e_obs, 
+                                  epsilon_model, 
+                                  mu_0.flatten(), 
+                                  Sigma_0)
+
+    # Run the filter
+    estimates = kf.run(np.array(observation_data))
+
+    return estimates
