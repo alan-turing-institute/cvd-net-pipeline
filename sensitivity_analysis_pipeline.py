@@ -74,7 +74,7 @@ def run_pipeline(config):
                        output_path=output_path, 
                        output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
-    if "5" in steps:
+    if "gsa" in steps:
         print("Step 5: Sensitivity Analysis")
         sensitivity_analysis(n_samples=n_samples,
                              n_params=n_params, 
