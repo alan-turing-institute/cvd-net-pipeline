@@ -11,7 +11,13 @@ import argparse
 
 def run_pipeline(config):
 
-    steps = config.get("steps", ["1", "2", "3", "4", "5", "6"])
+    steps = config.get("steps", ["sim",
+                                 "ag",
+                                 "pca",
+                                 "emu",
+                                 "cal",
+                                 "post_sim",
+                                 "post_res",])
 
     data_type = config.get("data_type", "synthetic")
 
@@ -24,7 +30,7 @@ def run_pipeline(config):
         # Parent folder for all simulations
         output_path = config.get("output_path")
 
-        if not "1" in steps:
+        if not "sim" in steps:
             # Get the n_params from the config if not provided by step 1
             n_params = config.get("n_params")
 
@@ -37,7 +43,7 @@ def run_pipeline(config):
 
         os.makedirs(output_path, exist_ok=True)
 
-        if "1" in steps:
+        if "sim" in steps:
             print("Step 1: Simulating Data")
 
             if "n_params" in locals():
@@ -53,14 +59,14 @@ def run_pipeline(config):
                 sample_parameters=True
             )
 
-        if "2" in steps:
+        if "ag" in steps:
             print("Step 2: Analysing Giessen (resample)")
             analyse_giessen(file_path=output_dir_sims,
                             data_type=data_type,
                             gaussian_sigmas=config.get('gaussian_sigmas'),
             )
 
-        if "3" in steps:
+        if "pca" in steps:
             print("Step 3: Compute PCA")
 
             n_pca_components = config.get("n_pca_components", 10)
@@ -73,7 +79,7 @@ def run_pipeline(config):
                         output_path=output_path,
                         data_type=data_type)
 
-        if "4" in steps:
+        if "emu" in steps:
             print("Step 4: Building Emulator")
             output_keys = config.get("output_keys", None)
             build_emulator(n_samples=n_samples,
@@ -88,7 +94,7 @@ def run_pipeline(config):
                                  n_params=n_params, 
                                  output_path=output_path)
 
-        if "5" in steps:
+        if "cal" in steps:
             print("Step 5: Calibrating parameters using config output keys")
 
             output_keys = config.get("output_keys")
@@ -112,11 +118,11 @@ def run_pipeline(config):
                                         dummy_data_dir=dummy_data_dir,
                                         config=config)
 
-        if "6" in steps:
+        if "post_sim" in steps:
             print("Step 6: Simulating posterior pressure waves.")
         
         
-            if not "5" in steps:
+            if not "cal" in steps:
                 output_dir_bayesian = config.get("output_dir_bayesian")
                 print(f"Reading parameter file from {output_dir_bayesian} as pre-defined in the configuration file.")
 
@@ -127,10 +133,10 @@ def run_pipeline(config):
                 sample_parameters = False
             )
 
-        if "7" in steps:
+        if "post_res" in steps:
             print("Step 7: Resampling posterior pressure waves.")
 
-            if not "6" in steps:
+            if not "post_sim" in steps:
                 output_dir_bayesian = config.get("output_dir_bayesian")
                 print(f"Loading posterior samples from {output_dir_bayesian} as pre-defined in the configuration file.")
 
@@ -153,13 +159,13 @@ def run_pipeline(config):
         # Define the output directory for the current data
         print("Data directory is: ", output_path)
         
-        if "2" in steps:
+        if "ag" in steps:
             print("Step 2: Analysing Giessen (resample)")
             analyse_giessen(file_path=output_path,
                             data_type=data_type,
                             gaussian_sigmas=config.get('gaussian_sigmas'))
 
-        if "3" in steps:
+        if "pca" in steps:
             print("Step 3: Compute PCA")
 
             n_pca_components = config.get("n_pca_components", 10)
@@ -170,7 +176,7 @@ def run_pipeline(config):
                         output_path=output_path,
                         data_type=data_type,)
 
-        if "5" in steps:
+        if "cal" in steps:
             print("Step 5: Calibrating parameters using config output keys")
 
             output_keys = config.get("output_keys")
