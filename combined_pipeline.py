@@ -17,7 +17,7 @@ def run_pipeline(config):
                                  "emu",
                                  "cal",
                                  "post_sim",
-                                 "post_res",])
+                                 "post_res"])
 
     data_type = config.get("data_type", "synthetic")
 
