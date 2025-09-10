@@ -4,6 +4,7 @@ from analyse_giessen import analyse_giessen
 from compute_pca import compute_pca
 from build_emulator import build_emulator
 from calibrate_parameters import calibrate_parameters
+from sensitivity_analysis import sensitivity_analysis
 from utils import plot_utils
 import os
 import argparse
@@ -18,7 +19,7 @@ def run_pipeline(config):
 
         print("Processing the pipeline for synthetic data.")
 
-        n_samples = config.get("n_samples", 5000)
+        n_samples = config.get("n_samples", 2048)
 
         # Parent folder for all simulations
         output_path = config.get("output_path")
@@ -74,12 +75,18 @@ def run_pipeline(config):
 
         if "4" in steps:
             print("Step 4: Building Emulator")
-            output_keys = config.get("output_keys")
+            output_keys = config.get("output_keys", None)
             build_emulator(n_samples=n_samples,
                         n_params=n_params, 
                         output_path=output_path, 
                         output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv",
                         output_keys_red=output_keys)
+
+        if "gsa" in steps:
+            print("Step GSA: Global Sensitivity Analysis")
+            sensitivity_analysis(n_samples=n_samples,
+                                 n_params=n_params, 
+                                 output_path=output_path)
 
         if "5" in steps:
             print("Step 5: Calibrating parameters using config output keys")
