@@ -362,11 +362,11 @@ def plot_parameter_trajectories(Sigma_post,
             return data[:num_windows * self.window_size].reshape(num_windows, self.window_size, -1).mean(axis=1)
 
     # Initialize resolution controller
-    window_size = 5
+    window_size = 100
     res_controller = ResolutionController(window_size)
 
     # Define time range before downsampling
-    time_range = (1, 4000)  # Specify the indices from the original data
+    time_range = (1, 105000)  # Specify the indices from the original data
 
     # Ensure posterior_variances has shape (3888, p)
     posterior_variances_corrected = np.array(Sigma_post).diagonal().reshape(1, -1)  # (1, p)

@@ -17,7 +17,11 @@ def data_type(request):
 @pytest.fixture
 def cleanup_output_file(data_type):
     """Cleanup fixture that handles output files for both data types."""
-    output_file = f"tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/{data_type}_data/waveform_resampled_all_pressure_traces_rv.csv"
+
+    if data_type == "real":
+        output_file = f"tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/{data_type}_data/pressure_traces_rv/waveform_resampled_all_pressure_traces_rv.csv"
+    elif data_type == "synthetic":
+        output_file = f"tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/{data_type}_data/waveform_resampled_all_pressure_traces_rv.csv"
     yield output_file, data_type
     if os.path.exists(output_file):
         os.remove(output_file)
@@ -34,14 +38,22 @@ def test_analyse_giessen_valid_input(cleanup_output_file):
     """Test analyse_giessen with valid input for both synthetic and real data."""
     output_file, data_type = cleanup_output_file
     
+    filepath = f'tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/{data_type}_data/'
+
+    if data_type == "real":
+        filepath += "pressure_traces_rv/"
+
     # Call the function with the input file
-    analyse_giessen(file_path=f'tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/{data_type}_data/', 
+    analyse_giessen(file_path=filepath, 
                     data_type=data_type,
                     gaussian_sigmas=[6., 4., 2.])
 
     # Check if the output data matches the expected output
     output_data = pd.read_csv(output_file)
-    expected_output = pd.read_csv(f'tests/expected_outputs/analyse_giessen_module/output_64_9_params/{data_type}_data/waveform_resampled_all_pressure_traces_rv.csv')
+    if data_type == "real":
+        expected_output = pd.read_csv(f'tests/expected_outputs/analyse_giessen_module/output_64_9_params/{data_type}_data/pressure_traces_rv/waveform_resampled_all_pressure_traces_rv.csv')
+    elif data_type == "synthetic":
+        expected_output = pd.read_csv(f'tests/expected_outputs/analyse_giessen_module/output_64_9_params/{data_type}_data/waveform_resampled_all_pressure_traces_rv.csv')   
     pd.testing.assert_frame_equal(output_data[expected_output.columns], expected_output)
 
 
