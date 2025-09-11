@@ -43,7 +43,8 @@ def process_emulator(emulator_name,
 
     # Set and analyze results
     problem.set_results(Y_reshape)
-    sobol_indices = problem.analyze_sobol(print_to_console=False)
+    sobol_indices = problem.analyze_sobol(print_to_console=False,
+                                          seed=seed)
 
     # Sort results
     total, first, second = sobol_indices.to_df()
