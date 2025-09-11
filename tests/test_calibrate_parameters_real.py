@@ -5,6 +5,12 @@ from calibrate_parameters import calibrate_parameters
 import tempfile
 import shutil
 import glob
+from tests.test_constants import (
+    OUTPUT_KEYS_FOR_TESTS, 
+    DEFAULT_N_SAMPLES, 
+    DEFAULT_N_PARAMS, 
+)
+
 
 def test_calibrate_parameters_real():
     # Define test parameters
@@ -12,26 +18,9 @@ def test_calibrate_parameters_real():
     with tempfile.TemporaryDirectory() as tmp_path:
         print(f"Temporary directory created at: {tmp_path}")
 
-        output_keys = [
-            "t_max_dpdt", 
-            "a_epad",
-            "epad", 
-            "s_a_epad", 
-            "s_epad",
-            "min_dpdt", 
-            "max_dpdt", 
-            "A_p", 
-            "P_max", 
-            "esp", 
-            "sys",
-            "iT", 
-            "PC1", 
-            "PC2", 
-            "PC3"
-        ]
-
-        n_samples = 64
-        n_params = 9
+        output_keys = OUTPUT_KEYS_FOR_TESTS
+        n_samples = DEFAULT_N_SAMPLES
+        n_params = DEFAULT_N_PARAMS
 
         # Copy all the expected input files from /tests/inputs_for_tests/calibrate_parameters_module/ to the temporary directory
         shutil.copytree('./tests/inputs_for_tests/calibrate_parameters_module/real_data',
