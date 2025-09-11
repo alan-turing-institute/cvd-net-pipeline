@@ -46,7 +46,6 @@ def test_calibrate_parameters_real():
                              output_keys=output_keys,
                              include_timeseries=False,
                              epsilon_obs_scale=0.05,
-                             dummy_data_dir='./tests/inputs_for_tests/calibrate_parameters_module/dummy_data/',
                              config=[])
 
         # Compare the output files to the expected output files
