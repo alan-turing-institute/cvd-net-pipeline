@@ -5,6 +5,13 @@ from calibrate_parameters import calibrate_parameters
 import tempfile
 import shutil
 import glob
+from tests.test_constants import (
+    OUTPUT_KEYS_FOR_TESTS_FOR_REAL_DATA_CALIBRATION, 
+    DEFAULT_N_SAMPLES, 
+    DEFAULT_N_PARAMS, 
+    DEFAULT_EPSILON_OBS_SCALE
+)
+
 
 def test_calibrate_parameters_real():
     # Define test parameters
@@ -12,52 +19,35 @@ def test_calibrate_parameters_real():
     with tempfile.TemporaryDirectory() as tmp_path:
         print(f"Temporary directory created at: {tmp_path}")
 
-        output_keys = [
-            "t_max_dpdt", 
-            "a_epad",
-            "epad", 
-            "s_a_epad", 
-            "s_epad",
-            "min_dpdt", 
-            "max_dpdt", 
-            "A_p", 
-            "P_max", 
-            "esp", 
-            "sys",
-            "iT", 
-            "PC1", 
-            "PC2", 
-            "PC3"
-        ]
+        output_keys = OUTPUT_KEYS_FOR_TESTS_FOR_REAL_DATA_CALIBRATION
+        n_samples = DEFAULT_N_SAMPLES
+        n_params = DEFAULT_N_PARAMS
 
-        n_samples = 64
-        n_params = 9
-
-        # Copy all the expected input files from /tests/inputs_for_tests/calibrate_parameters_module/ to the temporary directory
-        shutil.copytree('./tests/inputs_for_tests/calibrate_parameters_module/real_data',
-                        tmp_path,
-                        dirs_exist_ok=True)
+        # Copy all the expected input files to the temporary directory
+        emulator_path = './tests/known_good_outputs/synthetic_data/'
+        # From emulator_path, copy the input file: pure_input_64_9_params.csv
+        shutil.copy(os.path.join(emulator_path, f'pure_input_{n_samples}_{n_params}_params.csv'), tmp_path)
+        # Now copy over the waveform data:
+        shutil.copy('./tests/known_good_outputs/real_data/waveform_resampled_all_pressure_traces_rv_with_pca.csv', tmp_path)
 
         calibrate_parameters(data_type="real",
                              n_samples=n_samples,
                              n_params=n_params,
                              output_path=str(tmp_path),
-                             emulator_path='./tests/inputs_for_tests/calibrate_parameters_module/real_data',
+                             emulator_path=emulator_path,
                              output_keys=output_keys,
                              include_timeseries=False,
-                             epsilon_obs_scale=0.05,
-                             dummy_data_dir='./tests/inputs_for_tests/calibrate_parameters_module/dummy_data/',
+                             epsilon_obs_scale=DEFAULT_EPSILON_OBS_SCALE,
                              config=[])
 
         # Compare the output files to the expected output files
 
         # Load the expected output ----------------------------------------------------------------------
         expected_output_dir = os.path.join(
-            './tests/expected_outputs/calibrate_parameters_module',
-            'real_data',
+            './tests/known_good_outputs/real_data/',
             'bayesian_calibration_results',
             '15_output_keys',
-            'calibration_20250827_220413'
+            'calibration_20250911_133944'
         )
         
         expected_posterior_covariance = pd.read_csv(os.path.join(expected_output_dir,

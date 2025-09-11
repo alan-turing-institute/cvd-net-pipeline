@@ -25,6 +25,12 @@ def calibrate_parameters(data_type="synthetic",
         dir_name = f"{output_path}/output{file_suffix}"
 
         input_params = pd.read_csv(f'{output_path}/pure_input{file_suffix}.csv')
+        
+        # True input parameters of dummy data
+        true_input = pd.read_csv(f"{dummy_data_dir}/input_dummy_data.csv")
+
+        # Synthetic dummy data (to calibrate on)
+        output_file = pd.read_csv(f"{dummy_data_dir}/output_dummy_data/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
         # emulators
         emulators = pd.read_pickle(f"{dir_name}/emulators/linear_models_and_r2_scores_{n_samples}.pkl")
@@ -33,14 +39,16 @@ def calibrate_parameters(data_type="synthetic",
 
         dir_name = output_path
 
+        # Real data (to calibrate on)
+        output_file = pd.read_csv(f"{dir_name}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+
         input_params = pd.read_csv(f'{emulator_path}/pure_input_{n_samples}_{n_params}_params.csv')
 
         # emulators
         emulators = pd.read_pickle(f"{emulator_path}/output_{n_samples}_{n_params}_params/emulators/linear_models_and_r2_scores_{n_samples}.pkl")
         print(f"Using trained emulators from: {emulator_path}/output_{n_samples}_{n_params}_params.")
 
-    # Data
-    output_file = pd.read_csv(f"{dummy_data_dir}/output_dummy_data/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+    
     
     # Direcotry for saving results
     output_dir = f"{dir_name}/bayesian_calibration_results/"
@@ -67,8 +75,8 @@ def calibrate_parameters(data_type="synthetic",
     # Select emulators and data for specified output_keys
     emulator_output = emulators.loc[all_output_keys]
     observation_data = output_file.loc[:, all_output_keys] 
-    true_input = pd.read_csv(f"{dummy_data_dir}/input_dummy_data.csv")
-    ##### attempt to change get truewaveform consitent
+    
+   
     
 
     if data_type == "synthetic":
