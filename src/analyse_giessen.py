@@ -3,10 +3,10 @@ from AnalysisGiessen import analyseGiessen
 
 def analyse_giessen(file_path: str, data_type: str, gaussian_sigmas : list[float]):
 
-    rv_file = pd.read_csv(f"{file_path}/pressure_traces_rv/all_pressure_traces.csv")
+    
     
     if data_type == 'synthetic':
-
+        rv_file = pd.read_csv(f"{file_path}/pressure_traces_rv/all_pressure_traces.csv")
         ar_file = pd.read_csv(f"{file_path}/pressure_traces_pat/all_pressure_traces.csv")
         
         # Flag and remove any negative pressure traces
@@ -62,6 +62,9 @@ def analyse_giessen(file_path: str, data_type: str, gaussian_sigmas : list[float
 
     elif data_type == 'real':
         
+        rv_file = pd.read_csv(f"{file_path}/raw_data.csv")
+
+         # Here takes all Pressure traces from step 1
         rv_file[["Pressure", "cPressure"]] = rv_file[["Pressure [mmHg]", "Compensated Pressure [mmHg]"]]
 
         ag = analyseGiessen(df=rv_file)
