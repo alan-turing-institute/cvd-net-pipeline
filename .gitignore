@@ -175,6 +175,7 @@ output/
 CohortDataRaw/
 CohortDataRaw2_17_keys/
 CohortDataRaw3/
+CohortDataRaw4/
 *.pyc
 logs/
 ./tests/inputs_for_tests/calibrate_parameters_module/synthetic_data/output_64_9_params/simulations/

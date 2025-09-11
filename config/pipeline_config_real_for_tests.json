@@ -1,0 +1,35 @@
+{
+  "data_type": "real",
+  "input_parameters": "parameters_pulmonary_sensitive_summarystats.json",
+  "output_path": "CohortDataRaw/output_real/pat_4/pressure_traces_rv/",
+  "steps": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5"
+  ],
+  "n_pca_components": 10,
+  "n_samples": 64,
+  "n_params": 9,
+  "output_keys": [
+      "edp",
+      "dia",
+      "epad",
+      "eivc",
+      "sys",
+      "esp",
+      "a_epad",
+      "P_max",
+      "EF",
+      "Ees/Ea",
+      "iT",
+      "PC1",
+      "PC2",
+      "PC3"
+  ],
+  "include_timeseries": 0,
+  "epsilon_obs_scale": 0.05,
+  "emulator_path": "output_synthetic/",
+  "dummy_data_dir": "dummy_data"
+}
