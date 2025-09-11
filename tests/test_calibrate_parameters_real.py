@@ -6,7 +6,7 @@ import tempfile
 import shutil
 import glob
 from tests.test_constants import (
-    OUTPUT_KEYS_FOR_TESTS, 
+    OUTPUT_KEYS_FOR_TESTS_FOR_REAL_DATA_CALIBRATION, 
     DEFAULT_N_SAMPLES, 
     DEFAULT_N_PARAMS, 
     DEFAULT_EPSILON_OBS_SCALE
@@ -19,7 +19,7 @@ def test_calibrate_parameters_real():
     with tempfile.TemporaryDirectory() as tmp_path:
         print(f"Temporary directory created at: {tmp_path}")
 
-        output_keys = OUTPUT_KEYS_FOR_TESTS
+        output_keys = OUTPUT_KEYS_FOR_TESTS_FOR_REAL_DATA_CALIBRATION
         n_samples = DEFAULT_N_SAMPLES
         n_params = DEFAULT_N_PARAMS
 
