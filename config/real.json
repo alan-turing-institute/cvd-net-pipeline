@@ -1,10 +1,8 @@
 {
   "data_type": "real",
   "input_parameters": "parameters_pulmonary_sensitive_summarystats.json",
-  "output_path": "CohortDataRaw3/output_real/pat_4",
+  "output_path": "CohortDataRaw4/output_real/pat_4",
   "steps": [
-    "ag",
-    "pca",
     "cal"
   ],
   "n_pca_components": 10,
