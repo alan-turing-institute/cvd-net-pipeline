@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from utils.kf_emulator import KalmanFilterWithEmulator
 from utils.plot_utils import plot_kf_estimates
+import os
 
 def KFGiessenSETUP(n_samples:int=4096, 
                 n_params:int=9, 
@@ -90,6 +91,7 @@ def KFGiessenSETUP(n_samples:int=4096,
     # Define the output directory name, appending the number of output keys to the directory name and including a timestamp
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_dir_kf = f"{output_path}/kf_results/{len(all_output_keys)}_output_keys/calibration_{timestamp}"
+    os.makedirs(output_dir_kf, exist_ok=True)
 
     # Save the estimated parameters to a CSV file. First, turn the mu entries into a DataFrame
     mu_estimates_df = pd.DataFrame(
