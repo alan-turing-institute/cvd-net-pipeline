@@ -26,7 +26,7 @@ def KFGiessenSETUP(n_samples:int=4096,
 
     if include_timeseries:
         all_output_keys = output_file.iloc[:, :101].columns.tolist() + output_keys
-        print("Including time-series in calibraiton as specified in config file.")
+        print("Including time-series in calibration as specified in config file.")
 
         # Build the diagonal entries: 101 ones followed by the std devs
         # 101 ones are scaled by epsilon_obs_scale so they will equal 
