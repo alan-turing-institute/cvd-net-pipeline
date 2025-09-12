@@ -524,7 +524,6 @@ def plot_kf_estimates(estimates,
 
     plt.tight_layout()
     plt.subplots_adjust(right=0.85)
-    plt.show()
 
     # Save the figure
     fig.savefig(f'{output_path_figures}/kf_parameter_estimates.png', dpi=300)

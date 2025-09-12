@@ -91,7 +91,7 @@ def KFGiessenSETUP(n_samples:int=4096,
 
     # Define the output directory name, appending the number of output keys to the directory name and including a timestamp
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_dir_kf = f"{output_path}/kf_results/{len(all_output_keys)}_output_keys/calibration_{timestamp}"
+    output_dir_kf = f"{output_path}/kf_calibration_results/{len(all_output_keys)}_output_keys/calibration_{timestamp}"
     os.makedirs(output_dir_kf, exist_ok=True)
 
     # Save the estimated parameters to a CSV and npy files. First, turn the mu entries into a DataFrame
