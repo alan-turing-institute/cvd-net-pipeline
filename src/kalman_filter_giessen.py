@@ -4,6 +4,7 @@ import pandas as pd
 from utils.kf_emulator import KalmanFilterWithEmulator
 from utils.plot_utils import plot_kf_estimates
 import os
+import pickle
 
 def KFGiessenSETUP(n_samples:int=4096, 
                 n_params:int=9, 
@@ -93,15 +94,20 @@ def KFGiessenSETUP(n_samples:int=4096,
     output_dir_kf = f"{output_path}/kf_results/{len(all_output_keys)}_output_keys/calibration_{timestamp}"
     os.makedirs(output_dir_kf, exist_ok=True)
 
-    # Save the estimated parameters to a CSV file. First, turn the mu entries into a DataFrame
+    # Save the estimated parameters to a CSV and npy files. First, turn the mu entries into a DataFrame
     mu_estimates_df = pd.DataFrame(
         np.array([estimate[0] for estimate in estimates]), 
         columns=param_names
     )
-    mu_estimates_df.to_csv(f"{output_dir_kf}/kf_estimated_parameters.csv", index=False)
+    sigma_estimates = np.array([estimate[1] for estimate in estimates])
 
-    # Save the whole estimates (mean and covariance) to a npy file
-    np.save(f"{output_dir_kf}/kf_estimates.npy", estimates)
+    # Save to files
+    mu_estimates_df.to_csv(f"{output_dir_kf}/kf_estimated_means.csv", index=False)
+    np.save(f"{output_dir_kf}/kf_estimated_covariances.npy", sigma_estimates)
+
+    # Save the entire estimates list as a pickle file
+    with open(f"{output_dir_kf}/kf_estimated_means_and_covariances.pkl", 'wb') as f:
+        pickle.dump(estimates, f)
 
     # Plot the results
     plot_kf_estimates(estimates=estimates, 
