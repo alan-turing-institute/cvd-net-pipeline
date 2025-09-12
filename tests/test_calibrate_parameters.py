@@ -5,6 +5,12 @@ from calibrate_parameters import calibrate_parameters
 import tempfile
 import shutil
 import glob
+from tests.test_constants import (
+    OUTPUT_KEYS_FOR_TESTS_FOR_SYNTHETIC_DATA_CALIBRATION, 
+    DEFAULT_N_SAMPLES, 
+    DEFAULT_N_PARAMS, 
+    DEFAULT_EPSILON_OBS_SCALE
+)
 
 def test_calibrate_parameters():
     # Define test parameters
@@ -12,14 +18,9 @@ def test_calibrate_parameters():
     with tempfile.TemporaryDirectory() as tmp_path:
         print(f"Temporary directory created at: {tmp_path}")
 
-        output_keys = [
-            "t_max_dpdt", "a_epad", "epad", "s_a_epad", "s_epad",
-            "min_dpdt", "max_dpdt", "A_p", "P_max", "esp", "sys",
-            "EF", "Ees/Ea", "iT", "PC1", "PC2", "PC3"
-        ]
-
-        n_samples = 64
-        n_params = 9
+        output_keys = OUTPUT_KEYS_FOR_TESTS_FOR_SYNTHETIC_DATA_CALIBRATION
+        n_samples = DEFAULT_N_SAMPLES
+        n_params = DEFAULT_N_PARAMS
 
         # Copy all the expected input files from /tests/inputs_for_tests/calibrate_parameters_module/ to the temporary directory
         shutil.copytree('./tests/inputs_for_tests/calibrate_parameters_module/synthetic_data',
@@ -32,7 +33,7 @@ def test_calibrate_parameters():
                              output_path=str(tmp_path),
                              output_keys=output_keys,
                              include_timeseries=False,
-                             epsilon_obs_scale=0.05,
+                             epsilon_obs_scale=DEFAULT_EPSILON_OBS_SCALE,
                              dummy_data_dir='./tests/inputs_for_tests/calibrate_parameters_module/dummy_data/',
                              config=[])
 

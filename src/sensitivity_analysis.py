@@ -2,10 +2,72 @@ import os
 import numpy as np
 import pandas as pd
 from SALib import ProblemSpec
+from multiprocessing import Pool
+from functools import partial
+
+def process_emulator(emulator_name,
+                     pure_input_params,
+                     emulators,
+                     output_dir,
+                     seed):
+    """Process a single emulator for sensitivity analysis"""
+    print(f"Processing {emulator_name}...")
+
+    # Define problem spec for sensitivity analysis
+    problem = ProblemSpec({
+        'num_vars': len(pure_input_params.columns),
+        'names': pure_input_params.columns.tolist(),
+        'bounds': pure_input_params.describe().loc[['min', 'max']].T.values,
+        "outputs": [emulator_name],
+    })
+
+    linear_model = emulators.loc[emulator_name, 'Model']
+
+    # Sample inputs
+    problem.sample_sobol(1024, seed=seed)
+    X_samples = problem.samples
+    
+    # Extract emulator coefficients and intercept
+    beta_matrix = np.array(linear_model.coef_)
+    intercept = np.array(linear_model.intercept_)
+
+    # Ensure correct shape
+    if beta_matrix.ndim == 1:
+        beta_matrix = beta_matrix.reshape(1, -1)
+    if intercept.ndim == 0:
+        intercept = np.array([intercept])
+    
+    # Compute emulator outputs
+    Y_samples = X_samples @ beta_matrix.T + intercept
+    Y_reshape = Y_samples.reshape(-1)
+
+    # Set and analyze results
+    problem.set_results(Y_reshape)
+    sobol_indices = problem.analyze_sobol(print_to_console=False,
+                                          seed=seed)
+
+    # Sort results
+    total, first, second = sobol_indices.to_df()
+    total.sort_values('ST', inplace=True, ascending=False)
+
+    # Save results
+    result_data = pd.DataFrame({
+        "Parameter": total.index,
+        "ST": total['ST'],
+        "ST_conf": total['ST_conf']
+    })
+    save_emulator_name = emulator_name.replace("/", "_")
+    result_file = os.path.join(output_dir, f"sensitivity_{save_emulator_name}.csv")
+    result_data.to_csv(result_file, index=False)
+    
+    return f"Completed {emulator_name}"    
+
 
 def sensitivity_analysis(n_samples: int, 
                          n_params: int, 
-                         output_path: str):
+                         output_path: str,
+                         seed: int = 42,
+                         n_processes: int = None):
 
     file_suffix = f'_{n_samples}_{n_params}_params'
 
@@ -22,58 +84,20 @@ def sensitivity_analysis(n_samples: int,
     output_dir = f"{output_path}/output{file_suffix}/sensitivity_analysis_results"
     os.makedirs(output_dir, exist_ok=True)
 
-    # Iterate over each emulator
-    for emulator_name in emulator_list:
-        print(f"Processing {emulator_name}...")
+    # Create partial function with fixed arguments
+    process_func = partial(
+        process_emulator,
+        pure_input_params=pure_input_params,
+        emulators=emulators,
+        output_dir=output_dir,
+        seed=seed
+    )
 
-        # Define problem spec for sensitivity analysis
-        problem = ProblemSpec({
-            'num_vars': len(pure_input_params.columns),
-            'names': pure_input_params.columns.tolist(),
-            'bounds': pure_input_params.describe().loc[['min', 'max']].T.values,
-            "outputs": [emulator_name],
-        })
+    # Use multiprocessing
+    with Pool(processes=n_processes) as pool:
+        results = pool.map(process_func, emulator_list)
 
-        linear_model = emulators.loc[emulator_name, 'Model']
-
-        # Sample inputs
-        problem.sample_sobol(1024)
-        X_samples = problem.samples
-        
-        # Extract emulator coefficients and intercept
-        beta_matrix = np.array(linear_model.coef_)  # (num_outputs, num_vars) or (num_vars,)
-        intercept = np.array(linear_model.intercept_)  # (num_outputs,) or scalar
-
-        # Ensure correct shape
-        if beta_matrix.ndim == 1:
-            beta_matrix = beta_matrix.reshape(1, -1)  # Convert (num_vars,) → (1, num_vars)
-        if intercept.ndim == 0:
-            intercept = np.array([intercept])  # Convert scalar → (1,)
-        
-        # Compute emulator outputs
-        Y_samples = X_samples @ beta_matrix.T + intercept  # (num_samples, num_outputs)
-
-        # Flatten if necessary
-        Y_reshape = Y_samples.reshape(-1)
-        #print(f"Y_reshape shape: {Y_reshape.shape}")
-
-        # Set and analyze results
-        problem.set_results(Y_reshape)
-        sobol_indices = problem.analyze_sobol(print_to_console=False)
-
-        # Sort results
-        total, first, second = sobol_indices.to_df()
-        total.sort_values('ST', inplace=True, ascending=False)
-
-        # Save results
-        result_data = pd.DataFrame({
-            "Parameter": total.index,
-            "ST": total['ST'],
-            "ST_conf": total['ST_conf']
-        })
-        save_emulator_name = emulator_name.replace("/", "_") # Avoid slashes in file names
-
-        result_file = os.path.join(output_dir, f"sensitivity_{save_emulator_name}.csv")
-        result_data.to_csv(result_file, index=False)
+    for result in results:
+        print(result)   
 
     print("All analyses completed.")

@@ -93,7 +93,8 @@ def run_pipeline(config):
             print("Step GSA: Global Sensitivity Analysis")
             sensitivity_analysis(n_samples=n_samples,
                                  n_params=n_params, 
-                                 output_path=output_path)
+                                 output_path=output_path,
+                                 n_processes=None)
 
         if "cal" in steps:
             print("Step 5: Calibrating parameters using config output keys")
