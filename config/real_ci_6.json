@@ -3,9 +3,9 @@
   "input_parameters": "parameters_sensitive_ci_6.json",
   "output_path": "CohortDataRaw/output_real/pat_4",
   "steps": [
-    "2",
-    "3",
-    "5"
+    "ag",
+    "pca",
+    "cal"
   ],
   "n_pca_components": 10,
   "n_samples": 4096,

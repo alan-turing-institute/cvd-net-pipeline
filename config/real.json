@@ -3,7 +3,9 @@
   "input_parameters": "parameters_sensitive_pca123.json",
   "output_path": "CohortDataRaw2/output_real/pat_6_downsample_10",
   "steps": [
-    "5"
+    "ag",
+    "pca",
+    "cal"
   ],
   "n_pca_components": 10,
   "n_samples": 4096,
