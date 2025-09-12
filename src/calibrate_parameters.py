@@ -48,8 +48,6 @@ def calibrate_parameters(data_type="synthetic",
         emulators = pd.read_pickle(f"{emulator_path}/output_{n_samples}_{n_params}_params/emulators/linear_models_and_r2_scores_{n_samples}.pkl")
         print(f"Using trained emulators from: {emulator_path}/output_{n_samples}_{n_params}_params.")
 
-    
-    
     # Direcotry for saving results
     output_dir = f"{dir_name}/bayesian_calibration_results/"
 
@@ -76,9 +74,6 @@ def calibrate_parameters(data_type="synthetic",
     emulator_output = emulators.loc[all_output_keys]
     observation_data = output_file.loc[:, all_output_keys] 
     
-   
-    
-
     if data_type == "synthetic":
 
         # Create the diagonal matrix

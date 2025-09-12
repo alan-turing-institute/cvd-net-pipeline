@@ -86,17 +86,24 @@ def KFGiessenSETUP(n_samples:int=4096,
     estimates = kf.run(np.array(observation_data))
 
     # Save the resulting estimates
+
     # Define the output directory name, appending the number of output keys to the directory name and including a timestamp
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_dir_kf = f"{output_path}/kf_results/{len(all_output_keys)}_output_keys/calibration_{timestamp}"
 
-    # Save the estimated parameters to a CSV file
-    mu_estimates = pd.DataFrame([mu.flatten() for mu, _ in estimates], columns=param_names)
-    mu_estimates.to_csv(f"{output_dir_kf}/kf_parameter_estimates.csv", index=False)
-    print(f"Kalman filter parameter estimates saved to {output_dir_kf}/kf_parameter_estimates.csv")
+    # Save the estimated parameters to a CSV file. First, turn the mu entries into a DataFrame
+    mu_estimates_df = pd.DataFrame(
+        np.array([estimate[0] for estimate in estimates]), 
+        columns=param_names
+    )
+    mu_estimates_df.to_csv(f"{output_dir_kf}/kf_estimated_parameters.csv", index=False)
 
+    # Save the whole estimates (mean and covariance) to a npy file
+    np.save(f"{output_dir_kf}/kf_estimates.npy", estimates)
 
     # Plot the results
-    plot_kf_estimates(estimates, param_names)
+    plot_kf_estimates(estimates=estimates, 
+                      param_names=param_names,
+                      output_path=output_dir_kf)
 
     return estimates

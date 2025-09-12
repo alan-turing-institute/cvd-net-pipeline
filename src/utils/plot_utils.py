@@ -467,7 +467,12 @@ def plot_sensitivity_heatmap(directory, saveto, selected_keys=[]):
     plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.png", dpi=600)
     plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.pdf", dpi=600)
 
-def plot_kf_estimates(estimates, param_names, confidence_level=0.95, figsize=(10, 0.7), cmap='tab10'):
+def plot_kf_estimates(estimates, 
+                      param_names, 
+                      confidence_level=0.95, 
+                      figsize=(10, 0.7), 
+                      cmap='tab10',
+                      output_path=None):
     """
     Plots Kalman filter parameter estimates with confidence intervals, stacked vertically in one figure.
     
@@ -477,7 +482,12 @@ def plot_kf_estimates(estimates, param_names, confidence_level=0.95, figsize=(10
     - confidence_level: Confidence level for intervals (default=0.95).
     - figsize: Tuple specifying width and height per subplot row.
     - cmap: Matplotlib colormap name for assigning colours.
+    - output_path: directory to save the plots. A subdirectory will be created called "figures"
     """
+
+    output_path_figures = os.path.join(output_path,"figures")
+    os.makedirs(output_path_figures, exist_ok=True)
+
     n_timesteps = len(estimates)
     n_params = len(param_names)
 
@@ -515,4 +525,7 @@ def plot_kf_estimates(estimates, param_names, confidence_level=0.95, figsize=(10
     plt.tight_layout()
     plt.subplots_adjust(right=0.85)
     plt.show()
+
+    # Save the figure
+    fig.savefig(f'{output_path_figures}/kf_parameter_estimates.png', dpi=300)
 
