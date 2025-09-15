@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler, PowerTransformer
 from sklearn.pipeline import Pipeline
-from utils import plot_utils
+from cvdnet_pipeline.utils import plot_utils
 
 
 def compute_pca(n_samples:int=50, 

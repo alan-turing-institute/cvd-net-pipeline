@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 import os
 import numpy as np
-from build_emulator import build_emulator
+from cvdnet_pipeline.build_emulator import build_emulator
 import shutil
 
 @pytest.fixture

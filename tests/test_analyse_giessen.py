@@ -1,7 +1,7 @@
 import pytest
 import pandas as pd
 import os
-from analyse_giessen import analyse_giessen
+from cvdnet_pipeline.analyse_giessen import analyse_giessen
 
 
 # Parametrize data types for testing both synthetic and real data

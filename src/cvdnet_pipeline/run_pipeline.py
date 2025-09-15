@@ -1,11 +1,11 @@
 import json
-from simulate_data import simulate_data
-from analyse_giessen import analyse_giessen
-from compute_pca import compute_pca
-from build_emulator import build_emulator
-from calibrate_parameters import calibrate_parameters
-from sensitivity_analysis import sensitivity_analysis
-from utils import plot_utils
+from cvdnet_pipeline.simulate_data import simulate_data
+from cvdnet_pipeline.analyse_giessen import analyse_giessen
+from cvdnet_pipeline.compute_pca import compute_pca
+from cvdnet_pipeline.build_emulator import build_emulator
+from cvdnet_pipeline.calibrate_parameters import calibrate_parameters
+from cvdnet_pipeline.sensitivity_analysis import sensitivity_analysis
+from cvdnet_pipeline.utils import plot_utils
 import os
 import argparse
 
