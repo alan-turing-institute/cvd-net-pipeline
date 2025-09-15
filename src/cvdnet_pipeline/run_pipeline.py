@@ -208,8 +208,8 @@ def run_pipeline(config):
     else:
         raise ValueError(f"Unknown data type: {data_type}. Supported types are 'synthetic' and 'real'.")
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run the src with a configuration file.")
+def main():
+    parser = argparse.ArgumentParser(description="Run the pipeline with a configuration file.")
     parser.add_argument(
         "--config",
         type=str,
@@ -223,3 +223,6 @@ if __name__ == "__main__":
         config = json.load(config_file)
 
     run_pipeline(config)
+
+if __name__ == "__main__":
+    main()

@@ -9,11 +9,13 @@ version = "0.1.0"
 description = "A pipeline for performing rapid calibration of 0D cardiovascular models using linear emulators."
 authors = [
     { name = "Fay Frost", email = "fay.frost@nottingham.ac.uk" }
-    { name = "Levan Bokeria", email = "levan.bokeria@gmail.com}
+    { name = "Levan Bokeria", email = "levan.bokeria@gmail.com" }
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
 
+[project.scripts]
+cvdnet-pipe = "cvdnet_pipeline.run_pipeline:main"
 
 dependencies = [
     "pandas",
