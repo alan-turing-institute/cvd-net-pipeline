@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 import os
 import numpy as np
-from compute_pca import compute_pca
+from cvdnet_pipeline.compute_pca import compute_pca
 import shutil
 
 

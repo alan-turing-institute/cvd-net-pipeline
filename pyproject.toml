@@ -8,7 +8,7 @@ name = "cvdnet-pipeline"
 version = "0.1.0"
 description = "A pipeline for performing rapid calibration of 0D cardiovascular models using linear emulators."
 authors = [
-    { name = "Fay Frost", email = "fay.frost@nottingham.ac.uk" }
+    { name = "Fay Frost", email = "fay.frost@nottingham.ac.uk" },
     { name = "Levan Bokeria", email = "levan.bokeria@gmail.com" }
 ]
 license = "MIT"

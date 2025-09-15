@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from utils import helper_functions
+from cvdnet_pipeline.utils import helper_functions
 
 
 # steps/build_emulator.py
