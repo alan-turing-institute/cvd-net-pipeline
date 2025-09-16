@@ -5,6 +5,7 @@ from compute_pca import compute_pca
 from build_emulator import build_emulator
 from calibrate_parameters import calibrate_parameters
 from sensitivity_analysis import sensitivity_analysis
+from kalman_filter_giessen import KFGiessenSETUP
 from utils import plot_utils
 import os
 import argparse
@@ -204,6 +205,26 @@ def run_pipeline(config):
                                  config=config)
 
         print("Pipeline complete.")
+
+        if "kf" in steps:
+            print("Step 5: Kalman Filter with Emulator")
+
+            output_keys = config.get("output_keys")
+            if output_keys is None:
+                raise ValueError("output keys must be provided in the configuration to run calibration.")
+            
+            emulator_path = config.get("emulator_path")
+            n_samples = config.get("n_samples")
+            n_params = config.get("n_params")
+            include_timeseries = bool(config.get("include_timeseries"))        
+
+            estimates  = KFGiessenSETUP(n_samples=n_samples,
+                n_params=n_params,
+                output_path=output_path,
+                emulator_path=emulator_path,
+                output_keys=output_keys,
+                include_timeseries=include_timeseries,
+                epsilon_obs_scale=0.05)    
 
     else:
         raise ValueError(f"Unknown data type: {data_type}. Supported types are 'synthetic' and 'real'.")

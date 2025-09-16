@@ -1,17 +1,16 @@
 import matplotlib.pyplot as plt
+import scipy.stats as stats
+import matplotlib.cm as cm
+
 import numpy as np
 import os
 import pandas as pd
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import  PowerTransformer
-from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
 
 import seaborn as sns
 from scipy.stats import norm
 
 import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 
 import numpy as np
 import math
@@ -467,3 +466,63 @@ def plot_sensitivity_heatmap(directory, saveto, selected_keys=[]):
     plt.tight_layout()
     plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.png", dpi=600)
     plt.savefig(f"{output_path_figures}/{saveto}_sensitivity_heatmap.pdf", dpi=600)
+
+def plot_kf_estimates(estimates, 
+                      param_names, 
+                      confidence_level=0.95, 
+                      figsize=(10, 0.7), 
+                      cmap='tab10',
+                      output_path=None):
+    """
+    Plots Kalman filter parameter estimates with confidence intervals, stacked vertically in one figure.
+    
+    Parameters:
+    - estimates: List of (mu_t, Sigma_t) tuples from the KF run.
+    - param_names: List of parameter names.
+    - confidence_level: Confidence level for intervals (default=0.95).
+    - figsize: Tuple specifying width and height per subplot row.
+    - cmap: Matplotlib colormap name for assigning colours.
+    - output_path: directory to save the plots. A subdirectory will be created called "figures"
+    """
+
+    output_path_figures = os.path.join(output_path,"figures")
+    os.makedirs(output_path_figures, exist_ok=True)
+
+    n_timesteps = len(estimates)
+    n_params = len(param_names)
+
+    z = stats.norm.ppf(0.5 + confidence_level / 2)
+
+    mu_series = np.array([mu for mu, _ in estimates])  # shape: (n_timesteps, n_params)
+    sigma_series = np.array([np.sqrt(np.diag(Sigma)) for _, Sigma in estimates])  # shape: (n_timesteps, n_params)
+
+    time = np.arange(n_timesteps)
+
+    fig, axes = plt.subplots(n_params, 1, figsize=(figsize[0], figsize[1]*n_params), sharex=True)
+
+    if n_params == 1:
+        axes = [axes]  # ensure axes is iterable
+
+    # Generate distinct colours using a colormap
+    color_map = cm.get_cmap(cmap, n_params)
+    colors = [color_map(i) for i in range(n_params)]
+
+    for i, ax in enumerate(axes):
+        color = colors[i]
+        ax.plot(time, mu_series[:, i], color=color, label=param_names[i], linewidth=1)
+        ax.fill_between(time, 
+                        mu_series[:, i] - z * sigma_series[:, i],
+                        mu_series[:, i] + z * sigma_series[:, i],
+                        color=color, alpha=0.2)
+        
+        ax.grid(True, linestyle="--", alpha=0.5)
+        ax.legend(loc='upper right', fontsize='small')
+    
+    axes[-1].set_xlabel("Time Step")
+
+    plt.tight_layout()
+    plt.subplots_adjust(right=0.85)
+
+    # Save the figure
+    fig.savefig(f'{output_path_figures}/kf_parameter_estimates.png', dpi=300)
+
