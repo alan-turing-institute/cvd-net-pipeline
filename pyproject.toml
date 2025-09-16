@@ -13,10 +13,6 @@ authors = [
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
-
-[project.scripts]
-cvdnet-pipe = "cvdnet_pipeline.run_pipeline:main"
-
 dependencies = [
     "pandas",
     "numpy",
@@ -26,6 +22,9 @@ dependencies = [
     "seaborn",
     "salib"
 ]
+
+[project.scripts]
+cvdnet-pipe = "cvdnet_pipeline.run_pipeline:main"
 
 [project.optional-dependencies]
 notebooks = ["ipykernel"]
