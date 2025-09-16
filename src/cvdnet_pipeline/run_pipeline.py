@@ -8,16 +8,17 @@ from cvdnet_pipeline.sensitivity_analysis import sensitivity_analysis
 from cvdnet_pipeline.utils import plot_utils
 import os
 import argparse
+from cvdnet_pipeline.utils.constants import VALID_PIPELINE_STEPS
 
 def run_pipeline(config):
 
-    steps = config.get("steps", ["sim",
-                                 "ag",
-                                 "pca",
-                                 "emu",
-                                 "cal",
-                                 "post_sim",
-                                 "post_res"])
+    steps = config.get("steps", VALID_PIPELINE_STEPS)
+
+    # If steps has invalid entries, raise an error
+    for step in steps:
+        if step not in VALID_PIPELINE_STEPS:
+            raise ValueError(f"Invalid step '{step}' found in steps. "
+                             f"Valid steps for the pipeline are: {VALID_PIPELINE_STEPS}")
 
     data_type = config.get("data_type", "synthetic")
 
