@@ -231,6 +231,15 @@ def run_pipeline(config):
         raise ValueError(f"Unknown data type: {data_type}. Supported types are 'synthetic' and 'real'.")
 
 def main():
+    """
+    CLI entry point for running the CVDNet pipeline.
+
+    This function parses command-line arguments to obtain the path to a JSON configuration file,
+    loads the configuration, and executes the pipeline accordingly.
+
+    Usage:
+        python -m cvdnet_pipeline.run_pipeline --config path/to/config.json
+    """
     parser = argparse.ArgumentParser(description="Run the pipeline with a configuration file.")
     parser.add_argument(
         "--config",
