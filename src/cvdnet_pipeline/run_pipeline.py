@@ -6,6 +6,7 @@ from cvdnet_pipeline.build_emulator import build_emulator
 from cvdnet_pipeline.calibrate_parameters import calibrate_parameters
 from cvdnet_pipeline.sensitivity_analysis import sensitivity_analysis
 from cvdnet_pipeline.utils import plot_utils
+from cvdnet_pipeline.kalman_filter_giessen import KFGiessenSETUP
 import os
 import argparse
 from cvdnet_pipeline.utils.constants import VALID_PIPELINE_STEPS
