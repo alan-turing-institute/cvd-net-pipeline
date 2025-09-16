@@ -204,8 +204,6 @@ def run_pipeline(config):
                                  dummy_data_dir=dummy_data_dir,
                                  config=config)
 
-        print("Pipeline complete.")
-
         if "kf" in steps:
             print("Step 5: Kalman Filter with Emulator")
 
@@ -225,6 +223,8 @@ def run_pipeline(config):
                 output_keys=output_keys,
                 include_timeseries=include_timeseries,
                 epsilon_obs_scale=0.05)    
+
+        print("Pipeline complete.")
 
     else:
         raise ValueError(f"Unknown data type: {data_type}. Supported types are 'synthetic' and 'real'.")
