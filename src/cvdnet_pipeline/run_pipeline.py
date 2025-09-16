@@ -223,9 +223,9 @@ def run_pipeline(config):
                 output_keys=output_keys,
                 include_timeseries=include_timeseries,
                 epsilon_obs_scale=0.05)    
-
+        
         print("Pipeline complete.")
-
+        
     else:
         raise ValueError(f"Unknown data type: {data_type}. Supported types are 'synthetic' and 'real'.")
 

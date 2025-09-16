@@ -361,7 +361,7 @@ def plot_parameter_trajectories(Sigma_post,
             return data[:num_windows * self.window_size].reshape(num_windows, self.window_size, -1).mean(axis=1)
 
     # Initialize resolution controller
-    window_size = 100
+    window_size = 10
     res_controller = ResolutionController(window_size)
 
     # Define time range before downsampling
@@ -402,8 +402,8 @@ def plot_parameter_trajectories(Sigma_post,
         axes[i].legend(loc='center left', bbox_to_anchor=(1.0, 0.5))
         axes[i].grid()
 
-    axes[-1].set_xlabel('Time')
-    fig.suptitle(f'Parameter Trajectories (Averaged Over {window_size} Steps) [Original Range: {time_range}]')
+    axes[-1].set_xlabel('Beats')
+    fig.suptitle(f'Parameter Trajectories (Averaged Over {window_size} Steps)')
 
     plt.tight_layout()
     plt.subplots_adjust(right=0.85)  # Make space for legends on the right
