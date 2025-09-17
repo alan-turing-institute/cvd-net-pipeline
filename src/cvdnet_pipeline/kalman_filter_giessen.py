@@ -73,7 +73,7 @@ def KFGiessenSETUP(n_samples:int=4096,
     intercept = np.array(intercept).reshape(len(intercept), 1)
     
     # Process noise covariance
-    Q = np.eye(n_params) * 0.01
+    Q = np.eye(n_params) * 0.001
 
     # Initialize the Kalman Filter with Emulator
     kf = KalmanFilterWithEmulator(beta_matrix, 
