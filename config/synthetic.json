@@ -3,8 +3,11 @@
     "input_parameters": "parameters_sensitive_pca123_9.json",
     "output_path": "output_synthetic",
     "steps": [
-        "cal",
-        "post_sim"
+        "pca",
+        "emu",
+        "cal", 
+        "post_sim",
+        "post_res"
     ],
     "n_pca_components": 10,
     "n_params": 9,
@@ -15,11 +18,21 @@
         1e-05
     ],
     "output_keys": [
+        "edp",
+        "dia",
+        "epad",
+        "eivc",
+        "sys",
+        "esp",
+        "a_epad",
+        "P_max",
+        "EF",
+        "Ees/Ea",
         "iT",
         "PC1",
         "PC2",
         "PC3"
-        ],
+    ],
     "include_timeseries": 0,
     "epsilon_obs_scale": 0.05,
     "output_dir_bayesian": "output_synthetic/output_4096_11_params/bayesian_calibration_results/11_output_keys/calibration_20250818_141427",

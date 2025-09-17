@@ -24,6 +24,7 @@ def build_emulator(n_samples:int=200,
     # Initialize dictionaries to store R2 scores and models
     linear_r2_scores = {}
     linear_mse_scores = {}
+    linear_rmse_scores = {}
     linear_rse_scores = {}
     fitted_models = {}
 
@@ -33,15 +34,17 @@ def build_emulator(n_samples:int=200,
     # (if present) and fit a linear model to each of them using those parameters that have been selected as relevant inputs.
     # Currently, just a linear regression model is used.
     for key in output_keys:
-        model, r2, mse, rse = helper_functions.emulate_linear(input=filtered_input, output=output_file[key])
+        model, r2, mse, rmse, rse = helper_functions.emulate_linear(input=filtered_input, output=output_file[key])
         linear_r2_scores[key] = r2
         linear_mse_scores[key] = mse
+        linear_rmse_scores[key] = rmse
         linear_rse_scores[key] = rse
         fitted_models[key] = model
 
     # Convert the dictionaries to a DataFrame
     emulator_results_df = pd.DataFrame({'R2_Score': linear_r2_scores, 
                                         'MSE': linear_mse_scores,
+                                        'RMSE': linear_rmse_scores,
                                         'RSE': linear_rse_scores, 
                                         'Model': fitted_models})
     

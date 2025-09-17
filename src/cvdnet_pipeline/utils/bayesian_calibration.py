@@ -44,7 +44,7 @@ class BayesianCalibration:
         self.param_names = input_prior.columns.to_list() # Unclear if need to do this for real data. The .loc stuff.
 
         # Model error
-        self.epsilon_model = np.diag(emulator_output['RSE']**2) 
+        self.epsilon_model = np.diag(emulator_output['RMSE']) 
         
         # Compute posterior
         self.compute_posterior()

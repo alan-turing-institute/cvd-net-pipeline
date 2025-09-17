@@ -1,13 +1,21 @@
 {
     "data_type": "real",
-    "input_parameters": "parameters_sensitive_pca123_9.json",
+    "input_parameters": "parameters_sensitive_timeseries_7.json",
     "output_path": "CohortDataRaw2/output_real/pat_4",
     "steps": [
-        "cal", "kf"
+         "ag",
+          "pca",
+          "cal",
+          "kf"
     ],
     "n_pca_components": 10,
     "n_samples": 4096,
     "n_params": 9,
+     "gaussian_sigmas": [
+        1e-05,
+        1e-05,
+        1e-05
+    ],
     "output_keys": [
         "edp",
         "dia",

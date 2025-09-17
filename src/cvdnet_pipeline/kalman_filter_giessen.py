@@ -58,7 +58,7 @@ def KFGiessenSETUP(n_samples:int=4096,
     param_names = input_prior.loc[:, :'T'].columns.to_list()
 
     # Model error
-    epsilon_model = np.diag(emulator_output['RSE']**2) 
+    epsilon_model = np.diag(emulator_output['RMSE']) 
 
     # Construct beta matrix and intercepts
     beta_matrix = []

@@ -98,6 +98,9 @@ def emulate_linear(input, output):
     # compute MSE
     mse = mean_squared_error(Y, y_pred)
 
+    # compute RMSE
+    rmse = np.sqrt(mse)
+
     # compute RSE
     n = len(Y)   # Number of observations
     p = X.shape[1] + 1  # Number of parameters (including intercept)
@@ -105,4 +108,4 @@ def emulate_linear(input, output):
     rse = np.sqrt(rss / (n - p))
 
 
-    return model, r2, mse, rse
+    return model, r2, mse, rmse, rse
