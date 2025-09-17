@@ -3,7 +3,7 @@ from ModularCirc.Models.KorakianitisMixedModel import KorakianitisMixedModel, Ko
 from ModularCirc import BatchRunner
 import numpy as np
 import pandas as pd
-from utils import helper_functions, plot_utils
+from cvdnet_pipeline.utils import helper_functions, plot_utils
 
 def simulate_data(param_path: str, 
                   n_samples: int, 

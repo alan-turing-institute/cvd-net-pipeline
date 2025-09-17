@@ -1,9 +1,9 @@
 
 import pandas as pd
 import numpy as np
-from utils.bayesian_calibration import BayesianCalibration
+from cvdnet_pipeline.utils.bayesian_calibration import BayesianCalibration
 import os
-from utils import plot_utils
+from cvdnet_pipeline.utils import plot_utils
 import json
 from datetime import datetime
 

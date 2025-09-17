@@ -1,7 +1,7 @@
 import os
 import pytest
 import pandas as pd
-from calibrate_parameters import calibrate_parameters
+from cvdnet_pipeline.calibrate_parameters import calibrate_parameters
 import tempfile
 import shutil
 import glob

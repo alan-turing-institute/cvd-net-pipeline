@@ -1,24 +1,25 @@
 import json
-from simulate_data import simulate_data
-from analyse_giessen import analyse_giessen
-from compute_pca import compute_pca
-from build_emulator import build_emulator
-from calibrate_parameters import calibrate_parameters
-from sensitivity_analysis import sensitivity_analysis
-from kalman_filter_giessen import KFGiessenSETUP
-from utils import plot_utils
+from cvdnet_pipeline.simulate_data import simulate_data
+from cvdnet_pipeline.analyse_giessen import analyse_giessen
+from cvdnet_pipeline.compute_pca import compute_pca
+from cvdnet_pipeline.build_emulator import build_emulator
+from cvdnet_pipeline.calibrate_parameters import calibrate_parameters
+from cvdnet_pipeline.sensitivity_analysis import sensitivity_analysis
+from cvdnet_pipeline.utils import plot_utils
+from cvdnet_pipeline.kalman_filter_giessen import KFGiessenSETUP
 import os
 import argparse
+from cvdnet_pipeline.utils.constants import VALID_PIPELINE_STEPS
 
 def run_pipeline(config):
 
-    steps = config.get("steps", ["sim",
-                                 "ag",
-                                 "pca",
-                                 "emu",
-                                 "cal",
-                                 "post_sim",
-                                 "post_res"])
+    steps = config.get("steps", VALID_PIPELINE_STEPS)
+
+    # If steps has invalid entries, raise an error
+    for step in steps:
+        if step not in VALID_PIPELINE_STEPS:
+            raise ValueError(f"Invalid step '{step}' found in steps. "
+                             f"Valid steps for the pipeline are: {VALID_PIPELINE_STEPS}")
 
     data_type = config.get("data_type", "synthetic")
 
@@ -204,8 +205,6 @@ def run_pipeline(config):
                                  dummy_data_dir=dummy_data_dir,
                                  config=config)
 
-        
-
         if "kf" in steps:
             print("Step 5: Kalman Filter with Emulator")
 
@@ -231,8 +230,17 @@ def run_pipeline(config):
     else:
         raise ValueError(f"Unknown data type: {data_type}. Supported types are 'synthetic' and 'real'.")
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run the src with a configuration file.")
+def main():
+    """
+    CLI entry point for running the CVDNet pipeline.
+
+    This function parses command-line arguments to obtain the path to a JSON configuration file,
+    loads the configuration, and executes the pipeline accordingly.
+
+    Usage:
+        python -m cvdnet_pipeline.run_pipeline --config path/to/config.json
+    """
+    parser = argparse.ArgumentParser(description="Run the pipeline with a configuration file.")
     parser.add_argument(
         "--config",
         type=str,
@@ -246,3 +254,6 @@ if __name__ == "__main__":
         config = json.load(config_file)
 
     run_pipeline(config)
+
+if __name__ == "__main__":
+    main()

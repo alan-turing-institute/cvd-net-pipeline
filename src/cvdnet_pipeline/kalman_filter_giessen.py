@@ -1,8 +1,8 @@
 from datetime import datetime
 import numpy as np
 import pandas as pd
-from utils.kf_emulator import KalmanFilterWithEmulator
-from utils.plot_utils import plot_kf_estimates
+from cvdnet_pipeline.utils.kf_emulator import KalmanFilterWithEmulator
+from cvdnet_pipeline.utils.plot_utils import plot_kf_estimates
 import os
 import pickle
 
