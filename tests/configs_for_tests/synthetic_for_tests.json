@@ -8,12 +8,13 @@
         "pca",
         "emu",
         "cal",
+        "kf",
         "post_sim",
         "post_res"
     ],
     "n_pca_components": 10,
     "n_params": 9,
-    "n_samples": 64,
+    "n_samples": 32,
     "gaussian_sigmas": [
         1e-05,
         1e-05,
