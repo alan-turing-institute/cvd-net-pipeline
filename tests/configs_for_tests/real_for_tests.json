@@ -5,6 +5,7 @@
   "steps": [
     "ag",
     "pca",
+    "cal",
     "kf"
   ],
   "n_pca_components": 10,

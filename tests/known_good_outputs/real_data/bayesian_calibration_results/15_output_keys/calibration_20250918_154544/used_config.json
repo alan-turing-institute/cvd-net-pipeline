@@ -3,12 +3,13 @@
     "input_parameters": "parameters_pulmonary_sensitive_summarystats.json",
     "output_path": "CohortDataRaw4/output_real/pat_4/",
     "steps": [
-        "2",
-        "3",
-        "5"
+        "ag",
+        "pca",
+        "cal",
+        "kf"
     ],
     "n_pca_components": 10,
-    "n_samples": 64,
+    "n_samples": 32,
     "n_params": 9,
     "output_keys": [
         "t_max_dpdt",
