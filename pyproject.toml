@@ -19,7 +19,7 @@ dependencies = [
     "numpy",
     "ModularCirc",
     "pytest",
-    "my-package @ git+https://github.com/MaxBalmus/GiessenDataAnalysis.git@main",
+    "giessen-data-analysis",
     "seaborn",
     "salib"
 ]
