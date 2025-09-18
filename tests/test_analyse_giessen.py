@@ -2,11 +2,16 @@ import pytest
 import pandas as pd
 import os
 from cvdnet_pipeline.analyse_giessen import analyse_giessen
-
+from test_constants import (
+    DEFAULT_N_SAMPLES,
+    DEFAULT_N_PARAMS,
+    DEFAULT_EPSILON_OBS_SCALE,
+)
 
 # Parametrize data types for testing both synthetic and real data
 DATA_TYPES = ["synthetic","real"]
 
+output_location = './tests/known_good_outputs/'
 
 @pytest.fixture(params=DATA_TYPES)
 def data_type(request):
@@ -19,9 +24,14 @@ def cleanup_output_file(data_type):
     """Cleanup fixture that handles output files for both data types."""
 
     if data_type == "real":
-        output_file = f"tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/{data_type}_data/pressure_traces_rv/waveform_resampled_all_pressure_traces_rv.csv"
+        output_file = os.path.join(output_location,
+                                   data_type,
+                                   'waveform_resampled_all_pressure_traces_rv.csv')
     elif data_type == "synthetic":
-        output_file = f"tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/{data_type}_data/waveform_resampled_all_pressure_traces_rv.csv"
+        output_file = os.path.join(output_location,
+                                   data_type,
+                                   f"/output_{DEFAULT_N_SAMPLES}_{DEFAULT_N_PARAMS}_params/",
+                                   'waveform_resampled_all_pressure_traces_rv.csv')
     yield output_file, data_type
     if os.path.exists(output_file):
         os.remove(output_file)
@@ -29,16 +39,17 @@ def cleanup_output_file(data_type):
 @pytest.fixture
 def cleanup_calibration_output_file():
     """Cleanup fixture for calibrated synthetic data (only available for synthetic data currently)."""
-    output_file = "tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/synthetic_data/bayesian_calibration_results/17_output_keys/calibration_20250604_154542/waveform_resampled_all_pressure_traces_rv.csv"
+    output_file = f"tests/inputs_for_tests/analyse_giessen_module/output_{DEFAULT_N_SAMPLES}_{DEFAULT_N_PARAMS}_params/synthetic_data/bayesian_calibration_results/17_output_keys/calibration_20250604_154542/waveform_resampled_all_pressure_traces_rv.csv"
     yield output_file
     if os.path.exists(output_file):
         os.remove(output_file)        
+
 
 def test_analyse_giessen_valid_input(cleanup_output_file):
     """Test analyse_giessen with valid input for both synthetic and real data."""
     output_file, data_type = cleanup_output_file
     
-    filepath = f'tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/{data_type}_data/'
+    filepath = f'tests/inputs_for_tests/analyse_giessen_module/output_{DEFAULT_N_SAMPLES}_{DEFAULT_N_PARAMS}_params/{data_type}_data/'
 
     if data_type == "real":
         filepath += "pressure_traces_rv/"
@@ -51,9 +62,9 @@ def test_analyse_giessen_valid_input(cleanup_output_file):
     # Check if the output data matches the expected output
     output_data = pd.read_csv(output_file)
     if data_type == "real":
-        expected_output = pd.read_csv(f'tests/expected_outputs/analyse_giessen_module/output_64_9_params/{data_type}_data/pressure_traces_rv/waveform_resampled_all_pressure_traces_rv.csv')
+        expected_output = pd.read_csv(f'tests/expected_outputs/analyse_giessen_module/output_{DEFAULT_N_SAMPLES}_{DEFAULT_N_PARAMS}_params/{data_type}_data/pressure_traces_rv/waveform_resampled_all_pressure_traces_rv.csv')
     elif data_type == "synthetic":
-        expected_output = pd.read_csv(f'tests/expected_outputs/analyse_giessen_module/output_64_9_params/{data_type}_data/waveform_resampled_all_pressure_traces_rv.csv')   
+        expected_output = pd.read_csv(f'tests/expected_outputs/analyse_giessen_module/output_{DEFAULT_N_SAMPLES}_{DEFAULT_N_PARAMS}_params/{data_type}_data/waveform_resampled_all_pressure_traces_rv.csv')   
     pd.testing.assert_frame_equal(output_data[expected_output.columns], expected_output)
 
 
@@ -70,11 +81,11 @@ def test_analyse_giessen_valid_calibrated_input(cleanup_calibration_output_file)
     """Test analyse_giessen with valid calibrated input (synthetic data only currently)."""
 
     # Call the function with the input file
-    analyse_giessen(file_path='tests/inputs_for_tests/analyse_giessen_module/output_64_9_params/synthetic_data/bayesian_calibration_results/17_output_keys/calibration_20250604_154542/',
+    analyse_giessen(file_path=f'tests/inputs_for_tests/analyse_giessen_module/output_{DEFAULT_N_SAMPLES}_{DEFAULT_N_PARAMS}_params/synthetic_data/bayesian_calibration_results/17_output_keys/calibration_20250604_154542/',
                     data_type="synthetic",
                      gaussian_sigmas=[6., 4., 2.])
 
     # Check if the output data matches the expected output
     output_data = pd.read_csv(cleanup_calibration_output_file)
-    expected_output = pd.read_csv('tests/expected_outputs/analyse_giessen_module/output_64_9_params/synthetic_data/bayesian_calibration_results/17_output_keys/calibration_20250604_154542/waveform_resampled_all_pressure_traces_rv.csv')
+    expected_output = pd.read_csv(f'tests/expected_outputs/analyse_giessen_module/output_{DEFAULT_N_SAMPLES}_{DEFAULT_N_PARAMS}_params/synthetic_data/bayesian_calibration_results/17_output_keys/calibration_20250604_154542/waveform_resampled_all_pressure_traces_rv.csv')
     pd.testing.assert_frame_equal(output_data[expected_output.columns], expected_output)
