@@ -1,10 +1,8 @@
 import pandas as pd
-from AnalysisGiessen import analyseGiessen
+from giessen_data_analysis import analyseGiessen
 
 def analyse_giessen(file_path: str, data_type: str, gaussian_sigmas : list[float]):
 
-    
-    
     if data_type == 'synthetic':
         rv_file = pd.read_csv(f"{file_path}/pressure_traces_rv/all_pressure_traces.csv")
         ar_file = pd.read_csv(f"{file_path}/pressure_traces_pat/all_pressure_traces.csv")
