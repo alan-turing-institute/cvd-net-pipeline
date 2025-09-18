@@ -33,5 +33,6 @@
     "include_timeseries": 0,
     "epsilon_obs_scale": 0.05,
     "emulator_path": "output_synthetic/",
-    "dummy_data_dir": "dummy_data"
+    "dummy_data_dir": "dummy_data",
+    "synthetic_calibration_path": "14_output_keys/calibration_20250916_153255"
 }

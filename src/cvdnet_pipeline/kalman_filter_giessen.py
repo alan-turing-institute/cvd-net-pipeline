@@ -13,6 +13,7 @@ def KFGiessenSETUP(n_samples:int=4096,
                 output_keys:list=None,
                 include_timeseries:bool=True,
                 epsilon_obs_scale:float=0.05,
+                calibration_path:str=None
                 ):
         
     # Load observation data
@@ -73,8 +74,10 @@ def KFGiessenSETUP(n_samples:int=4096,
     intercept = np.array(intercept).reshape(len(intercept), 1)
     
     # Process noise covariance
-    Q = np.eye(n_params) * 0.001
-
+    #Q = np.eye(n_params) * 0.001
+    cov_matrix = pd.read_csv(f"{emulator_path}/output_{n_samples}_{n_params}_params/bayesian_calibration_results/{calibration_path}/posterior_covariance.csv")
+    Q = np.array(cov_matrix)
+    
     # Initialize the Kalman Filter with Emulator
     kf = KalmanFilterWithEmulator(beta_matrix, 
                                   intercept.flatten(), 

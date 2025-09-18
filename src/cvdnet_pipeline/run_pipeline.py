@@ -212,10 +212,13 @@ def run_pipeline(config):
             if output_keys is None:
                 raise ValueError("output keys must be provided in the configuration to run calibration.")
             
+
+            
             emulator_path = config.get("emulator_path")
             n_samples = config.get("n_samples")
             n_params = config.get("n_params")
-            include_timeseries = bool(config.get("include_timeseries"))        
+            include_timeseries = bool(config.get("include_timeseries")) 
+            calibration_path = config.get("synthetic_calibration_path")       
 
             estimates  = KFGiessenSETUP(n_samples=n_samples,
                 n_params=n_params,
@@ -223,7 +226,8 @@ def run_pipeline(config):
                 emulator_path=emulator_path,
                 output_keys=output_keys,
                 include_timeseries=include_timeseries,
-                epsilon_obs_scale=0.05)    
+                epsilon_obs_scale=0.05, 
+                calibration_path=calibration_path)    
         
         print("Pipeline complete.")
         
