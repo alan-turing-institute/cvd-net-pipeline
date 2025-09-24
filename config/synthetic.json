@@ -3,6 +3,8 @@
     "input_parameters": "parameters_sensitive_ci_6.json",
     "output_path": "output_synthetic",
     "steps": [
+        "sim",
+        "ag",
         "pca",
         "emu",
         "cal", 
