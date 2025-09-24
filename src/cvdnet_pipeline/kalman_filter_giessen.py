@@ -13,10 +13,16 @@ def KFGiessenSETUP(n_samples:int=4096,
                 output_keys:list=None,
                 include_timeseries:bool=True,
                 epsilon_obs_scale:float=0.05,
+                data_type:str=None
                 ):
         
-    # Load observation data
-    output_file = pd.read_csv(f"{output_path}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+    if data_type == 'synthetic':
+        print("Using KF for synthetic data.")
+        dir_output_name = f"{output_path}/output_{n_samples}_{n_params}_params"
+        output_file = pd.read_csv(f"{dir_output_name}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+    elif data_type == 'real':
+        # Load observation data
+        output_file = pd.read_csv(f"{output_path}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
     # Input for priors
     input_prior = pd.read_csv(f'{emulator_path}/input_{n_samples}_{n_params}_params.csv')
@@ -91,7 +97,15 @@ def KFGiessenSETUP(n_samples:int=4096,
 
     # Define the output directory name, appending the number of output keys to the directory name and including a timestamp
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_dir_kf = f"{output_path}/kf_calibration_results/{len(all_output_keys)}_output_keys/calibration_{timestamp}"
+
+    if data_type == 'synthetic':
+        dir_name = f"{dir_output_name}/kf_calibration_results/{len(all_output_keys)}_output_keys"
+        os.makedirs(dir_name, exist_ok=True)
+    elif data_type == 'real':
+        dir_name = f"{output_path}/kf_calibration_results/{len(all_output_keys)}_output_keys"
+        os.makedirs(dir_name, exist_ok=True)
+
+    output_dir_kf = f"{dir_name}/kf_calibration_results/{len(all_output_keys)}_output_keys/calibration_{timestamp}"
     os.makedirs(output_dir_kf, exist_ok=True)
 
     # Save the estimated parameters to a CSV and npy files. First, turn the mu entries into a DataFrame

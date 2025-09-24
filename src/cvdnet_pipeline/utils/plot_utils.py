@@ -518,7 +518,7 @@ def plot_kf_estimates(estimates,
         ax.grid(True, linestyle="--", alpha=0.5)
         ax.legend(loc='upper right', fontsize='small')
     
-    axes[-1].set_xlabel("Time Step")
+    axes[-1].set_xlabel("Beats")
 
     plt.tight_layout()
     plt.subplots_adjust(right=0.85)
