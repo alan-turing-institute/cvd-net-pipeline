@@ -26,7 +26,7 @@ def KFGiessenSETUP(n_samples:int=4096,
 
     # Input for priors
     input_prior = pd.read_csv(f'{emulator_path}/input_{n_samples}_{n_params}_params.csv')
-
+    
     # emulators
     emulators = pd.read_pickle(f"{emulator_path}/output_{n_samples}_{n_params}_params/emulators/linear_models_and_r2_scores_{n_samples}.pkl")
 

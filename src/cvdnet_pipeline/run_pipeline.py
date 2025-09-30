@@ -235,7 +235,8 @@ def run_pipeline(config):
             emulator_path = config.get("emulator_path")
             n_samples = config.get("n_samples")
             n_params = config.get("n_params")
-            include_timeseries = bool(config.get("include_timeseries"))        
+            include_timeseries = bool(config.get("include_timeseries")) 
+            output_path = config.get("output_path")       
 
             estimates  = KFGiessenSETUP(n_samples=n_samples,
                 n_params=n_params,
@@ -243,7 +244,8 @@ def run_pipeline(config):
                 emulator_path=emulator_path,
                 output_keys=output_keys,
                 include_timeseries=include_timeseries,
-                epsilon_obs_scale=0.05)    
+                epsilon_obs_scale=0.05,
+                data_type=data_type)    
         
         print("Pipeline complete.")
         
