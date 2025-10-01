@@ -46,6 +46,7 @@ def KFGiessenSETUP(n_samples:int=4096,
 
     # Create the diagonal matrix
     e_obs = np.diag(diagonal_values) * epsilon_obs_scale
+
     
     # Select emulators and data for specified output_keys
     emulator_output = emulators.loc[all_output_keys]
@@ -58,7 +59,7 @@ def KFGiessenSETUP(n_samples:int=4096,
 
     # dynamically define prior on T
     mu_0[-1,-1] = observation_data['iT'].iloc[0]
-    Sigma_0[-1, -1] = 0.0000001
+    Sigma_0[-1, -1] = 0.01
 
     # Parameter names
     param_names = input_prior.loc[:, :'T'].columns.to_list()
@@ -79,7 +80,8 @@ def KFGiessenSETUP(n_samples:int=4096,
     intercept = np.array(intercept).reshape(len(intercept), 1)
     
     # Process noise covariance
-    Q = np.eye(n_params) * 0.01
+    variances = input_prior.var().loc[:'T'].values
+    Q = np.diag(0.01 * variances)
 
     # Initialize the Kalman Filter with Emulator
     kf = KalmanFilterWithEmulator(beta_matrix, 
@@ -127,5 +129,12 @@ def KFGiessenSETUP(n_samples:int=4096,
     plot_kf_estimates(estimates=estimates, 
                       param_names=param_names,
                       output_path=output_dir_kf)
+    
+    # Save Q matrix and input prior variance
+    Q_df = pd.DataFrame(Q, index=param_names, columns=param_names)
+    Q_df.to_csv(f"{output_dir_kf}/process_noise_covariance_Q.csv")
 
+    # (Optional) also save variances
+    pd.DataFrame({"variance": variances}, index=param_names).to_csv(f"{output_dir_kf}/param_variances.csv")
+    
     return estimates
