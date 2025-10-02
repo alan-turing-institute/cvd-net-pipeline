@@ -29,6 +29,7 @@ from test_constants import (
 
 RTOL_TOLERANCE = 1e-2
 
+# @pytest.mark.skip(reason="Temporarily disabled")
 def test_analyse_giessen_synthetic_data():
     """Test analyse_giessen with synthetic data using temporary directories."""
     
@@ -36,7 +37,8 @@ def test_analyse_giessen_synthetic_data():
         print(f"Temporary directory created at: {tmp_path}")
         
         # Define input and expected output paths
-        input_data_path      = f'./tests/known_good_outputs/synthetic_data/output_{DEFAULT_N_SAMPLES}_{DEFAULT_N_PARAMS}_params/'
+        input_data_path      = ('./tests/known_good_outputs/synthetic_data/'
+                                f'output_{DEFAULT_N_SAMPLES}_{DEFAULT_N_PARAMS}_params/')
         expected_output_path = os.path.join(input_data_path,'waveform_resampled_all_pressure_traces_rv.csv')
         
         # Verify input data exists
@@ -53,7 +55,9 @@ def test_analyse_giessen_synthetic_data():
         analyse_giessen(
             file_path=tmp_path,
             data_type="synthetic",
-            gaussian_sigmas=[6., 4., 2.]
+            gaussian_sigmas=[1e-05, 
+                             1e-05,
+                             1e-05]
         )
         
         # Verify output file was created
@@ -72,6 +76,7 @@ def test_analyse_giessen_synthetic_data():
         )
 
 
+# @pytest.mark.skip(reason="Temporarily disabled")
 def test_analyse_giessen_real_data():
     """Test analyse_giessen with real data using temporary directories."""
     
@@ -115,6 +120,7 @@ def test_analyse_giessen_real_data():
         )
 
 
+# @pytest.mark.skip(reason="Temporarily disabled")
 def test_analyse_giessen_calibrated_synthetic_data():
     """Test analyse_giessen with calibrated synthetic data using temporary directories."""
     
@@ -140,7 +146,9 @@ def test_analyse_giessen_calibrated_synthetic_data():
         analyse_giessen(
             file_path=tmp_path,
             data_type="synthetic",
-            gaussian_sigmas=[6., 4., 2.]
+            gaussian_sigmas=[1e-05, 
+                             1e-05,
+                             1e-05]
         )
         
         # Verify output file was created
@@ -158,7 +166,7 @@ def test_analyse_giessen_calibrated_synthetic_data():
             rtol=RTOL_TOLERANCE
         )
 
-
+# @pytest.mark.skip(reason="Temporarily disabled")
 def test_analyse_giessen_invalid_input():
     """Test analyse_giessen with invalid file path."""
     
@@ -172,6 +180,7 @@ def test_analyse_giessen_invalid_input():
             )
 
 
+# @pytest.mark.skip(reason="Temporarily disabled")
 def test_analyse_giessen_missing_required_files():
     """Test analyse_giessen behavior when required input files are missing."""
     
