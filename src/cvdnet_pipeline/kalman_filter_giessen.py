@@ -34,15 +34,15 @@ def KFGiessenSETUP(n_samples:int=4096,
         all_output_keys = output_file.iloc[:, :101].columns.tolist() + output_keys
         print("Including time-series in calibration as specified in config file.")
 
-        # Build the diagonal entries: 101 ones followed by the std devs
+        # Build the diagonal entries: 101 ones followed by the variances
         # 101 ones are scaled by epsilon_obs_scale so they will equal 
         # 1 when multipled by epsilon_obs_scale further down. 
-        sd_values = output_file[output_keys].std().values
-        diagonal_values = np.concatenate([np.ones(101)/epsilon_obs_scale, sd_values]) 
+        var_values = output_file[output_keys].var().values
+        diagonal_values = np.concatenate([np.ones(101)/epsilon_obs_scale, var_values]) 
     else:
         all_output_keys = output_keys
-        sd_values = output_file[output_keys].std().values
-        diagonal_values = sd_values
+        var_values = output_file[output_keys].var().values
+        diagonal_values = var_values
 
     # Create the diagonal matrix
     e_obs = np.diag(diagonal_values) * epsilon_obs_scale
@@ -65,7 +65,7 @@ def KFGiessenSETUP(n_samples:int=4096,
     param_names = input_prior.loc[:, :'T'].columns.to_list()
 
     # Model error
-    epsilon_model = np.diag(emulator_output['RMSE']) 
+    epsilon_model = np.diag(emulator_output['MSE']) 
 
     # Construct beta matrix and intercepts
     beta_matrix = []

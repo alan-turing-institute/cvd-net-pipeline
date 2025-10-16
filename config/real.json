@@ -1,15 +1,15 @@
 {
     "data_type": "real",
-    "input_parameters": "parameters_sensitive_pca12_8.json",
-    "output_path": "CohortDataRaw2/output_real/pat_11",
+    "input_parameters": "parameters_sensitive_playground.json",
+    "output_path": "CohortDataRaw2/output_real/pat_6_night",
     "steps": [
-        "cal",
-        "kf"
+        "kf",
+        "cal"
          
     ],
     "n_pca_components": 10,
-    "n_samples": 64,
-    "n_params": 8,
+    "n_samples": 4096,
+    "n_params": 9,
      "gaussian_sigmas": [
         1e-05,
         1e-05,
@@ -28,7 +28,8 @@
         "Ees/Ea",
         "iT",
         "PC1",
-        "PC2"   
+        "PC2",
+        "PC3"
     ],
     "include_timeseries": 0,
     "epsilon_obs_scale": 0.05,
