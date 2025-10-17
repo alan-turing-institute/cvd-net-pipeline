@@ -59,15 +59,15 @@ def calibrate_parameters(data_type="synthetic",
         all_output_keys = output_file.iloc[:, :101].columns.tolist() + output_keys
         print("Including time-series in calibraiton as specified in config file.")
 
-        # Build the diagonal entries: 101 ones followed by the std devs
+        # Build the diagonal entries: 101 ones followed by the variances
         # 101 ones are scaled by epsilon_obs_scale so they will equal 
         # 1 when multipled by epsilon_obs_scale further down. 
-        sd_values = output_file[output_keys].std().values
-        diagonal_values = np.concatenate([np.ones(101)/epsilon_obs_scale, sd_values]) 
+        var_values = output_file[output_keys].var().values
+        diagonal_values = np.concatenate([np.ones(101)/epsilon_obs_scale, var_values]) 
     else:
         all_output_keys = output_keys
-        sd_values = output_file[output_keys].std().values
-        diagonal_values = sd_values
+        var_values = output_file[output_keys].var().values
+        diagonal_values = var_values
 
 
     # Select emulators and data for specified output_keys
@@ -76,7 +76,7 @@ def calibrate_parameters(data_type="synthetic",
     
     if data_type == "synthetic":
 
-        # Create the diagonal matrix
+        # Create the diagonal matrix of observation noise 
         e_obs = np.diag(diagonal_values) * epsilon_obs_scale
         
         bc = BayesianCalibration(input_prior=input_params, 

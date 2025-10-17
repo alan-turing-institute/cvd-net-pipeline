@@ -13,14 +13,20 @@ def KFGiessenSETUP(n_samples:int=4096,
                 output_keys:list=None,
                 include_timeseries:bool=True,
                 epsilon_obs_scale:float=0.05,
+                data_type:str=None
                 ):
         
-    # Load observation data
-    output_file = pd.read_csv(f"{output_path}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+    if data_type == 'synthetic':
+        print("Using KF for synthetic data.")
+        dir_output_name = f"{output_path}/output_{n_samples}_{n_params}_params"
+        output_file = pd.read_csv(f"{dir_output_name}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+    elif data_type == 'real':
+        # Load observation data
+        output_file = pd.read_csv(f"{output_path}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
     # Input for priors
     input_prior = pd.read_csv(f'{emulator_path}/input_{n_samples}_{n_params}_params.csv')
-
+    
     # emulators
     emulators = pd.read_pickle(f"{emulator_path}/output_{n_samples}_{n_params}_params/emulators/linear_models_and_r2_scores_{n_samples}.pkl")
 
@@ -28,18 +34,19 @@ def KFGiessenSETUP(n_samples:int=4096,
         all_output_keys = output_file.iloc[:, :101].columns.tolist() + output_keys
         print("Including time-series in calibration as specified in config file.")
 
-        # Build the diagonal entries: 101 ones followed by the std devs
+        # Build the diagonal entries: 101 ones followed by the variances
         # 101 ones are scaled by epsilon_obs_scale so they will equal 
         # 1 when multipled by epsilon_obs_scale further down. 
-        sd_values = output_file[output_keys].std().values
-        diagonal_values = np.concatenate([np.ones(101)/epsilon_obs_scale, sd_values]) 
+        var_values = output_file[output_keys].var().values
+        diagonal_values = np.concatenate([np.ones(101)/epsilon_obs_scale, var_values]) 
     else:
         all_output_keys = output_keys
-        sd_values = output_file[output_keys].std().values
-        diagonal_values = sd_values
+        var_values = output_file[output_keys].var().values
+        diagonal_values = var_values
 
     # Create the diagonal matrix
     e_obs = np.diag(diagonal_values) * epsilon_obs_scale
+
     
     # Select emulators and data for specified output_keys
     emulator_output = emulators.loc[all_output_keys]
@@ -52,13 +59,13 @@ def KFGiessenSETUP(n_samples:int=4096,
 
     # dynamically define prior on T
     mu_0[-1,-1] = observation_data['iT'].iloc[0]
-    Sigma_0[-1, -1] = 0.0000001
+    Sigma_0[-1, -1] = 0.01
 
     # Parameter names
     param_names = input_prior.loc[:, :'T'].columns.to_list()
 
     # Model error
-    epsilon_model = np.diag(emulator_output['RMSE']) 
+    epsilon_model = np.diag(emulator_output['MSE']) 
 
     # Construct beta matrix and intercepts
     beta_matrix = []
@@ -73,7 +80,8 @@ def KFGiessenSETUP(n_samples:int=4096,
     intercept = np.array(intercept).reshape(len(intercept), 1)
     
     # Process noise covariance
-    Q = np.eye(n_params) * 0.01
+    variances = input_prior.var().loc[:'T'].values
+    Q = np.diag(0.01 * variances)
 
     # Initialize the Kalman Filter with Emulator
     kf = KalmanFilterWithEmulator(beta_matrix, 
@@ -91,7 +99,15 @@ def KFGiessenSETUP(n_samples:int=4096,
 
     # Define the output directory name, appending the number of output keys to the directory name and including a timestamp
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_dir_kf = f"{output_path}/kf_calibration_results/{len(all_output_keys)}_output_keys/calibration_{timestamp}"
+
+    if data_type == 'synthetic':
+        dir_name = f"{dir_output_name}/kf_calibration_results/{len(all_output_keys)}_output_keys"
+        os.makedirs(dir_name, exist_ok=True)
+    elif data_type == 'real':
+        dir_name = f"{output_path}/kf_calibration_results/{len(all_output_keys)}_output_keys"
+        os.makedirs(dir_name, exist_ok=True)
+
+    output_dir_kf = f"{dir_name}/kf_calibration_results/{len(all_output_keys)}_output_keys/calibration_{timestamp}"
     os.makedirs(output_dir_kf, exist_ok=True)
 
     # Save the estimated parameters to a CSV and npy files. First, turn the mu entries into a DataFrame
@@ -113,5 +129,12 @@ def KFGiessenSETUP(n_samples:int=4096,
     plot_kf_estimates(estimates=estimates, 
                       param_names=param_names,
                       output_path=output_dir_kf)
+    
+    # Save Q matrix and input prior variance
+    Q_df = pd.DataFrame(Q, index=param_names, columns=param_names)
+    Q_df.to_csv(f"{output_dir_kf}/process_noise_covariance_Q.csv")
 
+    # (Optional) also save variances
+    pd.DataFrame({"variance": variances}, index=param_names).to_csv(f"{output_dir_kf}/param_variances.csv")
+    
     return estimates

@@ -1,12 +1,11 @@
 {
     "data_type": "real",
-    "input_parameters": "parameters_sensitive_timeseries_7.json",
-    "output_path": "CohortDataRaw2/output_real/pat_4",
+    "input_parameters": "parameters_sensitive_playground.json",
+    "output_path": "CohortDataRaw2/output_real/pat_6_night",
     "steps": [
-         "ag",
-          "pca",
-          "cal",
-          "kf"
+        "kf",
+        "cal"
+         
     ],
     "n_pca_components": 10,
     "n_samples": 4096,

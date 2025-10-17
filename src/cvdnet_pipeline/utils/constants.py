@@ -6,6 +6,7 @@ VALID_PIPELINE_STEPS = ["sim", # simulation
                   "ag", # analyse giessen
                   "pca", # principal component analysis
                   "emu", # building emulations
+                  "gsa", # global sensitivity analysis
                   "cal", # calibration
                   "kf", # Kalman filter
                   "post_sim", # posterior simulation

@@ -361,7 +361,7 @@ def plot_parameter_trajectories(Sigma_post,
             return data[:num_windows * self.window_size].reshape(num_windows, self.window_size, -1).mean(axis=1)
 
     # Initialize resolution controller
-    window_size = 10
+    window_size = 1
     res_controller = ResolutionController(window_size)
 
     # Define time range before downsampling
@@ -499,7 +499,8 @@ def plot_kf_estimates(estimates,
     time = np.arange(n_timesteps)
 
     fig, axes = plt.subplots(n_params, 1, figsize=(figsize[0], figsize[1]*n_params), sharex=True)
-
+    
+   
     if n_params == 1:
         axes = [axes]  # ensure axes is iterable
 
@@ -518,7 +519,7 @@ def plot_kf_estimates(estimates,
         ax.grid(True, linestyle="--", alpha=0.5)
         ax.legend(loc='upper right', fontsize='small')
     
-    axes[-1].set_xlabel("Time Step")
+    axes[-1].set_xlabel("Beats")
 
     plt.tight_layout()
     plt.subplots_adjust(right=0.85)

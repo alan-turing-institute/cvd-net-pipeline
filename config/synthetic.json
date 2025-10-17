@@ -3,9 +3,11 @@
     "input_parameters": "parameters_sensitive_pca123_9.json",
     "output_path": "output_synthetic",
     "steps": [
+        "sim",
+        "ag",
         "pca",
         "emu",
-        "cal", 
+        "cal",
         "post_sim",
         "post_res"
     ],
