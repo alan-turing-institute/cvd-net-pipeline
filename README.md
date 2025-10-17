@@ -27,8 +27,8 @@ You can install the dependencies using the `pyproject.toml` file:
 
 ## Usage
 
-The pipeline can be run by executing the `cvdnet-pipe` script. You must specify a configuration file in JSON format using the `--config` argument. For example, to run the pipeline using the the config file named `synthetic.JSON` use should use the command
-`cvdnet-pipe --config config/synthetic.json'.
+The pipeline can be run by executing the `cvdnet-pipe` command. You must specify a configuration file in JSON format using the `--config` argument. For example, to run the pipeline using the the config file named `synthetic.json` you should use the command
+`cvdnet-pipe --config config/synthetic.json`.
 
 ### Configuration File
 
@@ -86,9 +86,9 @@ The configuration file should define which pipeline steps to run and other argue
 
 ```n_params```: The number of non-fixed parameters sampled.
 
-```nsamples```: The number of samples you want to run.
+```n_samples```: The number of samples you want to run.
 
-```"gaussian_sigmas```: Parameters which control peak identification in waveform analysis - best not to change.
+```gaussian_sigmas```: Parameters which control peak identification in waveform analysis - best not to change.
 
 ```output_keys```: The outputs you want to calibrate on.
 
@@ -105,7 +105,7 @@ The configuration file should define which pipeline steps to run and other argue
 To run the pipeline, specify the configuration file as follows:
 
 ```bash
-`cvdnet-pipe --config config/synthetic.json'
+cvdnet-pipe --config config/synthetic.json
 ```
 
 ### Steps in the Pipeline
@@ -155,4 +155,4 @@ To run specific steps, modify the `steps` field in the configuration file. For e
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for details.
-```
+
