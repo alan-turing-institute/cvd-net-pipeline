@@ -120,6 +120,7 @@ def run_pipeline(config):
                                         epsilon_obs_scale=config.get("epsilon_obs_scale", 0.05),
                                         dummy_data_dir=dummy_data_dir,
                                         config=config)
+
         if "kf" in steps:
             print("Step 5: Kalman Filter with Emulator")
 
@@ -139,7 +140,8 @@ def run_pipeline(config):
                 emulator_path=emulator_path,
                 output_keys=output_keys,
                 include_timeseries=include_timeseries,
-                epsilon_obs_scale=0.05, data_type=data_type)   
+                epsilon_obs_scale=0.05, 
+                data_type=data_type)   
 
         if "post_sim" in steps:
             print("Step 6: Simulating posterior pressure waves.")
