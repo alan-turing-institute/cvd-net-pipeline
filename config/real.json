@@ -9,7 +9,7 @@
     ],
     "n_pca_components": 10,
     "n_samples": 4096,
-    "n_params": 9,
+    "n_params": 8,
      "gaussian_sigmas": [
         1e-05,
         1e-05,
