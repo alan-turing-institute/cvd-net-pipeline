@@ -1,16 +1,15 @@
 {
     "data_type": "synthetic",
-    "input_parameters": "parameters_patr_drift_2_rc.json",
+    "input_parameters": "parameters_sensitive_ci_6.json",
     "output_path": "output_synthetic/",
     "steps": [
-        "sim",
         "ag",
         "pca",
         "emu"                
     ],
     "n_pca_components": 10,
-    "n_params": 3,
-    "n_samples": 8192,
+    "n_params": 6,
+    "n_samples": 100,
     "gaussian_sigmas": [
         1e-05,
         1e-05,
