@@ -70,7 +70,7 @@ class BayesianCalibration:
             # dynamically define prior on T
             self.mu_0[self.ind,-1] = self.observation_data['iT'].iloc[0]
 
-        self.Sigma_0[self.ind, self.ind] = 0.01
+        self.Sigma_0[self.ind, self.ind] = 0.0001
 
 
     def compute_posterior(self):

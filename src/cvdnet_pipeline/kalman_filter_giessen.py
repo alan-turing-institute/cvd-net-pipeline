@@ -59,7 +59,7 @@ def KFGiessenSETUP(n_samples:int=4096,
 
     # dynamically define prior on T
     mu_0[-1,-1] = observation_data['iT'].iloc[0]
-    Sigma_0[-1, -1] = 0.01
+    Sigma_0[-1, -1] = 0.0001
 
     # Parameter names
     param_names = input_prior.loc[:, :'T'].columns.to_list()
