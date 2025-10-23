@@ -6,13 +6,17 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
+from ModularCirc import BatchRunner
+
 
 def load_csv(path, drop_column=""):
     return pd.read_csv(path, usecols=lambda x: x != drop_column)
 
+
 def save_csv(df, path):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     df.to_csv(path, index=False)
+
 
 def load_simulation(input_path):
     simulations = []
@@ -21,6 +25,7 @@ def load_simulation(input_path):
             df = pd.read_csv(os.path.join(input_path, file), index_col=0)
             simulations.append(df)
     return simulations
+
 
 def select_feasible_traces(simulated_traces, output_path):
     # Create column headers
@@ -77,6 +82,7 @@ def select_feasible_traces(simulated_traces, output_path):
 
     return pressure_traces_df_pat, pressure_traces_df_rv
 
+
 def emulate_linear(input, output):
     # Input and output data
     X = input
@@ -109,3 +115,29 @@ def emulate_linear(input, output):
 
 
     return model, r2, mse, rmse, rse
+
+def get_file_suffix(n_samples: int,
+                    n_params: int,
+                    param_path: str = None,
+                    output_path: str = None):
+    """
+    Generate consistent file suffix for the pipeline.
+    
+    Args:
+        n_samples: Number of samples
+        n_params: Number of parameters
+        param_path: Path to parameter JSON file (optional)
+        output_path: Output path to check for existing files (optional)
+    
+    Returns:
+        File suffix string in format: _{n_samples}_{n_params}_params_{sorted_param_names}
+    """
+    base_suffix = f'_{n_samples}_{n_params}_params'
+    br = BatchRunner('Sobol', 0)
+    br.setup_sampler(param_path)
+    br.sample(1)  # Sample just one to get column names
+    
+    relevant_columns = [col for col in br._samples.columns if col in br._parameters_2_sample.keys()]
+    relevant_params = '_'.join(col.replace('.','') for col in sorted(relevant_columns))
+
+    return f'{base_suffix}_{relevant_params}'

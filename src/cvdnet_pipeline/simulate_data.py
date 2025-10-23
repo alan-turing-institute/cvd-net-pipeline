@@ -58,7 +58,9 @@ def simulate_data(param_path: str,
     br.setup_model(model=KorakianitisMixedModel, po=KorakianitisMixedModel_parameters,
                    time_setup=TEMPLATE_TIME_SETUP_DICT)
 
-    file_suffix  = f'_{n_samples}_{n_params}_params'
+    # Sort the relevant columns for consistent file naming and append to file_suffix
+    relevant_params = '_'.join(col.replace('.','') for col in sorted(relevant_columns))
+    file_suffix  = f'_{n_samples}_{n_params}_params_{relevant_params}'
     
     # Save as CSV files 
     _pure_samples.to_csv(os.path.join(output_path, f'pure_input{file_suffix}.csv'), index=False)

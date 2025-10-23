@@ -10,6 +10,7 @@ from cvdnet_pipeline.kalman_filter_giessen import KFGiessenSETUP
 import os
 import argparse
 from cvdnet_pipeline.utils.constants import VALID_PIPELINE_STEPS
+from cvdnet_pipeline.utils.helper_functions import get_file_suffix
 
 def run_pipeline(config):
 
