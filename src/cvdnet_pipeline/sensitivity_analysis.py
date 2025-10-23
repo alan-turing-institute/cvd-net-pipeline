@@ -67,21 +67,22 @@ def sensitivity_analysis(n_samples: int,
                          n_params: int, 
                          output_path: str,
                          seed: int = 42,
-                         n_processes: int = None):
+                         n_processes: int = None,
+                         output_dir_sims: str = None):
 
-    file_suffix = f'_{n_samples}_{n_params}_params'
+    file_suffix = output_dir_sims.split("output")[-1]
 
     # Read Input Data
     pure_input_params = pd.read_csv(f"{output_path}/pure_input{file_suffix}.csv")
 
     # Import Emulators
-    emulators = pd.read_pickle(f"{output_path}/output{file_suffix}/emulators/linear_models_and_r2_scores_{n_samples}.pkl")
+    emulators = pd.read_pickle(f"{output_path}/{output_dir_sims}/emulators/linear_models_and_r2_scores_{n_samples}.pkl")
 
     # Extract the emulator names
     emulator_list = emulators.index.to_list()
 
     # Directory to save results
-    output_dir = f"{output_path}/output{file_suffix}/sensitivity_analysis_results"
+    output_dir = f"{output_path}/{output_dir_sims}/sensitivity_analysis_results"
     os.makedirs(output_dir, exist_ok=True)
 
     # Create partial function with fixed arguments

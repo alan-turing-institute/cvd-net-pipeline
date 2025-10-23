@@ -13,12 +13,13 @@ def KFGiessenSETUP(n_samples:int=4096,
                 output_keys:list=None,
                 include_timeseries:bool=True,
                 epsilon_obs_scale:float=0.05,
-                data_type:str=None
-                ):
+                data_type:str=None,
+                output_dir_sims: str=None):
         
     if data_type == 'synthetic':
         print("Using KF for synthetic data.")
-        dir_output_name = f"{output_path}/output_{n_samples}_{n_params}_params"
+
+        dir_output_name = f"{output_path}/{output_dir_sims}"
         output_file = pd.read_csv(f"{dir_output_name}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
     elif data_type == 'real':
         # Load observation data

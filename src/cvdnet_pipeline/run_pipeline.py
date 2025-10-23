@@ -102,7 +102,8 @@ def run_pipeline(config):
             sensitivity_analysis(n_samples=n_samples,
                                  n_params=n_params, 
                                  output_path=output_path,
-                                 n_processes=None)
+                                 n_processes=None,
+                                 output_dir_sims=output_dir_sims)
 
         if "cal" in steps:
             print("Step 5: Calibrating parameters using config output keys")
@@ -126,7 +127,8 @@ def run_pipeline(config):
                                         include_timeseries=include_timeseries,
                                         epsilon_obs_scale=config.get("epsilon_obs_scale", 0.05),
                                         dummy_data_dir=dummy_data_dir,
-                                        config=config)
+                                        config=config,
+                                        output_dir_sims=output_dir_sims)
 
         if "kf" in steps:
             print("Step 5: Kalman Filter with Emulator")
@@ -148,7 +150,8 @@ def run_pipeline(config):
                 output_keys=output_keys,
                 include_timeseries=include_timeseries,
                 epsilon_obs_scale=0.05, 
-                data_type=data_type)   
+                data_type=data_type,
+                output_dir_sims=output_dir_sims)
 
         if "post_sim" in steps:
             print("Step 6: Simulating posterior pressure waves.")

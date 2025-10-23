@@ -16,13 +16,14 @@ def calibrate_parameters(data_type="synthetic",
                          include_timeseries:bool=True,
                          epsilon_obs_scale:float=0.05,
                          dummy_data_dir:str=None,
-                         config:dict=None):
+                         config:dict=None,
+                         output_dir_sims: str=None):
 
     if data_type == "synthetic":
     
-        file_suffix = f'_{n_samples}_{n_params}_params'
+        file_suffix = output_dir_sims.split("output")[-1]
 
-        dir_name = f"{output_path}/output{file_suffix}"
+        dir_name = f"{output_path}/{output_dir_sims}"
 
         input_params = pd.read_csv(f'{output_path}/pure_input{file_suffix}.csv')
         
