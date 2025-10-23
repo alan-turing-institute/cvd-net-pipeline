@@ -41,7 +41,11 @@ def run_pipeline(config):
                 raise ValueError("n_params must be provided in the configuration if step 1 is not being executed.")
 
             # Define the output directory for the current simulations
-            output_dir_sims = os.path.join(output_path, f'output_{n_samples}_{n_params}_params')
+            file_suffix = get_file_suffix(n_samples=n_samples, 
+                                          n_params=n_params, 
+                                          param_path=os.path.join('./input_parameters_jsons', 
+                                                                  config.get("input_parameters")))
+            output_dir_sims = os.path.join(output_path, f'output{file_suffix}')       
             print("Simulation output directory is: ", output_dir_sims)
 
         os.makedirs(output_path, exist_ok=True)
@@ -80,7 +84,8 @@ def run_pipeline(config):
                         n_params=n_params, 
                         n_pca_components=n_pca_components,
                         output_path=output_path,
-                        data_type=data_type)
+                        data_type=data_type,
+                        output_dir_sims=output_dir_sims)
 
         if "emu" in steps:
             print("Step 4: Building Emulator")
@@ -89,7 +94,8 @@ def run_pipeline(config):
                         n_params=n_params, 
                         output_path=output_path, 
                         output_file_name="waveform_resampled_all_pressure_traces_rv_with_pca.csv",
-                        output_keys_red=output_keys)
+                        output_keys_red=output_keys,
+                        output_dir_sims=output_dir_sims)
 
         if "gsa" in steps:
             print("Step GSA: Global Sensitivity Analysis")

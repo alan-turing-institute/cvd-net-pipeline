@@ -8,12 +8,14 @@ def build_emulator(n_samples:int=200,
                    n_params:int=9, 
                    output_path:str="output", 
                    output_file_name:str="waveform_resampled_all_pressure_traces_rv_with_pca.csv",
-                   output_keys_red:list[str]=None):
+                   output_keys_red:list[str]=None,
+                   output_dir_sims:str=None):
     
-    file_suffix = f'_{n_samples}_{n_params}_params'
+    # Get the file_suffix from output_dir_sims
+    file_suffix = output_dir_sims.split("output")[-1]
 
     input_file = pd.read_csv(f"{output_path}/pure_input{file_suffix}.csv")
-    output_file = pd.read_csv(f"{output_path}/output{file_suffix}/{output_file_name}")
+    output_file = pd.read_csv(f"{output_dir_sims}/{output_file_name}")
 
     # Select only first relevant inputs 
     filtered_input = input_file.copy()

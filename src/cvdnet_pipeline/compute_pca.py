@@ -11,15 +11,14 @@ def compute_pca(n_samples:int=50,
                 n_params:int=9, 
                 n_pca_components:int=10, 
                 output_path:str="output", 
-                data_type: str="synthetic"):
+                data_type: str="synthetic",
+                output_dir_sims: str=None):
     
     output_file_name = 'waveform_resampled_all_pressure_traces_rv.csv' 
 
     if data_type == "synthetic":
-           
-        file_sufix = f'_{n_samples}_{n_params}_params'
 
-        dir_name = f"{output_path}/output{file_sufix}"
+        dir_name = output_dir_sims
 
     elif data_type == "real":
 
