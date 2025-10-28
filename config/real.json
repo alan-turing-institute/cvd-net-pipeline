@@ -1,14 +1,14 @@
 {
     "data_type": "real",
-    "input_parameters": "parameters_patr_drift_2_rveact.json",
-    "output_path": "CohortDataRaw2/output_real/pat_synthetic_3/",
+    "input_parameters": "parameters_sensitive_ci_6_wide.json",
+    "output_path": "CohortDataRaw2/output_real/pat_synthetic_6_RC_rveact_epas_kpas/",
     "steps": [
         "cal",
         "kf"
     ],
     "n_pca_components": 10,
     "n_samples": 1024,
-    "n_params": 3,
+    "n_params": 6,
     "gaussian_sigmas": [
         1e-05,
         1e-05,
