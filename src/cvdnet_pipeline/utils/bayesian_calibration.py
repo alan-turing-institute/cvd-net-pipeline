@@ -45,9 +45,6 @@ class BayesianCalibration:
 
         # Model error variances 
         self.epsilon_model = np.diag(emulator_output['MSE']) 
-        
-        # Compute posterior
-        self.compute_posterior()
 
 
     def _setup_priors(self):
