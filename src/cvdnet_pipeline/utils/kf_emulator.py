@@ -60,6 +60,7 @@ class KalmanFilterWithEmulator:
         # Kalman gain
         S = self.H @ Sigma_pred @ self.H.T + self.Sigma_obs_total
         K = np.linalg.solve(S, (Sigma_pred @ self.H.T).T).T 
+        
 
         # Innovation (residual)
         innovation = y_t - (self.H @ mu_pred)
