@@ -21,8 +21,7 @@ class KalmanFilterWithEmulator:
         self.Sigma_emu = Sigma_emu
         self.Sigma_obs_total = Sigma_emu + R
 
-        
-        
+    
         # Augment mu_0 to include intercept
         self.mu = np.insert(mu_0, 0, 1)
 
@@ -82,5 +81,5 @@ class KalmanFilterWithEmulator:
         estimates = []
         for y_t in Y:
             mu_t, Sigma_t = self.step(y_t)
-            estimates.append((mu_t[1:, ].copy(), Sigma_t[1:, 1:].copy()))
+            estimates.append((mu_t[1:].copy(), Sigma_t[1:, 1:].copy()))
         return estimates

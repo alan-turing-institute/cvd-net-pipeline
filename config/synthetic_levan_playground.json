@@ -4,6 +4,7 @@
     "output_path": "output_synthetic",
     "steps": [
         "cal",
+        "kf",
         "post_sim",
         "post_res"
     ],
