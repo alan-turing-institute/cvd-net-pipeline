@@ -81,7 +81,6 @@ def KFGiessenSETUP(n_samples:int=4096,
     
     # Process noise covariance
     variances = input_prior.var().loc[:'T'].values
-    means = input_prior.mean().loc[:'T'].values
     Q = np.diag(0.01 * variances)
     
 

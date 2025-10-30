@@ -1,33 +1,22 @@
 {
     "data_type": "synthetic",
-    "input_parameters": "parameters_sensitive_ci_6_wide.json",
+    "input_parameters": "parameters_sensitive_pca123_9.json",
     "output_path": "output_synthetic/",
     "steps": [
-        "sim", 
-        "ag",
-        "pca",
-        "emu"
+        "cal",
+        "post_sim",
+        "post_res"
                     
     ],
     "n_pca_components": 10,
-    "n_params": 6,
-    "n_samples": 1024,
+    "n_params": 9,
+    "n_samples": 4096,
     "gaussian_sigmas": [
         1e-05,
         1e-05,
         1e-05
     ],
     "output_keys": [
-        "edp",
-        "dia",
-        "epad",
-        "eivc",
-        "sys",
-        "esp",
-        "a_epad",
-        "P_max",
-        "EF",
-        "Ees/Ea",
         "iT",
         "PC1",
         "PC2",
