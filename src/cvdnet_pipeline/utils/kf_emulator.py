@@ -46,6 +46,8 @@ class KalmanFilterWithEmulator:
         # pd.DataFrame(self.B_0).to_csv("kf_B_0.csv", index=False)
         # pd.DataFrame(self.B).to_csv("kf_B.csv", index=False)
         
+        self.mu_prior = self.mu.copy()
+        self.Sigma_prior = self.Sigma.copy()
         
     def step(self, y_t):
         """
@@ -54,8 +56,11 @@ class KalmanFilterWithEmulator:
         """
 
         # Prediction : State transition matrix F is implicitly the identity i.e. a random walk
+        #print("changed")
         mu_pred = self.mu
         Sigma_pred = self.Sigma + self.Qnew
+        #mu_pred = self.mu_prior
+        #Sigma_pred = self.Sigma_prior
 
         # Kalman gain
         S = self.H @ Sigma_pred @ self.H.T + self.Sigma_obs_total
