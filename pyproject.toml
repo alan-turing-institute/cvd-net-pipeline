@@ -26,6 +26,7 @@ dependencies = [
 
 [project.scripts]
 cvdnet-pipe = "cvdnet_pipeline.run_pipeline:main"
+cvdnet-pipe-local = "cvdnet_pipeline.run_pipeline_local:main"
 
 [project.optional-dependencies]
 notebooks = ["ipykernel"]

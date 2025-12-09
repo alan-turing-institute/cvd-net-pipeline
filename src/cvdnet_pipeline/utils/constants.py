@@ -9,5 +9,6 @@ VALID_PIPELINE_STEPS = ["sim", # simulation
                   "gsa", # global sensitivity analysis
                   "cal", # calibration
                   "kf", # Kalman filter
+                  "kf_local", # Kalman filter with local emulator
                   "post_sim", # posterior simulation
                   "post_res"] # posterior resampling

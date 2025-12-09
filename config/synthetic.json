@@ -1,16 +1,15 @@
 {
     "data_type": "synthetic",
-    "input_parameters": "parameters_sensitive_pca123_9.json",
+    "input_parameters": "parameters_sensitive_ci_6.json",
     "output_path": "output_synthetic/",
     "steps": [
-        "cal",
-        "post_sim",
-        "post_res"
-                    
+        "ag",
+        "pca",
+        "emu"
     ],
     "n_pca_components": 10,
-    "n_params": 9,
-    "n_samples": 4096,
+    "n_params": 6,
+    "n_samples": 1000,
     "gaussian_sigmas": [
         1e-05,
         1e-05,
