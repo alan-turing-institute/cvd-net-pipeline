@@ -9,7 +9,7 @@ import pickle
 def KF_local_setup(n_samples:int=4096, 
                 n_params:int=9, 
                 emulator_path:str='emulator',
-                output_path:str='output', 
+                output_path:str='output_synthetic', 
                 output_keys:list=None,
                 include_timeseries:bool=True,
                 epsilon_obs_scale:float=0.05,
@@ -20,13 +20,18 @@ def KF_local_setup(n_samples:int=4096,
         print("Using KF for synthetic data.")
         dir_output_name = f"{output_path}/output_{n_samples}_{n_params}_params"
         output_file = pd.read_csv(f"{dir_output_name}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+
+        # Input parameter samples to be used to build local emulators
+        input_prior = pd.read_csv(f'{output_path}/input_{n_samples}_{n_params}_params.csv')
+        input_prior_pure = pd.read_csv(f'{output_path}/pure_input_{n_samples}_{n_params}_params.csv')
+
     elif data_type == 'real':
         # Load real observation data
         output_file = pd.read_csv(f"{output_path}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
-    # Input parameter samples to be used to build local emulators
-    input_prior = pd.read_csv(f'{emulator_path}/input_{n_samples}_{n_params}_params.csv')
-    input_prior_pure = pd.read_csv(f'{emulator_path}/pure_input_{n_samples}_{n_params}_params.csv')
+        # Input parameter samples to be used to build local emulators
+        input_prior = pd.read_csv(f'{emulator_path}/input_{n_samples}_{n_params}_params.csv')
+        input_prior_pure = pd.read_csv(f'{emulator_path}/pure_input_{n_samples}_{n_params}_params.csv')
     
     
     if include_timeseries:
@@ -67,13 +72,15 @@ def KF_local_setup(n_samples:int=4096,
     Q = np.diag(0.01 * variances)
     
     # Give KF prior samples to build local emulators from
+    if data_type == 'synthetic':
+        Y_prior = pd.read_csv(f"{output_path}/output_{n_samples}_{n_params}_params/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+        Y_prior = Y_prior.loc[:, all_output_keys]
+    elif data_type == 'real':
+        # simulated outputs for prior samples
+        Y_prior = pd.read_csv(f"{emulator_path}/output_{n_samples}_{n_params}_params/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+        Y_prior = Y_prior.loc[:, all_output_keys]
 
-    # all prior samples
-    X_prior = input_prior_pure
-
-    # simulated outputs for prior samples
-    Y_prior = pd.read_csv(f"{emulator_path}/output_{n_samples}_{n_params}_params/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
-    Y_prior = Y_prior.loc[:, all_output_keys]
+ 
 
     # Initialize the Kalman Filter with Emulator
     kf = KalmanFilterWithLocalEmulator(X_prior=input_prior_pure, 
@@ -100,7 +107,7 @@ def KF_local_setup(n_samples:int=4096,
         dir_name = f"{output_path}/kf_local_calibration_results/{len(all_output_keys)}_output_keys"
         os.makedirs(dir_name, exist_ok=True)
 
-    output_dir_kf = f"{dir_name}/kf_local_calibration_results/{len(all_output_keys)}_output_keys/calibration_{timestamp}"
+    output_dir_kf = f"{dir_name}/calibration_{timestamp}"
     os.makedirs(output_dir_kf, exist_ok=True)
 
     # Save the estimated parameters to a CSV and npy files. First, turn the mu entries into a DataFrame

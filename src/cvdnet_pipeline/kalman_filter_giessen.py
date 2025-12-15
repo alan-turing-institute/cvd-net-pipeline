@@ -108,7 +108,7 @@ def KFGiessenSETUP(n_samples:int=4096,
         dir_name = f"{output_path}/kf_calibration_results/{len(all_output_keys)}_output_keys"
         os.makedirs(dir_name, exist_ok=True)
 
-    output_dir_kf = f"{dir_name}/kf_calibration_results/{len(all_output_keys)}_output_keys/calibration_{timestamp}"
+    output_dir_kf = f"{dir_name}/calibration_{timestamp}"
     os.makedirs(output_dir_kf, exist_ok=True)
 
     # Save the estimated parameters to a CSV and npy files. First, turn the mu entries into a DataFrame

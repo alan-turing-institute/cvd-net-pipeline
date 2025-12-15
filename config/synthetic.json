@@ -3,23 +3,30 @@
     "input_parameters": "parameters_sensitive_ci_6.json",
     "output_path": "output_synthetic/",
     "steps": [
-        "ag",
-        "pca",
-        "emu"
+        "cal",
+        "kf",
+        "kf_local"
     ],
     "n_pca_components": 10,
     "n_params": 6,
-    "n_samples": 1000,
+    "n_samples": 4096,
     "gaussian_sigmas": [
         1e-05,
         1e-05,
         1e-05
     ],
     "output_keys": [
-        "iT",
-        "PC1",
-        "PC2",
-        "PC3"
+        "edp",
+        "dia",
+        "epad",
+        "eivc",
+        "sys",
+        "esp",
+        "a_epad",
+        "P_max",
+        "EF",
+        "Ees/Ea",
+        "iT"
     ],
     "include_timeseries": 0,
     "epsilon_obs_scale": 0.05,
