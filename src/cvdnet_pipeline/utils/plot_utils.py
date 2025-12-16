@@ -530,3 +530,82 @@ def plot_kf_estimates(estimates,
     # Save the figure
     fig.savefig(f'{output_path_figures}/kf_parameter_estimates.png', dpi=300)
 
+
+def plot_st_lines(directory,
+                  selected_files: list | None = None,
+                  file_pattern: str = "sensitivity_*.csv",
+                  param_col: str = "Parameter",
+                  st_col: str = "ST",
+                  highlight_params: list | None = None,
+                  label_offsets: dict | None = None,
+                  show_param_labels: bool = False,
+                  figsize=(23, 9)):
+    import glob, os, pandas as pd, numpy as np, matplotlib.pyplot as plt, seaborn as sns
+
+    # collect files
+    if selected_files:
+        files = [os.path.join(directory, f) for f in selected_files]
+    else:
+        files = sorted(glob.glob(os.path.join(directory, file_pattern)))
+    if not files:
+        raise ValueError(f"No files found in {directory} using pattern {file_pattern} or provided selection.")
+
+    # assemble ST DataFrame (rows=time, cols=params)
+    series_list = []
+    for fpath in files:
+        df = pd.read_csv(fpath)
+        if param_col not in df.columns or st_col not in df.columns:
+            raise ValueError(f"File {fpath} lacks required columns '{param_col}' or '{st_col}'")
+        series_list.append(df.set_index(param_col)[st_col])
+    st_df = pd.concat(series_list, axis=1).T
+    st_df.index = range(len(files))
+    all_parameters = st_df.columns.tolist()
+
+    # defaults
+    if highlight_params is None:
+        highlight_params = []
+    if label_offsets is None:
+        label_offsets = {}
+
+    # requested colours (will map in order to highlight_params)
+    palette = ['blue', 'orange', 'red', 'purple', 'brown', 'green', 'pink']  # pink is available if needed
+    highlight_colors = {p: palette[i % len(palette)] for i, p in enumerate(highlight_params)}
+
+    # plotting
+    plt.figure(figsize=figsize)
+    x = np.arange(len(files))
+    for param in all_parameters:
+        y = pd.to_numeric(st_df[param], errors="coerce")
+        if param in highlight_params:
+            color = highlight_colors[param]
+            linewidth = 2.5
+            zorder = 3
+            label = param
+        else:
+            color = "lightgrey"
+            linewidth = 0.9
+            zorder = 2
+            label = None
+        plt.plot(x, y, label=label, color=color, linewidth=linewidth, zorder=zorder)
+
+        # optional inline labels at final x
+        if show_param_labels and param in highlight_params:
+            x_offset, y_offset = label_offsets.get(param, (0.5, 0.0))
+            plt.text(x[-1] + x_offset, y.iloc[-1] + y_offset, param,
+                     color=color, va='center', fontsize=12, fontweight='bold')
+
+    # X ticks limited to {0,20,40,60,80,100} within the file range
+    desired_ticks = [0, 20, 40, 60, 80, 100]
+    ticks = [t for t in desired_ticks if t <= len(files) - 1]
+    plt.xticks(ticks, ticks, rotation=0, fontsize=12)
+
+    plt.xlim(-0.5, len(files) - 0.5)
+    plt.xlabel("Time Index (file order)", fontsize=14)
+    plt.ylabel("ST", fontsize=14)
+
+    # show legend for highlighted params only
+    if highlight_params:
+        plt.legend(loc='upper left', fontsize=11)
+
+    plt.tight_layout()
+    plt.show()
