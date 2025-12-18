@@ -143,29 +143,30 @@ def run_pipeline(config):
                 include_timeseries=include_timeseries,
                 epsilon_obs_scale=0.05, 
                 data_type=data_type)   
+            
         
         if "kf_local" in steps:
             print("Step 5: Kalman Filter with Local Linear Emulator")
 
-        output_keys = config.get("output_keys")
-        if output_keys is None:
-            raise ValueError("output keys must be provided in the configuration to run calibration.")
-        
-        
-        n_samples = config.get("n_samples")
-        n_params = config.get("n_params")
-        include_timeseries = bool(config.get("include_timeseries"))
-        data_type = config.get("data_type")
+            output_keys = config.get("output_keys")
+            if output_keys is None:
+                raise ValueError("output keys must be provided in the configuration to run calibration.")
+            
+            
+            n_samples = config.get("n_samples")
+            n_params = config.get("n_params")
+            include_timeseries = bool(config.get("include_timeseries"))
+            data_type = config.get("data_type")
 
-        estimates  = KF_local_setup(n_samples=n_samples, 
-            n_params=n_params,
-            output_path=output_path,
-            output_keys=output_keys,
-            include_timeseries=include_timeseries,
-            epsilon_obs_scale=0.05,
-            data_type=data_type
-            )    
-    
+            estimates  = KF_local_setup(n_samples=n_samples, 
+                n_params=n_params,
+                output_path=output_path,
+                output_keys=output_keys,
+                include_timeseries=include_timeseries,
+                epsilon_obs_scale=0.05,
+                data_type=data_type
+                )    
+        
 
         if "post_sim" in steps:
             print("Step 6: Simulating posterior pressure waves.")
