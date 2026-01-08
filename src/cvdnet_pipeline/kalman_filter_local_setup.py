@@ -1,15 +1,15 @@
 from datetime import datetime
 import numpy as np
 import pandas as pd
-from cvdnet_pipeline.utils.kf_emulator import KalmanFilterWithEmulator
+from cvdnet_pipeline.utils.kf_emulator_local import KalmanFilterWithLocalEmulator
 from cvdnet_pipeline.utils.plot_utils import plot_kf_estimates
 import os
 import pickle
 
-def KFGiessenSETUP(n_samples:int=4096, 
+def KF_local_setup(n_samples:int=4096, 
                 n_params:int=9, 
-                output_path:str='output', 
-                emulator_path:str=None,
+                emulator_path:str='emulator',
+                output_path:str='output_synthetic', 
                 output_keys:list=None,
                 include_timeseries:bool=True,
                 epsilon_obs_scale:float=0.05,
@@ -20,16 +20,20 @@ def KFGiessenSETUP(n_samples:int=4096,
         print("Using KF for synthetic data.")
         dir_output_name = f"{output_path}/output_{n_samples}_{n_params}_params"
         output_file = pd.read_csv(f"{dir_output_name}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+
+        # Input parameter samples to be used to build local emulators
+        input_prior = pd.read_csv(f'{output_path}/input_{n_samples}_{n_params}_params.csv')
+        input_prior_pure = pd.read_csv(f'{output_path}/pure_input_{n_samples}_{n_params}_params.csv')
+
     elif data_type == 'real':
-        # Load observation data
+        # Load real observation data
         output_file = pd.read_csv(f"{output_path}/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
 
-    # Input for priors
-    input_prior = pd.read_csv(f'{emulator_path}/input_{n_samples}_{n_params}_params.csv')
+        # Input parameter samples to be used to build local emulators
+        input_prior = pd.read_csv(f'{emulator_path}/input_{n_samples}_{n_params}_params.csv')
+        input_prior_pure = pd.read_csv(f'{emulator_path}/pure_input_{n_samples}_{n_params}_params.csv')
     
-    # emulators
-    emulators = pd.read_pickle(f"{emulator_path}/output_{n_samples}_{n_params}_params/emulators/linear_models_and_r2_scores_{n_samples}.pkl")
-
+    
     if include_timeseries:
         all_output_keys = output_file.iloc[:, :101].columns.tolist() + output_keys
         print("Including time-series in calibration as specified in config file.")
@@ -43,16 +47,14 @@ def KFGiessenSETUP(n_samples:int=4096,
         all_output_keys = output_keys
         var_values = output_file[output_keys].var().values
         diagonal_values = var_values
-
-    # Create the diagonal matrix
-    e_obs = np.diag(diagonal_values) * epsilon_obs_scale
-
     
-    # Select emulators and data for specified output_keys
-    emulator_output = emulators.loc[all_output_keys]
+    # Select observaton data to calibrate on
     observation_data = output_file.loc[:, all_output_keys]
 
-    # Priors
+    # Create the diagonal matrix of observation noise (for specified output keys)
+    R = np.diag(diagonal_values) * epsilon_obs_scale
+
+    ## Create initial prior for Kalman Filter
     mu_0 = np.array(input_prior.mean().loc[:'T'])
     mu_0 = mu_0.reshape(-1, 1)
     Sigma_0 = np.diag(input_prior.var().loc[:'T'])
@@ -64,34 +66,31 @@ def KFGiessenSETUP(n_samples:int=4096,
     # Parameter names
     param_names = input_prior.loc[:, :'T'].columns.to_list()
 
-    # Model error
-    epsilon_model = np.diag(emulator_output['MSE']) 
 
-    # Construct beta matrix and intercepts
-    beta_matrix = []
-    intercept = []
-
-    for _, row_entry in emulator_output.iterrows():
-        model = row_entry['Model']
-        beta_matrix.append(model.coef_)
-        intercept.append(model.intercept_)
-    
-    beta_matrix = np.array(beta_matrix)
-    intercept = np.array(intercept).reshape(len(intercept), 1)
-    
     # Process noise covariance
     variances = input_prior.var().loc[:'T'].values
     Q = np.diag(0.01 * variances)
     
+    # Give KF prior samples to build local emulators from
+    if data_type == 'synthetic':
+        Y_prior = pd.read_csv(f"{output_path}/output_{n_samples}_{n_params}_params/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+        Y_prior = Y_prior.loc[:, all_output_keys]
+    elif data_type == 'real':
+        # simulated outputs for prior samples
+        Y_prior = pd.read_csv(f"{emulator_path}/output_{n_samples}_{n_params}_params/waveform_resampled_all_pressure_traces_rv_with_pca.csv")
+        Y_prior = Y_prior.loc[:, all_output_keys]
+
+ 
 
     # Initialize the Kalman Filter with Emulator
-    kf = KalmanFilterWithEmulator(beta_matrix, 
-                                  intercept.flatten(), 
-                                  Q, 
-                                  e_obs, 
-                                  epsilon_model, 
-                                  mu_0.flatten(), 
-                                  Sigma_0)
+    kf = KalmanFilterWithLocalEmulator(X_prior=input_prior_pure, 
+                                       Y_prior=Y_prior,
+                                       observation_data=observation_data, 
+                                       Q=Q, 
+                                       R=R, 
+                                       mu_0=mu_0, 
+                                       Sigma_0=Sigma_0,
+                                       k_neighbors=200)      
 
     # Run the filter
     estimates = kf.run(np.array(observation_data))
@@ -102,10 +101,10 @@ def KFGiessenSETUP(n_samples:int=4096,
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     if data_type == 'synthetic':
-        dir_name = f"{dir_output_name}/kf_calibration_results/{len(all_output_keys)}_output_keys"
+        dir_name = f"{dir_output_name}/kf_local_calibration_results/{len(all_output_keys)}_output_keys"
         os.makedirs(dir_name, exist_ok=True)
     elif data_type == 'real':
-        dir_name = f"{output_path}/kf_calibration_results/{len(all_output_keys)}_output_keys"
+        dir_name = f"{output_path}/kf_local_calibration_results/{len(all_output_keys)}_output_keys"
         os.makedirs(dir_name, exist_ok=True)
 
     output_dir_kf = f"{dir_name}/calibration_{timestamp}"

@@ -4,7 +4,8 @@
     "output_path": "CohortDataRaw2/output_real/pat_synthetic_6_infer_fixed_params/",
     "steps": [
         "cal",
-        "kf"
+        "kf",
+        "kf_local"
     ],
     "n_pca_components": 10,
     "n_samples": 4096,
