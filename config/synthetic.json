@@ -3,9 +3,10 @@
     "input_parameters": "parameters_sensitive_ci_6_wide.JSON",
     "output_path": "output_synthetic/",
     "steps": [
-        "cal",
-        "post_sim",
-        "post_res"
+      
+        "ag",
+        "pca"
+        
                     
     ],
     "n_pca_components": 10,
@@ -17,6 +18,16 @@
         1e-05
     ],
     "output_keys": [
+         "edp",
+        "dia",
+        "epad",
+        "eivc",
+        "sys",
+        "esp",
+        "a_epad",
+        "P_max",
+        "EF",
+        "Ees/Ea",
         "iT",
         "PC1",
         "PC2",
