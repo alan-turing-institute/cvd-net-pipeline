@@ -5,8 +5,10 @@
     "steps": [
       
         "ag",
-        "pca"
-        
+        "pca",
+        "emu",
+        "kf_local",
+        "test"
                     
     ],
     "n_pca_components": 10,
